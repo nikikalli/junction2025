@@ -1,7 +1,6 @@
 import TextType from "@/components/TextType";
 import SpotlightCard from "@/components/SpotlightCard";
 import PrismaticBurst from "@/components/PrismaticBurst";
-import GradientText from "@/components/GradientText";
 import { InputWithButton } from "@/components/InputWithButton";
 
 export const Home = () => {
@@ -24,14 +23,6 @@ export const Home = () => {
           <h1 className="text-4xl md:text-6xl font-bold mb-2 whitespace-nowrap">
             Welcome to {""}
             <span className="inline">
-              <GradientText
-                colors={["#ff007a", "#4d3dff", "#ffffff"]}
-                animationSpeed={3}
-                showBorder={false}
-                className="custom-class inline"
-              >
-                {"Sephira"}
-              </GradientText>
             </span>
           </h1>
           <TextType
