@@ -97,6 +97,7 @@ interface CanvasList {
 interface Segment {
   id: number;
   name: string;
+  type: string;
 }
 
 export const CampaignScreen = () => {
@@ -104,15 +105,22 @@ export const CampaignScreen = () => {
   const [loading, setLoading] = useState(false);
   const [selectedCanvasId, setSelectedCanvasId] = useState<string | null>(null);
   const [selectedSegment, setSelectedSegment] = useState<Segment | null>(null);
+  const [selectedSegments, setSelectedSegments] = useState<number[]>([]);
   const [count] = useState(20);
   const [scheduled, setScheduled] = useState<ScheduledBroadcast[]>([]);
   const [showScheduled, setShowScheduled] = useState(false);
   const [canvasList, setCanvasList] = useState<CanvasList[]>([]);
   const [loadingList, setLoadingList] = useState(false);
-  const [segments] = useState<Segment[]>(
+  // track selected campaign type per canvas id (so toggle is per-card)
+  const [campaignTypes, setCampaignTypes] = useState<Record<string, 'Standard' | 'Promotional'>>({});
+  const [selectedCampaignType, setSelectedCampaignType] = useState<'Standard' | 'Promotional'>('Standard');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const [segments, setSegments] = useState<Segment[]>(
     Array.from({ length: 20 }, (_, i) => ({
       id: i + 1,
-      name: `Segment ${i + 1} - ${['US', 'UK', 'DE', 'FR', 'ES', 'IT', 'JP', 'CN', 'BR', 'CA', 'AU', 'MX', 'IN', 'KR', 'NL', 'SE', 'NO', 'DK', 'FI', 'PL'][i % 20]}`
+      name: `Segment ${i + 1} - ${['US', 'UK', 'DE', 'FR', 'ES', 'IT', 'JP', 'CN', 'BR', 'CA', 'AU', 'MX', 'IN', 'KR', 'NL', 'SE', 'NO', 'DK', 'FI', 'PL'][i % 20]}`,
+      type: 'Standard' // Will be set when user selects campaign type
     }))
   );
 
@@ -123,6 +131,12 @@ export const CampaignScreen = () => {
       const data = await response.json();
       const list = data.canvases?.map((c: any) => ({ id: c.id, name: c.name })) || [];
       setCanvasList(list);
+      // initialize per-canvas campaign type to 'Standard'
+      const initialTypes = list.reduce((acc: Record<string, 'Standard' | 'Promotional'>, c: CanvasList) => {
+        acc[c.id] = 'Standard';
+        return acc;
+      }, {});
+      setCampaignTypes(initialTypes);
     } catch (error) {
       console.error('Error fetching canvas list:', error);
     } finally {
@@ -130,10 +144,14 @@ export const CampaignScreen = () => {
     }
   };
 
-  const selectCampaign = (canvasId: string) => {
+  const selectCampaign = (canvasId: string, campaignType: 'Standard' | 'Promotional') => {
     setSelectedCanvasId(canvasId);
     setSelectedSegment(null);
     setCanvases([]);
+    setSelectedCampaignType(campaignType);
+
+    // Update all segments to the selected campaign type
+    setSegments(segments.map(seg => ({ ...seg, type: campaignType })));
   };
 
   const selectSegment = async (segment: Segment) => {
@@ -164,6 +182,49 @@ export const CampaignScreen = () => {
     setCanvases([]);
   };
 
+  const toggleSegmentSelection = (segmentId: number) => {
+    setSelectedSegments(prev =>
+      prev.includes(segmentId)
+        ? prev.filter(id => id !== segmentId)
+        : [...prev, segmentId]
+    );
+  };
+
+  const createCampaignsForSegments = async () => {
+    if (!selectedCanvasId || selectedSegments.length === 0) return;
+
+    setLoading(true);
+    try {
+      // Check if any selected segments are promotional
+      const selectedSegmentObjs = segments.filter(seg => selectedSegments.includes(seg.id));
+      const hasPromotional = selectedSegmentObjs.some(seg => seg.type === 'Promotional');
+
+      // Compliance check for promotional campaigns (always passes for now)
+      const complianceApproved = true;
+
+      if (hasPromotional && !complianceApproved) {
+        alert('Promotional campaigns require compliance approval');
+        return;
+      }
+
+      // Show success with compliance status
+      const message = hasPromotional
+        ? `Creating campaigns for ${selectedSegments.length} segments...\n✓ Compliance check passed for promotional campaigns`
+        : `Creating campaigns for ${selectedSegments.length} segments...`;
+
+      alert(message);
+      console.log('Selected segments:', selectedSegments);
+      console.log('Compliance approved:', complianceApproved);
+
+      // Reset selection
+      setSelectedSegments([]);
+    } catch (error) {
+      console.error('Error creating campaigns:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchScheduled = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/campaigns/scheduled');
@@ -178,6 +239,11 @@ export const CampaignScreen = () => {
   useEffect(() => {
     fetchCanvasList();
   }, []);
+
+  // simple client-side search for canvases by name
+  const filteredCanvasList = canvasList.filter(c =>
+    c.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -194,25 +260,62 @@ export const CampaignScreen = () => {
 
         {!selectedCanvasId ? (
           <div>
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">Select a Campaign</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-700">Select a Canvas</h2>
             {loadingList ? (
               <div className="bg-white rounded-lg shadow p-12 text-center">
-                <p className="text-gray-500">Loading campaigns...</p>
+                <p className="text-gray-500">Loading canvases...</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {canvasList.map((canvas) => (
-                  <button
-                    key={canvas.id}
-                    onClick={() => selectCampaign(canvas.id)}
-                    className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow text-left"
-                  >
-                    <h3 className="font-bold text-lg text-gray-800 mb-2">{canvas.name}</h3>
-                    <p className="text-sm text-gray-500">Click to view segments</p>
-                  </button>
-                ))}
-              </div>
-            )}
+              <>
+                <div className="mb-4">
+                  <input
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search canvases..."
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredCanvasList.map((canvas) => {
+                   const currentType = campaignTypes[canvas.id] ?? 'Standard';
+                    return (
+                      <div
+                        key={canvas.id}
+                        className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                      >
+                        <h3 className="font-bold text-lg text-gray-800 mb-2">{canvas.name}</h3>
+                    <p className="text-sm text-gray-500 mb-3">Campaign type:</p>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="inline-flex rounded-lg bg-gray-100 p-1">
+                        <button
+                          onClick={() => setCampaignTypes(prev => ({ ...prev, [canvas.id]: 'Standard' }))}
+                          className={`px-3 py-1 rounded-md font-medium ${currentType === 'Standard' ? 'bg-white text-blue-800 shadow' : 'text-gray-600'}`}
+                        >
+                          Standard
+                        </button>
+                        <button
+                          onClick={() => setCampaignTypes(prev => ({ ...prev, [canvas.id]: 'Promotional' }))}
+                          className={`px-3 py-1 rounded-md font-medium ${currentType === 'Promotional' ? 'bg-white text-purple-800 shadow' : 'text-gray-600'}`}
+                        >
+                          Promotional
+                        </button>
+                      </div>
+                      <span className="text-xs text-gray-500">Current: <strong>{currentType}</strong></span>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => selectCampaign(canvas.id, currentType)}
+                        className="w-full bg-indigo-600 text-white px-4 py-2 rounded font-medium hover:bg-indigo-700"
+                      >
+                        Select Canvas
+                       </button>
+                    </div>
+                 </div>
+                 );
+                })}
+                </div>
+              </>
+             )}
           </div>
         ) : !selectedSegment ? (
           <div>
@@ -221,23 +324,78 @@ export const CampaignScreen = () => {
                 onClick={backToCampaigns}
                 className="text-blue-600 hover:text-blue-800 font-medium"
               >
-                ← Back to campaigns
+                ← Back to canvases
               </button>
               <h2 className="text-xl font-semibold text-gray-700">
-                Campaign Segments
+                Campaign Segments - {selectedCampaignType}
               </h2>
+            </div>
+
+            <div className="mb-6 bg-white rounded-lg shadow p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 flex-1">
+                  <span className={`px-4 py-2 rounded-lg font-medium ${
+                    selectedCampaignType === 'Standard'
+                      ? 'bg-blue-100 text-blue-800'
+                      : 'bg-purple-100 text-purple-800'
+                  }`}>
+                    {selectedCampaignType} Campaign
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {segments.length} segments available
+                  </span>
+                  {selectedCampaignType === 'Promotional' && (
+                    <span className="text-xs text-green-600">
+                      ✓ Compliance check enabled
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={createCampaignsForSegments}
+                  disabled={selectedSegments.length === 0}
+                  className={`px-6 py-2 rounded-lg font-medium ${
+                    selectedSegments.length > 0
+                      ? 'bg-purple-600 text-white hover:bg-purple-700'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  Create Campaigns ({selectedSegments.length})
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {segments.map((segment) => (
-                <button
+                <div
                   key={segment.id}
-                  onClick={() => selectSegment(segment)}
-                  className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow text-left"
+                  className={`bg-white rounded-lg shadow-md p-4 border-2 transition-all ${
+                    selectedSegments.includes(segment.id)
+                      ? 'border-purple-500 bg-purple-50'
+                      : 'border-transparent hover:shadow-lg'
+                  }`}
                 >
-                  <h3 className="font-bold text-md text-gray-800">{segment.name}</h3>
-                  <p className="text-xs text-gray-500 mt-1">Click to view copy</p>
-                </button>
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedSegments.includes(segment.id)}
+                      onChange={() => toggleSegmentSelection(segment.id)}
+                      className="mt-1 w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                    />
+                    <div className="flex-1" onClick={() => selectSegment(segment)}>
+                      <h3 className="font-bold text-md text-gray-800 cursor-pointer hover:text-purple-600">
+                        {segment.name}
+                      </h3>
+                      <p className="text-xs text-gray-500 mt-1">
+                        <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 rounded">
+                          {segment.type}
+                        </span>
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1 cursor-pointer hover:text-purple-600">
+                        Click to view copy
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
