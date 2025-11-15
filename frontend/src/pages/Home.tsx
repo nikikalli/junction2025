@@ -73,6 +73,11 @@ interface Segment {
   name: string;
 }
 
+interface MessageWithKey {
+  key: string;
+  message: CanvasMessage;
+}
+
 const MessagePreview = ({ message }: { message: CanvasMessage }) => {
   if (message.channel === "email" && message.body) {
     return (
@@ -152,6 +157,7 @@ export const Home = () => {
   const [pendingCanvasName, setPendingCanvasName] = useState<string | null>(
     null
   );
+  const [selectedMessageKey, setSelectedMessageKey] = useState<string | null>(null);
   const count = 20;
 
   useEffect(() => {
@@ -231,6 +237,7 @@ export const Home = () => {
 
   const selectSegment = async (segment: Segment) => {
     setSelectedSegment(segment);
+    setSelectedMessageKey(null);
     setLoading(true);
     try {
       if (!selectedCanvasId) return;
@@ -252,11 +259,13 @@ export const Home = () => {
     setSelectedSegment(null);
     setCanvases([]);
     setSearchTerm("");
+    setSelectedMessageKey(null);
   };
 
   const backToSegments = () => {
     setSelectedSegment(null);
     setCanvases([]);
+    setSelectedMessageKey(null);
   };
 
   const toggleSegmentSelection = (segmentId: number) => {
@@ -266,6 +275,41 @@ export const Home = () => {
         : [...prev, segmentId]
     );
   };
+
+  // Extract all messages from canvas with their keys
+  const getAllMessages = (): MessageWithKey[] => {
+    if (canvases.length === 0) return [];
+    
+    const canvas = canvases[0];
+    const messages: MessageWithKey[] = [];
+    
+    canvas.steps.forEach((step) => {
+      if (step.messages) {
+        Object.entries(step.messages).forEach(([key, message]) => {
+          messages.push({
+            key: `${step.name}-${key}`,
+            message,
+          });
+        });
+      }
+    });
+    
+    return messages;
+  };
+
+  const allMessages = getAllMessages();
+  const selectedMessage = selectedMessageKey
+    ? allMessages.find((m) => m.key === selectedMessageKey)?.message ||
+      allMessages[0]?.message ||
+      null
+    : allMessages[0]?.message || null;
+
+  // Auto-select first message when loading
+  useEffect(() => {
+    if (allMessages.length > 0 && !selectedMessageKey) {
+      setSelectedMessageKey(allMessages[0].key);
+    }
+  }, [allMessages, selectedMessageKey]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
@@ -354,16 +398,21 @@ export const Home = () => {
               ) : !selectedSegment ? (
                 <div className="w-full bg-neutral-900 rounded-lg overflow-y-auto max-h-[70vh]">
                   <div className="flex flex-col mb-6 gap-3">
-                    <Button
-                      onClick={backToCampaigns}
-                      variant="ghost"
-                      className="text-neutral-400 hover:text-neutral-200 p-0 h-auto font-medium text-sm"
-                    >
-                      ← Back
-                    </Button>
-                    <h3 className="text-lg font-semibold text-neutral-100">
-                      Campaign Name: {pendingCanvasName}
-                    </h3>
+                    <div className="flex flex-row gap-3 items-center">
+                      <Button
+                        onClick={backToCampaigns}
+                        variant="ghost"
+                        className="text-neutral-400 hover:text-neutral-200 p-0 h-auto font-medium text-sm"
+                      >
+                        ← Back
+                      </Button>
+                      <h3 className="text-lg text-neutral-100">
+                        Campaign Name:{" "}
+                        <span className="font-semibold">
+                          {pendingCanvasName}
+                        </span>
+                      </h3>
+                    </div>
                     <p className="text-lg  text-gray-400">
                       {selectedCampaignType}
                     </p>
@@ -379,11 +428,7 @@ export const Home = () => {
                         <div
                           key={segment.id}
                           onClick={() => toggleSegmentSelection(segment.id)}
-                          className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${
-                            selectedSegments.includes(segment.id)
-                              ? "border-purple-500 bg-neutral-800"
-                              : "border-neutral-700 bg-neutral-850 hover:border-neutral-600"
-                          }`}
+                          className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${"border-neutral-700 bg-neutral-850 hover:border-neutral-600"}`}
                         >
                           <div
                             className="flex items-start gap-3"
@@ -415,97 +460,109 @@ export const Home = () => {
                   )}
                 </div>
               ) : (
-                <div className="w-full bg-neutral-900 rounded-lg p-6 max-h-[70vh] overflow-y-auto border border-neutral-800">
-                  <div className="mb-6 flex items-center gap-3">
-                    <Button
-                      onClick={backToSegments}
-                      variant="ghost"
-                      className="text-neutral-400 hover:text-neutral-200 p-0 h-auto font-medium text-sm"
-                    >
-                      ← Back
-                    </Button>
-                    <h3 className="text-lg font-semibold text-neutral-100">
-                      {selectedSegment.name} - Campaign Copy
-                    </h3>
+                <div className="w-full h-[70vh] flex flex-row gap-4">
+                  {/* Left Column - Message List */}
+                  <div className="w-[35%] bg-neutral-900 rounded-lg border border-neutral-800 flex flex-col overflow-hidden">
+                    <div className="flex flex-col gap-3 p-4 border-b border-neutral-800">
+                      <div className="flex flex-row gap-3 items-center">
+                        <Button
+                          onClick={backToSegments}
+                          variant="ghost"
+                          className="text-neutral-400 hover:text-neutral-200 p-0 h-auto font-medium text-sm"
+                        >
+                          ← Back
+                        </Button>
+                        <h3 className="text-sm font-semibold text-neutral-100">
+                          {selectedSegment.name}
+                        </h3>
+                      </div>
+                      <p className="text-xs text-gray-400">
+                        {selectedCampaignType}
+                      </p>
+                    </div>
+
+                    {loading ? (
+                      <div className="flex-1 flex items-center justify-center text-neutral-400">
+                        Loading...
+                      </div>
+                    ) : allMessages.length > 0 ? (
+                      <div className="flex-1 overflow-y-auto">
+                        <div className="flex flex-col gap-2 p-4">
+                          {allMessages.map((item) => (
+                            <button
+                              key={item.key}
+                              onClick={() => setSelectedMessageKey(item.key)}
+                              className={`text-left p-3 rounded-lg border transition-all text-sm ${
+                                selectedMessageKey === item.key
+                                  ? "border-purple-500 bg-purple-900/30 text-purple-100"
+                                  : "border-neutral-700 bg-neutral-850 text-neutral-300 hover:border-neutral-600"
+                              }`}
+                            >
+                              <div className="font-medium">{item.message.channel}</div>
+                              <div className="text-xs text-neutral-400 mt-1 truncate">
+                                {item.message.subject ||
+                                  item.message.message ||
+                                  item.message.body ||
+                                  "No content"}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex-1 flex items-center justify-center text-neutral-400 text-sm">
+                        No messages available
+                      </div>
+                    )}
                   </div>
 
-                  {loading ? (
-                    <div className="text-center py-6 text-neutral-400">
-                      Loading campaign copy...
-                    </div>
-                  ) : canvases.length > 0 ? (
-                    <div className="space-y-4">
-                      {canvases.map((canvas, index) => {
-                        const allMessages: CanvasMessage[] = [];
-                        canvas.steps.forEach((step) => {
-                          if (step.messages) {
-                            Object.values(step.messages).forEach((msg) =>
-                              allMessages.push(msg)
-                            );
-                          }
-                        });
-
-                        return (
-                          <div
-                            key={index}
-                            className="bg-neutral-800 rounded-lg border border-neutral-700 overflow-hidden"
-                          >
-                            <div className="bg-linear-to-r from-purple-600 to-blue-600 text-white p-5">
+                  {/* Right Column - Message Preview */}
+                  <div className="w-[65%] bg-neutral-900 rounded-lg border border-neutral-800 flex flex-col overflow-hidden">
+                    {loading ? (
+                      <div className="flex-1 flex items-center justify-center text-neutral-400">
+                        Loading campaign copy...
+                      </div>
+                    ) : selectedMessage ? (
+                      <div className="flex-1 overflow-y-auto p-4">
+                        {canvases.length > 0 && (
+                          <div className="mb-4 pb-4 border-b border-neutral-700">
+                            <div className="bg-linear-to-r from-purple-600 to-blue-600 text-white p-4 rounded-lg">
                               <h4 className="font-bold text-lg">
-                                {canvas.name}
+                                {canvases[0].name}
                               </h4>
-                              {canvas.country && (
+                              {canvases[0].country && (
                                 <p className="text-xs opacity-80 mt-1">
-                                  Country: {canvas.country}
+                                  Country: {canvases[0].country}
                                 </p>
                               )}
                             </div>
-
-                            <div className="p-5">
-                              <div className="flex gap-2 mb-4 text-xs flex-wrap">
-                                <span
-                                  className={`px-2.5 py-1 rounded-md font-medium ${
-                                    canvas.draft
-                                      ? "bg-neutral-700 text-neutral-300"
-                                      : "bg-green-900 text-green-200"
-                                  }`}
-                                >
-                                  {canvas.draft ? "Draft" : "Active"}
-                                </span>
-                                <span className="px-2.5 py-1 rounded-md bg-blue-900 text-blue-200 font-medium">
-                                  {canvas.variants?.length || 0} variants
-                                </span>
-                                <span className="px-2.5 py-1 rounded-md bg-purple-900 text-purple-200 font-medium">
-                                  {canvas.steps?.length || 0} steps
-                                </span>
-                              </div>
-
-                              {allMessages.length > 0 ? (
-                                <div className="space-y-4">
-                                  <h5 className="font-semibold text-sm text-neutral-100">
-                                    Messages
-                                  </h5>
-                                  {allMessages.map((message, msgIndex) => (
-                                    <div key={msgIndex} className="text-sm">
-                                      <MessagePreview message={message} />
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : (
-                                <p className="text-xs text-neutral-400">
-                                  No messages configured
-                                </p>
-                              )}
+                            <div className="flex gap-2 mt-4 text-xs flex-wrap">
+                              <span
+                                className={`px-2.5 py-1 rounded-md font-medium ${
+                                  canvases[0].draft
+                                    ? "bg-neutral-700 text-neutral-300"
+                                    : "bg-green-900 text-green-200"
+                                }`}
+                              >
+                                {canvases[0].draft ? "Draft" : "Active"}
+                              </span>
+                              <span className="px-2.5 py-1 rounded-md bg-blue-900 text-blue-200 font-medium">
+                                {canvases[0].variants?.length || 0} variants
+                              </span>
+                              <span className="px-2.5 py-1 rounded-md bg-purple-900 text-purple-200 font-medium">
+                                {canvases[0].steps?.length || 0} steps
+                              </span>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="text-center py-6 text-neutral-400">
-                      No campaign copy available
-                    </div>
-                  )}
+                        )}
+                        <MessagePreview message={selectedMessage} />
+                      </div>
+                    ) : (
+                      <div className="flex-1 flex items-center justify-center text-neutral-400">
+                        Select a message to view details
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </SpotlightCard>
