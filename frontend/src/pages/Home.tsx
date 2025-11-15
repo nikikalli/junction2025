@@ -289,7 +289,7 @@ export const Home = () => {
               <>
                 <TextType
                   className="text-4xl md:text-6xl font-bold mb-2 whitespace-nowrap"
-                  text={["One manager, a thousand campaigns"]}
+                  text={["One vision, a thousand campaigns"]}
                   typingSpeed={75}
                   pauseDuration={1500}
                   showCursor={true}
