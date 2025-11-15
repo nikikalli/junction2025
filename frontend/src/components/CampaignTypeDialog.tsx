@@ -26,53 +26,56 @@ export const CampaignTypeDialog = ({
 }: CampaignTypeDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Audience</DialogTitle>
-        </DialogHeader>
-        <p>
-          Select Campaign Type for <span className="font-bold">{campaignName}</span>
-        </p>
-        <div className="flex flex-row gap-3">
-          <button
-            onClick={() => onTypeChange("Standard")}
-            className={`px-4 py-3 rounded-lg border-2 font-medium hover:bg-blue-100 ${
-              selectedType === "Standard"
-                ? "border-purple-500"
-                : "border-gray-300"
-            }`}
-          >
-            Standard Campaign
-          </button>
-          <button
-            onClick={() => onTypeChange("Promotional")}
-            className={`px-4 py-3 rounded-lg border-2 font-medium hover:bg-blue-100 ${
-              selectedType === "Promotional"
-                ? "border-purple-500"
-                : "border-gray-300"
-            }`}
-          >
-            Promotional Campaign
-          </button>
-        </div>
-        <div className="flex flex-row items-center justify-between gap-3">
-          <p>Baby Age</p>
-          <div>
-            <Input className="w-30" placeholder="min" />
-            -
-            <Input className="w-30" placeholder="max" />
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-sm text-zinc-500">{campaignName}</DialogTitle>
+            <DialogTitle className="text-2xl">Audience</DialogTitle>
+          </DialogHeader>
+          <p>
+            Type
+          </p>
+          <div className="flex flex-row gap-3">
+            <button
+              onClick={() => onTypeChange("Standard")}
+              className={`px-4 py-3 rounded-lg border-2 font-medium hover:bg-blue-100 ${
+                selectedType === "Standard"
+                  ? "border-purple-500"
+                  : "border-gray-300"
+              }`}
+            >
+              Standard Campaign
+            </button>
+            <button
+              onClick={() => onTypeChange("Promotional")}
+              className={`px-4 py-3 rounded-lg border-2 font-medium hover:bg-blue-100 ${
+                selectedType === "Promotional"
+                  ? "border-purple-500"
+                  : "border-gray-300"
+              }`}
+            >
+              Promotional Campaign
+            </button>
           </div>
-        </div>
-        <div className="flex flex-row items-center justify-between gap-3">
-          <p>Mother Age</p>
-          <div>
-            <Input className="w-30" placeholder="min" />
-            -
-            <Input className="w-30" placeholder="max" />
+          <div className="flex flex-col items-start text-left justify-between gap-3">
+            <p>Baby Age</p>
+            <div>
+              <Input className="w-30" placeholder="min" />
+              -
+              <Input className="w-30" placeholder="max" />
+            </div>
           </div>
-        </div>
-        <Button onClick={() => onConfirm(selectedType)}>Next</Button>
-      </DialogContent>
-    </Dialog>
+          <div className="flex flex-col items-start text-left justify-between gap-3">
+            <p>Mother Age</p>
+            <div>
+              <Input className="w-30" placeholder="min" />
+              -
+              <Input className="w-30" placeholder="max" />
+            </div>
+          </div>
+          <Button onClick={() => onConfirm(selectedType)}>
+            Next
+          </Button>
+        </DialogContent>
+      </Dialog>
   );
 };
