@@ -11,4 +11,7 @@ export const config = {
     apiKey: process.env.BRAZE_API_KEY || '',
     restEndpoint: process.env.BRAZE_REST_ENDPOINT || 'https://rest.fra-01.braze.eu',
   },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || '',
+  },
 } as const;
