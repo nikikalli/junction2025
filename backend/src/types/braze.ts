@@ -197,6 +197,7 @@ export interface CreateContentBlockRequest {
   description?: string;
   content_type?: string;
   tags?: string[];
+  teams?: string[];
 }
 
 export interface UpdateContentBlockRequest {
@@ -258,4 +259,18 @@ export interface UpdateEmailTemplateRequest {
   plaintext_body?: string;
   preheader?: string;
   tags?: string[];
+}
+
+export interface ScheduledBroadcast {
+  name: string;
+  id: string;
+  type: 'Canvas' | 'Campaign';
+  tags: string[];
+  next_send_time: string;
+  schedule_type?: string;
+}
+
+export interface ScheduledBroadcastsResponse {
+  scheduled_broadcasts: ScheduledBroadcast[];
+  message: string;
 }

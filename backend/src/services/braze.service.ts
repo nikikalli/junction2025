@@ -18,6 +18,7 @@ import {
   EmailTemplateResponse,
   CreateEmailTemplateRequest,
   UpdateEmailTemplateRequest,
+  ScheduledBroadcastsResponse,
 } from '../types/braze';
 import { createError } from '../middleware/errorHandler';
 
@@ -39,7 +40,11 @@ class BrazeService {
 
     this.client.interceptors.request.use(
       (requestConfig) => {
-        requestConfig.params = { ...requestConfig.params, api_key: config.braze.apiKey };
+        requestConfig.params = {
+          ...requestConfig.params,
+          api_key: config.braze.apiKey,
+          'attributes[teams_array]': 'team7'
+        };
         return requestConfig;
       }
     );
@@ -143,7 +148,11 @@ class BrazeService {
   }
 
   async createContentBlock(request: CreateContentBlockRequest): Promise<ContentBlockResponse> {
-    const response = await this.client.post<ContentBlockResponse>('/content_blocks/create', request);
+    const requestWithTeam = {
+      ...request,
+      teams: request.teams || ['team7'],
+    };
+    const response = await this.client.post<ContentBlockResponse>('/content_blocks/create', requestWithTeam);
     return response.data;
   }
 
@@ -171,6 +180,13 @@ class BrazeService {
 
   async updateEmailTemplate(request: UpdateEmailTemplateRequest): Promise<EmailTemplateResponse> {
     const response = await this.client.post<EmailTemplateResponse>('/templates/email/update', request);
+    return response.data;
+  }
+
+  async getScheduledBroadcasts(endTime: string): Promise<ScheduledBroadcastsResponse> {
+    const response = await this.client.get<ScheduledBroadcastsResponse>('/messages/scheduled_broadcasts', {
+      params: { end_time: endTime },
+    });
     return response.data;
   }
 }
