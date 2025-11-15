@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface GradientTextProps {
   children: ReactNode;
@@ -22,7 +22,7 @@ export default function GradientText({
 
   return (
     <div
-      className={`relative mx-auto flex max-w-fit flex-row items-center justify-center rounded-[1.25rem] font-medium transition-shadow duration-500 overflow-hidden cursor-pointer ${className}`}
+      className={`flex flex-row font-medium transition-shadow duration-500 overflow-hidden cursor-pointer ${className}`}
     >
       {showBorder && (
         <div
