@@ -8,8 +8,6 @@ import {
   BrazeTrackRequest,
   BrazeTrackResponse,
   BrazeErrorResponse,
-  ScheduleCanvasRequest,
-  ScheduleCanvasResponse,
   ContentBlockListResponse,
   ContentBlockResponse,
   CreateContentBlockRequest,

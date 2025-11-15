@@ -198,7 +198,7 @@ export const Home = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/campaigns/analyzedSegments?count=20"
+        "http://localhost:3000/api/braze/analyzedSegments?count=20"
       );
       const data = await response.json();
       const mappedSegments: Segment[] = data.segments.map(
@@ -235,7 +235,7 @@ export const Home = () => {
     try {
       if (!selectedCanvasId) return;
       const response = await fetch(
-        `http://localhost:3000/api/campaigns/generate/${selectedCanvasId}?count=${count}`
+        `http://localhost:3000/api/braze/generate/${selectedCanvasId}?count=${count}`
       );
       const data = await response.json();
       const segmentCanvas = data.canvases?.[segment.id - 1];

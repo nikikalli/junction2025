@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { apiRouter } from './api';
 import { errorHandler } from './middleware/errorHandler';
+import { databaseService } from './services/database.service';
 
 dotenv.config();
 
@@ -20,8 +21,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check
-app.get('/health', (_req: Request, res: Response) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+app.get('/health', async (_req: Request, res: Response) => {
+  const dbConnected = await databaseService.testConnection();
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    database: dbConnected ? 'connected' : 'disconnected'
+  });
 });
 
 // API routes
@@ -37,8 +43,16 @@ app.use((_req: Request, res: Response) => {
 
 // Start server (for local development)
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
+
+    // Test database connection
+    const dbConnected = await databaseService.testConnection();
+    if (dbConnected) {
+      console.log('✓ Database connected');
+    } else {
+      console.warn('⚠ Database connection failed');
+    }
   });
 }
 
