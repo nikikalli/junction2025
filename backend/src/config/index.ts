@@ -11,4 +11,11 @@ export const config = {
     apiKey: process.env.BRAZE_API_KEY || '',
     restEndpoint: process.env.BRAZE_REST_ENDPOINT || 'https://rest.fra-01.braze.eu',
   },
+  database: {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432', 10),
+    name: process.env.DB_NAME || 'junction2025',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || '',
+  },
 } as const;

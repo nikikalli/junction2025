@@ -1,5 +1,5 @@
 import { brazeService } from './braze.service';
-import type { BrazeCanvasDetailsResponse, ScheduleCanvasResponse } from '../types/braze';
+import type { BrazeCanvasDetailsResponse } from '../types/braze';
 
 interface GeneratedCampaign extends BrazeCanvasDetailsResponse {
   dispatch_id?: string;
