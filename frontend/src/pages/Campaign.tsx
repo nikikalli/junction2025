@@ -95,9 +95,41 @@ interface CanvasList {
 }
 
 interface Segment {
+  // Identifiers
+  segment_id: string;
+
+  // Demographics
+  language: string;
+  parent_age: number;
+  parent_gender: string;
+  baby_count: number;
+  baby_age_week_1: number;
+
+  // Behavioral
+  event_count: number;
+
+  // Sentiment/Engagement
+  engagement_propensity: number;
+  price_sensitivity: number;
+  brand_loyalty: number;
+  contact_frequency_tolerance: number;
+  content_engagement_rate: number;
+
+  // Channel Preferences
+  prefers_email: boolean;
+  prefers_push: boolean;
+  prefers_inapp: boolean;
+
+  // Values
+  values_family: number;
+  values_eco_conscious: number;
+  values_convenience: number;
+  values_quality: number;
+
+  // UI fields
+  type: string;
   id: number;
   name: string;
-  type: string;
 }
 
 export const CampaignScreen = () => {
@@ -116,13 +148,7 @@ export const CampaignScreen = () => {
   const [selectedCampaignType, setSelectedCampaignType] = useState<'Standard' | 'Promotional'>('Standard');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const [segments, setSegments] = useState<Segment[]>(
-    Array.from({ length: 20 }, (_, i) => ({
-      id: i + 1,
-      name: `Segment ${i + 1} - ${['US', 'UK', 'DE', 'FR', 'ES', 'IT', 'JP', 'CN', 'BR', 'CA', 'AU', 'MX', 'IN', 'KR', 'NL', 'SE', 'NO', 'DK', 'FI', 'PL'][i % 20]}`,
-      type: 'Standard' // Will be set when user selects campaign type
-    }))
-  );
+  const [segments, setSegments] = useState<Segment[]>([]);
 
   const fetchCanvasList = async () => {
     setLoadingList(true);
@@ -144,14 +170,32 @@ export const CampaignScreen = () => {
     }
   };
 
-  const selectCampaign = (canvasId: string, campaignType: 'Standard' | 'Promotional') => {
+  const selectCampaign = async (canvasId: string, campaignType: 'Standard' | 'Promotional') => {
     setSelectedCanvasId(canvasId);
     setSelectedSegment(null);
     setCanvases([]);
     setSelectedCampaignType(campaignType);
+    setLoading(true);
 
-    // Update all segments to the selected campaign type
-    setSegments(segments.map(seg => ({ ...seg, type: campaignType })));
+    try {
+      // Fetch analyzed segments from backend
+      const response = await fetch('http://localhost:3000/api/campaigns/analyzedSegments?count=20');
+      const data = await response.json();
+
+      // Map backend segments to UI format
+      const mappedSegments: Segment[] = data.segments.map((seg: any, index: number) => ({
+        ...seg,
+        id: index + 1,
+        name: seg.segment_id,
+        type: campaignType,
+      }));
+
+      setSegments(mappedSegments);
+    } catch (error) {
+      console.error('Error fetching analyzed segments:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const selectSegment = async (segment: Segment) => {
@@ -364,7 +408,7 @@ export const CampaignScreen = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {segments.map((segment) => (
                 <div
                   key={segment.id}
@@ -374,25 +418,63 @@ export const CampaignScreen = () => {
                       : 'border-transparent hover:shadow-lg'
                   }`}
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2">
                     <input
                       type="checkbox"
                       checked={selectedSegments.includes(segment.id)}
                       onChange={() => toggleSegmentSelection(segment.id)}
                       className="mt-1 w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
                     />
-                    <div className="flex-1" onClick={() => selectSegment(segment)}>
-                      <h3 className="font-bold text-md text-gray-800 cursor-pointer hover:text-purple-600">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-sm text-gray-800 mb-2">
                         {segment.name}
                       </h3>
-                      <p className="text-xs text-gray-500 mt-1">
-                        <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 rounded">
-                          {segment.type}
-                        </span>
-                      </p>
-                      <p className="text-xs text-gray-500 mt-1 cursor-pointer hover:text-purple-600">
-                        Click to view copy
-                      </p>
+
+                      <div className="space-y-1 text-xs text-gray-600">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Language:</span>
+                          <span className="font-medium">{segment.language.toUpperCase()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Age:</span>
+                          <span className="font-medium">{segment.parent_age}y</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Gender:</span>
+                          <span className="font-medium capitalize">{segment.parent_gender}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Babies:</span>
+                          <span className="font-medium">{segment.baby_count}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Engagement:</span>
+                          <span className="font-medium">{segment.engagement_propensity}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Loyalty:</span>
+                          <span className="font-medium">{segment.brand_loyalty}%</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-2 flex gap-1 flex-wrap">
+                        {segment.prefers_email && (
+                          <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">📧</span>
+                        )}
+                        {segment.prefers_push && (
+                          <span className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-xs">🔔</span>
+                        )}
+                        {segment.prefers_inapp && (
+                          <span className="px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded text-xs">📱</span>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => selectSegment(segment)}
+                        className="mt-2 text-xs text-purple-600 hover:text-purple-800 font-medium"
+                      >
+                        View details →
+                      </button>
                     </div>
                   </div>
                 </div>
