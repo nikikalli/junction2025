@@ -26,18 +26,18 @@ export const CampaignTypeDialog = ({
 }: CampaignTypeDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md bg-gray-900">
           <DialogHeader>
-            <DialogTitle className="text-sm text-zinc-500">{campaignName}</DialogTitle>
-            <DialogTitle className="text-2xl">Audience</DialogTitle>
+            <DialogTitle className="text-sm text-zinc-400 font-bold">{campaignName}</DialogTitle>
+            <DialogTitle className="text-2xl text-gray-100">Audience</DialogTitle>
           </DialogHeader>
-          <p>
+          <p className="text-gray-400">
             Type
           </p>
           <div className="flex flex-row gap-3">
             <button
               onClick={() => onTypeChange("Standard")}
-              className={`px-4 py-3 rounded-lg border-2 font-medium hover:bg-blue-100 ${
+              className={`px-4 py-3 rounded-lg border-2 font-medium text-gray-200 hover:bg-gray-700 ${
                 selectedType === "Standard"
                   ? "border-purple-500"
                   : "border-gray-300"
@@ -47,7 +47,7 @@ export const CampaignTypeDialog = ({
             </button>
             <button
               onClick={() => onTypeChange("Promotional")}
-              className={`px-4 py-3 rounded-lg border-2 font-medium hover:bg-blue-100 ${
+              className={`px-4 py-3 rounded-lg border-2 font-medium text-gray-200 hover:bg-gray-700 ${
                 selectedType === "Promotional"
                   ? "border-purple-500"
                   : "border-gray-300"
@@ -57,22 +57,22 @@ export const CampaignTypeDialog = ({
             </button>
           </div>
           <div className="flex flex-col items-start text-left justify-between gap-3">
-            <p>Baby Age</p>
-            <div>
+            <p className="text-gray-400">Baby Age</p>
+            <div className="flex gap-3 text-gray-400 items-center">
               <Input className="w-30" placeholder="min" />
               -
               <Input className="w-30" placeholder="max" />
             </div>
           </div>
           <div className="flex flex-col items-start text-left justify-between gap-3">
-            <p>Mother Age</p>
-            <div>
+            <p className="text-gray-400">Mother Age</p>
+            <div className="flex gap-3 text-gray-400 items-center">
               <Input className="w-30" placeholder="min" />
               -
               <Input className="w-30" placeholder="max" />
             </div>
           </div>
-          <Button onClick={() => onConfirm(selectedType)}>
+          <Button className="bg-gray-600 hover:bg-gray-700" onClick={() => onConfirm(selectedType)}>
             Next
           </Button>
         </DialogContent>

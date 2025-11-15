@@ -24,7 +24,7 @@ export const SegmentList = ({
       <div className="flex flex-col mb-6 gap-3">
         <HeaderWithBackButton
           onBack={onBack}
-          title={`Campaign Name: ${canvasName}`}
+          title={`${canvasName}`}
           subtitle={campaignType}
         />
       </div>

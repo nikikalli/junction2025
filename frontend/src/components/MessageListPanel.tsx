@@ -22,8 +22,8 @@ export const MessageListPanel = ({
   onMessageSelect,
 }: MessageListPanelProps) => {
   return (
-    <div className="w-[35%] bg-neutral-900 rounded-lg border border-neutral-800 flex flex-col overflow-hidden">
-      <div className="flex flex-col gap-3 p-4 border-b border-neutral-800">
+    <div className="w-full md:w-[35%] bg-neutral-900 flex flex-col overflow-hidden">
+      <div className="flex flex-col gap-3">
         <HeaderWithBackButton
           onBack={onBack}
           title={segmentName}
@@ -36,7 +36,7 @@ export const MessageListPanel = ({
           Loading...
         </div>
       ) : allMessages.length > 0 ? (
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto h-full ">
           <div className="flex flex-col gap-2 p-4">
             {allMessages.map((item) => (
               <MessageButton

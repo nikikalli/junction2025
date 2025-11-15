@@ -16,7 +16,7 @@ import type { CanvasMessage } from "@/types";
 const MessagePreview = ({ message }: { message: CanvasMessage }) => {
   if (message.channel === "email" && message.body) {
     return (
-      <div className="border border-neutral-700 rounded-lg overflow-hidden bg-neutral-800">
+      <div className="border border-neutral-700 h-full rounded-lg overflow-hidden bg-neutral-800">
         <div className="bg-neutral-700 px-4 py-3 border-b border-neutral-600 text-sm">
           <strong className="text-neutral-100">Subject:</strong>
           <span className="text-neutral-300 ml-2">
@@ -25,7 +25,7 @@ const MessagePreview = ({ message }: { message: CanvasMessage }) => {
         </div>
         <iframe
           srcDoc={message.body}
-          className="w-full h-96 border-0"
+          className="w-full h-full border-0"
           title="Email preview"
           sandbox="allow-same-origin"
         />
@@ -137,7 +137,7 @@ export const Home = () => {
             {!selectedCanvasId && (
               <>
                 <TextType
-                  className="text-4xl md:text-6xl font-bold mb-2 whitespace-nowrap"
+                  className="text-2xl md:text-4xl font-bold text-center whitespace-nowrap"
                   text={["One manager, a thousand campaigns"]}
                   typingSpeed={75}
                   pauseDuration={1500}
@@ -171,7 +171,7 @@ export const Home = () => {
                   onSegmentSelect={selectSegment}
                 />
               ) : (
-                <div className="w-full h-[70vh] flex flex-row gap-4">
+                <div className="w-full h-[70vh] flex flex-col md:flex-row gap-4">
                   <MessageListPanel
                     allMessages={allMessages}
                     selectedMessageKey={selectedMessageKey}
@@ -181,13 +181,12 @@ export const Home = () => {
                     onBack={handleBackToSegments}
                     onMessageSelect={setSelectedMessageKey}
                   />
-                  <div className="w-[65%] bg-neutral-900 rounded-lg border border-neutral-800 flex flex-col overflow-hidden">
+                  <div className="w-full md:w-[65%] bg-neutral-900 flex flex-col overflow-hidden">
                     {segmentLoading ? (
                       <div className="flex-1 flex items-center justify-center text-neutral-400">
-                        Loading campaign copy...
                       </div>
                     ) : selectedMessage ? (
-                      <div className="flex-1 overflow-y-auto p-4">
+                      <div className="flex-1 overflow-y-auto h-full">
                         <MessagePreview message={selectedMessage} />
                       </div>
                     ) : (

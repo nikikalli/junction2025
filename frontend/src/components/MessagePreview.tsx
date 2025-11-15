@@ -3,8 +3,8 @@ import { CanvasMessage } from "@/types";
 const MessagePreview = ({ message }: { message: CanvasMessage }) => {
   if (message.channel === "email" && message.body) {
     return (
-      <div className="border border-neutral-700 rounded-lg overflow-hidden bg-neutral-800">
-        <div className="bg-neutral-700 px-4 py-3 border-b border-neutral-600 text-sm">
+      <div className="border border-neutral-700 h-full rounded-lg overflow-hidden h-full bg-neutral-800">
+        <div className="bg-neutral-700 px-4 py-3 border-b border-neutral-600 text-sm h-full ">
           <strong className="text-neutral-100">Subject:</strong>
           <span className="text-neutral-300 ml-2">
             {message.subject || "No subject"}
@@ -12,7 +12,7 @@ const MessagePreview = ({ message }: { message: CanvasMessage }) => {
         </div>
         <iframe
           srcDoc={message.body}
-          className="w-full h-96 border-0"
+          className="w-full h-full border-0"
           title="Email preview"
           sandbox="allow-same-origin"
         />
@@ -48,7 +48,7 @@ const MessagePreview = ({ message }: { message: CanvasMessage }) => {
   }
 
   return (
-    <div className="border border-neutral-700 rounded-lg bg-neutral-800 p-4">
+    <div className="border border-neutral-700 rounded-lg h-full bg-neutral-800 p-4">
       <div className="text-sm text-neutral-400">{message.channel} message</div>
       <pre className="text-xs mt-2 overflow-auto text-neutral-300">
         {JSON.stringify(message, null, 2)}

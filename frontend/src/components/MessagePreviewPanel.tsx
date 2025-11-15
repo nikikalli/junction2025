@@ -49,10 +49,9 @@ export const MessagePreviewPanel = ({
     <div className="w-[65%] bg-neutral-900 rounded-lg border border-neutral-800 flex flex-col overflow-hidden">
       {loading ? (
         <div className="flex-1 flex items-center justify-center text-neutral-400">
-          Loading campaign copy...
         </div>
       ) : selectedMessage ? (
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto h-full">
           {canvas && <CanvasSummaryHeader canvas={canvas} />}
           <div>{selectedMessage && JSON.stringify(selectedMessage)}</div>
         </div>
