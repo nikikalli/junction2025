@@ -52,7 +52,7 @@ class ViyaCampaignAnalytics:
 
     def load_data(self):
         print("Loading data into CAS...")
-        self.conn.read_csv(f'{DATA_DIR_OUTPUT}/{SEGMENTS_OUTPUT_FILE}',
+        self.conn.read_csv(f'{DATA_DIR_INPUT}/{SEGMENTS_INPUT_FILE}',
                           casout={'name': 'segments', 'replace': True})
         self.conn.read_csv(f'{DATA_DIR_GENERATED}/{CAMPAIGNS_FILE}',
                           casout={'name': 'campaigns', 'replace': True})

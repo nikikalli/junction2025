@@ -4,7 +4,8 @@ import os
 
 class CampaignSpecificationGenerator:
     def __init__(self):
-        self.output_dir = 'data/output'
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        self.output_dir = os.path.join(base_dir, 'data', 'output')
         os.makedirs(self.output_dir, exist_ok=True)
 
     def load_phase3_results(self):
