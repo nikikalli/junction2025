@@ -139,7 +139,7 @@ class ViyaCampaignAnalytics:
         self.conn.fedsql.execdirect(query=f'''
             CREATE TABLE segments_learned AS
             SELECT s.segment_id, s."language", s.parent_age, s.parent_gender,
-                   s.baby_count, s.baby_age_week_1, s.event_count,
+                   s.baby_count,
 
                    (COALESCE(p.avg_engagement, {DEFAULT_ENGAGEMENT}) - {ENGAGEMENT_MIN}) / {ENGAGEMENT_SCALE} AS engagement_propensity,
 
