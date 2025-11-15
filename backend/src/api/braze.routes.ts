@@ -84,19 +84,6 @@ router.post(
   }
 );
 
-router.post(
-  '/canvas/trigger/schedule',
-  validateBody(scheduleCanvasSchema),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const data = await brazeService.scheduleTriggeredCanvas(req.body);
-      res.json(data);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 router.get('/content-blocks/list', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await brazeService.listContentBlocks();

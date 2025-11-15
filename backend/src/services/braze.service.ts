@@ -84,22 +84,6 @@ class BrazeService {
     return response.data;
   }
 
-  async scheduleTriggeredCanvas(request: ScheduleCanvasRequest): Promise<ScheduleCanvasResponse> {
-    if (request.broadcast && request.recipients && request.recipients.length > 0) {
-      throw createError('Cannot use both broadcast and recipients list', 400);
-    }
-
-    if (request.recipients && request.recipients.length > 50) {
-      throw createError('Maximum 50 recipients allowed per request', 400);
-    }
-
-    const response = await this.client.post<ScheduleCanvasResponse>(
-      '/canvas/trigger/schedule/create',
-      request
-    );
-    return response.data;
-  }
-
   async sendUserAttributes(attributes: BrazeUserAttribute[]): Promise<BrazeTrackResponse> {
     if (!attributes || attributes.length === 0) {
       throw createError('At least one user attribute is required', 400);
