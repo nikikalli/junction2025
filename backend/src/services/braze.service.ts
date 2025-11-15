@@ -189,6 +189,16 @@ class BrazeService {
     });
     return response.data;
   }
+
+  async sendCampaign(request: any): Promise<any> {
+    const response = await this.client.post('/messages/send', request);
+    return response.data;
+  }
+
+  async scheduleCampaign(request: any): Promise<any> {
+    const response = await this.client.post('/messages/schedule/create', request);
+    return response.data;
+  }
 }
 
 export const brazeService = new BrazeService();
