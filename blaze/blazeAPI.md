@@ -110,7 +110,7 @@ The backend must support at least these Braze API endpoints:
      - Updating user attributes.
      - Sending custom events.
 
-2. `POST /campaigns/trigger/send`
+2. `POST /braze/trigger/send`
    - Used to trigger an existing **Braze Campaign** for:
      - Specific recipients.
      - Or as a broadcast to the campaign’s segment.
@@ -351,7 +351,7 @@ Each endpoint below lists possible HTTP status codes.
 6.1 Create Campaign
 
 Method: POST
-Path: /api/campaigns
+Path: /api/braze
 
 6.1.1 Request Body
 {
@@ -448,7 +448,7 @@ Body: standard error format with code = "VALIDATION_ERROR".
 6.2 Update Campaign
 
 Method: PUT
-Path: /api/campaigns/:id
+Path: /api/braze/:id
 
 6.2.1 Request Body
 
@@ -485,7 +485,7 @@ Possible errors:
 6.3 Get Campaign
 
 Method: GET
-Path: /api/campaigns/:id
+Path: /api/braze/:id
 
 6.3.1 Response
 
@@ -523,7 +523,7 @@ Status: 404 Not Found with NOT_FOUND error code.
 6.4 List Campaigns
 
 Method: GET
-Path: /api/campaigns
+Path: /api/braze
 
 6.4.1 Query Parameters
 
@@ -537,7 +537,7 @@ market (string) – filter campaigns that include this market.
 
 search (string) – substring search on name.
 
-Example: /api/campaigns?status=approved&type=promotional&market=FI
+Example: /api/braze?status=approved&type=promotional&market=FI
 
 6.4.2 Response
 
@@ -571,7 +571,7 @@ Status: 200 OK
 6.5 Run QA For Campaign
 
 Method: POST
-Path: /api/campaigns/:id/qa
+Path: /api/braze/:id/qa
 
 6.5.1 QA Rules
 
@@ -659,7 +659,7 @@ If validation inside QA fails (for example dates invalid because of data corrupt
 6.6 Launch Campaign
 
 Method: POST
-Path: /api/campaigns/:id/launch
+Path: /api/braze/:id/launch
 
 6.6.1 Preconditions
 
@@ -716,7 +716,7 @@ You may extend later to support custom audiences.
 
 6.6.2.1 Launching Braze Campaign
 
-Braze endpoint: POST /campaigns/trigger/send
+Braze endpoint: POST /braze/trigger/send
 
 Payload:
 
@@ -1200,9 +1200,9 @@ Apply all rules from section 6.5.1.
 
 Inspect other campaigns only for promotional overlap checks.
 
-9.2.7 routes/campaigns.ts
+9.2.7 routes/braze.ts
 
-Defines Express routes for /api/campaigns with handlers:
+Defines Express routes for /api/braze with handlers:
 
 createCampaign
 
@@ -1335,13 +1335,13 @@ Backend forwards events to Braze.
 
 11.4 Create Campaign
 
-Marketer or team uses frontend to call POST /api/campaigns with campaign data.
+Marketer or team uses frontend to call POST /api/braze with campaign data.
 
 Backend validates, computes complexity and risk, and stores the campaign.
 
 11.5 QA
 
-Frontend triggers POST /api/campaigns/:id/qa.
+Frontend triggers POST /api/braze/:id/qa.
 
 Backend loads campaign and other campaigns.
 
@@ -1353,11 +1353,11 @@ If no errors, backend marks campaign as approved.
 
 11.6 Launch
 
-Frontend calls POST /api/campaigns/:id/launch.
+Frontend calls POST /api/braze/:id/launch.
 
 Backend checks that campaign is approved and that a Braze identifier is set.
 
-Backend calls Braze POST /campaigns/trigger/send or POST /canvas/trigger/send.
+Backend calls Braze POST /braze/trigger/send or POST /canvas/trigger/send.
 
 Backend stores dispatch_id.
 

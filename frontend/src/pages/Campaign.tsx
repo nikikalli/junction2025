@@ -179,7 +179,7 @@ export const CampaignScreen = () => {
 
     try {
       // Fetch analyzed segments from backend
-      const response = await fetch('http://localhost:3000/api/campaigns/analyzedSegments?count=20');
+      const response = await fetch('http://localhost:3000/api/braze/analyzedSegments?count=20');
       const data = await response.json();
 
       // Map backend segments to UI format
@@ -203,7 +203,7 @@ export const CampaignScreen = () => {
     setLoading(true);
     try {
       if (!selectedCanvasId) return;
-      const response = await fetch(`http://localhost:3000/api/campaigns/generate/${selectedCanvasId}?count=${count}`);
+      const response = await fetch(`http://localhost:3000/api/braze/generate/${selectedCanvasId}?count=${count}`);
       const data = await response.json();
       // Only show the canvas copy corresponding to this segment (1-based index)
       const segmentCanvas = data.canvases?.[segment.id - 1];
@@ -271,7 +271,7 @@ export const CampaignScreen = () => {
 
   const fetchScheduled = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/campaigns/scheduled');
+      const response = await fetch('http://localhost:3000/api/braze/scheduled');
       const data = await response.json();
       setScheduled(data.scheduled_broadcasts || []);
       setShowScheduled(true);

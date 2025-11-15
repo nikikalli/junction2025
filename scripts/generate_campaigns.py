@@ -43,7 +43,7 @@ for i in range(12):
     campaign_id += 1
 
 campaigns_df = pd.DataFrame(campaigns)
-campaigns_df.to_csv('data/generated/campaigns.csv', index=False)
+campaigns_df.to_csv('data/generated/braze.csv', index=False)
 print(f"\nCreated {len(campaigns_df)} campaigns")
 
 results = []

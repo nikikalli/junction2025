@@ -1,5 +1,5 @@
 import { brazeService } from './braze.service';
-import type { BrazeCanvasDetailsResponse, ScheduleCanvasResponse } from '../types/braze';
+import type { BrazeCanvasDetailsResponse } from '../types/braze';
 
 interface GeneratedCampaign extends BrazeCanvasDetailsResponse {
   dispatch_id?: string;
@@ -25,39 +25,12 @@ class CampaignGeneratorService {
     for (let i = 0; i < count; i++) {
       const country = this.COUNTRIES[i % this.COUNTRIES.length];
 
-      try {
-        const scheduleResponse: ScheduleCanvasResponse = await brazeService.scheduleTriggeredCanvas({
-          canvas_id: canvasId,
-          broadcast: true,
-          schedule: {
-            time: scheduleTime.toISOString(),
-            in_local_time: false,
-            at_optimal_time: false,
-          },
-          canvas_entry_properties: {
-            country,
-            campaign_index: i + 1,
-            generated_at: new Date().toISOString(),
-          },
-        });
-
-        campaigns.push({
-          ...originalCanvas,
-          dispatch_id: scheduleResponse.dispatch_id,
-          schedule_id: scheduleResponse.schedule_id,
-          country,
-          campaign_index: i + 1,
-          name: `${originalCanvas.name} - ${country}`,
-        });
-      } catch (error) {
-        console.error(`Failed to schedule campaign ${i + 1} for ${country}:`, error);
-        campaigns.push({
-          ...originalCanvas,
-          country,
-          campaign_index: i + 1,
-          name: `${originalCanvas.name} - ${country} (Failed)`,
-        });
-      }
+    campaigns.push({
+        ...originalCanvas,
+        country,
+        campaign_index: i + 1,
+        name: `${originalCanvas.name} - ${country} (Failed)`,
+      });
     }
 
     return campaigns;
