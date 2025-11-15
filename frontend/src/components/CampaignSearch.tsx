@@ -30,11 +30,11 @@ export const CampaignSearch = ({
 
       {searchTerm.trim() !== "" && (
         <div
-          className="absolute mt-2 top-full w-full bg-white text-black rounded shadow-lg overflow-visible z-20"
+          className="absolute mt-2 top-full w-full bg-neutral-900 text-zinc-400 rounded shadow-lg overflow-visible z-20"
           style={{ minWidth: "500px" }}
         >
           {loadingList ? (
-            <div className="px-3 py-2 text-sm text-gray-500">Loading...</div>
+            <div className="px-3 py-2 text-sm">Loading...</div>
           ) : filteredCanvasList.length > 0 ? (
             filteredCanvasList.slice(0, 6).map((c) => (
               <div
@@ -43,14 +43,14 @@ export const CampaignSearch = ({
                 onClick={() => onCampaignSelect(c.id, c.name)}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm text-gray-700 truncate">
+                  <span className="text-sm truncate">
                     {c.name}
                   </span>
                 </div>
               </div>
             ))
           ) : (
-            <div className="px-3 py-2 text-sm text-gray-500">No results</div>
+            <div className="px-3 py-2 text-sm">No results</div>
           )}
         </div>
       )}
