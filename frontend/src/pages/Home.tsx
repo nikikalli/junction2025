@@ -138,7 +138,7 @@ export const Home = () => {
               <>
                 <TextType
                   className="text-2xl md:text-4xl font-bold text-center whitespace-nowrap"
-                  text={["One manager, a thousand campaigns"]}
+                  text={["One vision, a thousand campaigns"]}
                   typingSpeed={75}
                   pauseDuration={1500}
                   showCursor={true}

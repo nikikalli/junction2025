@@ -162,7 +162,7 @@ npm run type-check         # Type check all workspaces
 
 ### Campaign Management
 
-- `POST /api/campaigns/generate` - Generate AI campaign content
+- `POST /api/braze/generate` - Generate AI campaign content
   ```json
   {
     "prompt": "Create a welcome email for new parents",
@@ -171,7 +171,7 @@ npm run type-check         # Type check all workspaces
   }
   ```
 
-- `POST /api/campaigns/create` - Create campaign in Braze
+- `POST /api/braze/create` - Create campaign in Braze
   ```json
   {
     "name": "Welcome Campaign",
@@ -180,9 +180,9 @@ npm run type-check         # Type check all workspaces
   }
   ```
 
-- `GET /api/campaigns/analytics/:campaignId` - Get campaign analytics
+- `GET /api/braze/analytics/:campaignId` - Get campaign analytics
 
-- `POST /api/campaigns/optimize` - Get AI optimization suggestions
+- `POST /api/braze/optimize` - Get AI optimization suggestions
   ```json
   {
     "campaignData": "Campaign details...",
