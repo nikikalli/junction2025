@@ -1,0 +1,13 @@
+campaign_id,campaign_type,channel,message_sentiment,value_theme,offer_type,discount_percentage
+CAMP_001,educational,email,friendly,convenience,none,
+CAMP_002,educational,email,friendly,family,none,
+CAMP_003,educational,push,friendly,convenience,none,
+CAMP_004,educational,inapp,friendly,convenience,none,
+CAMP_005,discount,inapp,friendly,eco_conscious,percentage_discount,25.0
+CAMP_006,discount,push,friendly,eco_conscious,percentage_discount,15.0
+CAMP_007,premium,email,informative,family,premium,
+CAMP_008,premium,email,informative,quality,premium,
+CAMP_009,discount,inapp,urgent,convenience,percentage_discount,10.0
+CAMP_010,premium,inapp,informative,eco_conscious,premium,
+CAMP_011,premium,push,informative,convenience,bundle,
+CAMP_012,educational,email,friendly,convenience,none,
