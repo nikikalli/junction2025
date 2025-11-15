@@ -9,24 +9,22 @@ interface Props {
   className?: string
 }
 
-export function InputWithButton({ value, onChange, onSubmit, placeholder, className }: Props) {
+export function InputWithButton({ value, onChange, onSubmit, placeholder }: Props) {
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault()
         onSubmit && onSubmit()
       }}
-      className={`w-full ${className ?? ""}`}
+      className={`w-full`}
     >
-      <div className="flex w-full items-center gap-2">
-        <Input
-          className="bg-gray-900 border-0"
-          type="text"
-          placeholder={placeholder || "Search Canvas to create a new Campaign"}
-          value={value}
-          onChange={onChange}
-        />
-      </div>
+      <Input
+        className="bg-transparent border-0"
+        type="text"
+        placeholder={placeholder || "Search Canvas to create a new Campaign"}
+        value={value}
+        onChange={onChange}
+      />
     </form>
   )
 }
