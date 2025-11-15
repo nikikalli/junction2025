@@ -3,6 +3,7 @@ import SpotlightCard from "@/components/SpotlightCard";
 import PrismaticBurst from "@/components/PrismaticBurst";
 import { InputWithButton } from "@/components/InputWithButton";
 import { Nav } from "@/components/Nav";
+import { Button } from "@/components/ui/button";
 import { useState, useEffect } from 'react';
 
 interface CanvasList {
@@ -68,9 +69,10 @@ interface Segment {
 const MessagePreview = ({ message }: { message: CanvasMessage }) => {
   if (message.channel === 'email' && message.body) {
     return (
-      <div className="border rounded">
-        <div className="bg-gray-100 px-3 py-2 border-b text-sm">
-          <strong>Subject:</strong> {message.subject || 'No subject'}
+      <div className="border border-neutral-700 rounded-lg overflow-hidden bg-neutral-800">
+        <div className="bg-neutral-700 px-4 py-3 border-b border-neutral-600 text-sm">
+          <strong className="text-neutral-100">Subject:</strong>
+          <span className="text-neutral-300 ml-2">{message.subject || 'No subject'}</span>
         </div>
         <iframe
           srcDoc={message.body}
@@ -84,9 +86,9 @@ const MessagePreview = ({ message }: { message: CanvasMessage }) => {
 
   if (message.channel === 'sms' && (message.message || message.body)) {
     return (
-      <div className="border rounded bg-white p-4">
-        <div className="text-xs text-gray-500 mb-2">SMS Message</div>
-        <div className="bg-blue-500 text-white rounded-2xl px-4 py-2 inline-block max-w-xs">
+      <div className="border border-neutral-700 rounded-lg bg-neutral-800 p-4">
+        <div className="text-xs text-neutral-400 mb-3">SMS Message</div>
+        <div className="bg-blue-600 text-white rounded-2xl px-4 py-2 inline-block max-w-xs">
           {message.message || message.body}
         </div>
       </div>
@@ -95,22 +97,22 @@ const MessagePreview = ({ message }: { message: CanvasMessage }) => {
 
   if (message.channel === 'push' && (message.message || message.body)) {
     return (
-      <div className="border rounded bg-gray-50 p-4">
-        <div className="bg-white rounded-lg shadow-sm p-3 max-w-sm">
-          <div className="text-xs text-gray-500 mb-1">Push Notification</div>
-          <div className="font-semibold text-sm">{message.subject || 'Notification'}</div>
-          <div className="text-sm text-gray-700 mt-1">{message.message || message.body}</div>
+      <div className="border border-neutral-700 rounded-lg bg-neutral-800 p-4">
+        <div className="bg-neutral-700 rounded-lg shadow-sm p-3 max-w-sm border border-neutral-600">
+          <div className="text-xs text-neutral-400 mb-2">Push Notification</div>
+          <div className="font-semibold text-sm text-neutral-100">{message.subject || 'Notification'}</div>
+          <div className="text-sm text-neutral-300 mt-2">{message.message || message.body}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="border rounded bg-gray-50 p-4">
-      <div className="text-sm text-gray-500">
+    <div className="border border-neutral-700 rounded-lg bg-neutral-800 p-4">
+      <div className="text-sm text-neutral-400">
         {message.channel} message
       </div>
-      <pre className="text-xs mt-2 overflow-auto">{JSON.stringify(message, null, 2)}</pre>
+      <pre className="text-xs mt-2 overflow-auto text-neutral-300">{JSON.stringify(message, null, 2)}</pre>
     </div>
   );
 };
@@ -264,20 +266,24 @@ export const NewHome = () => {
         />
         <div className="absolute inset-0 z-10 flex flex-col items-center h-full">
           <Nav />
-          <div className="flex flex-col items-center justify-center h-full gap-6">
-            <TextType
-              className="text-4xl md:text-6xl font-bold mb-2 whitespace-nowrap"
-              text={["One manager, a thousand campaigns"]}
-              typingSpeed={75}
-              pauseDuration={1500}
-              showCursor={true}
-              cursorCharacter="_"
-            />
-            <p className="text-1xl md:text-2xl text-gray-400">
-              Turn assets into campaigns with one click
-            </p>
+          <div className="flex flex-col items-center justify-center h-full gap-6 w-full px-4">
+            {!selectedCanvasId && (
+              <>
+                <TextType
+                  className="text-4xl md:text-6xl font-bold mb-2 whitespace-nowrap"
+                  text={["One manager, a thousand campaigns"]}
+                  typingSpeed={75}
+                  pauseDuration={1500}
+                  showCursor={true}
+                  cursorCharacter="_"
+                />
+                <p className="text-1xl md:text-2xl text-gray-400">
+                  Turn assets into campaigns with one click
+                </p>
+              </>
+            )}
             <SpotlightCard
-              className="flex flex-col items-center justify-center custom-spotlight-card w-full"
+              className="flex flex-col items-center justify-center custom-spotlight-card w-[1000px] max-w-full"
               spotlightColor="rgba(0, 229, 255, 0.2)"
             >
               {!selectedCanvasId ? (
@@ -295,36 +301,38 @@ export const NewHome = () => {
                   />
 
                   {searchTerm.trim() !== '' && (
-                    <div className="absolute mt-2 top-full w-full max-w-sm bg-white text-black rounded shadow-lg overflow-visible z-20">
+                    <div className="absolute mt-2 top-full w-full bg-white text-black rounded shadow-lg overflow-visible z-20" style={{ minWidth: '500px' }}>
                       {loadingList ? (
                         <div className="px-3 py-2 text-sm text-gray-500">Loading...</div>
                       ) : filteredCanvasList.length > 0 ? (
                         filteredCanvasList.slice(0, 6).map((c) => {
                           const currentType = campaignTypes[c.id] ?? 'Standard';
                           return (
-                            <div key={c.id} className="px-3 py-2 border-b hover:bg-gray-50">
-                              <div className="flex justify-between items-center gap-2">
-                                <span className="text-sm text-gray-700 flex-1">{c.name}</span>
-                                <div className="inline-flex rounded-lg bg-gray-100 p-0.5">
+                            <div key={c.id} className="px-3 py-3 border-b hover:bg-gray-50">
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="text-sm text-gray-700 truncate">{c.name}</span>
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <div className="inline-flex rounded-lg bg-gray-100 p-0.5">
+                                    <button
+                                      onClick={() => setCampaignTypes(prev => ({ ...prev, [c.id]: 'Standard' }))}
+                                      className={`px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap ${currentType === 'Standard' ? 'bg-white text-blue-700 shadow' : 'text-gray-600'}`}
+                                    >
+                                      Std
+                                    </button>
+                                    <button
+                                      onClick={() => setCampaignTypes(prev => ({ ...prev, [c.id]: 'Promotional' }))}
+                                      className={`px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap ${currentType === 'Promotional' ? 'bg-white text-purple-700 shadow' : 'text-gray-600'}`}
+                                    >
+                                      Promo
+                                    </button>
+                                  </div>
                                   <button
-                                    onClick={() => setCampaignTypes(prev => ({ ...prev, [c.id]: 'Standard' }))}
-                                    className={`px-2 py-0.5 rounded text-xs font-medium ${currentType === 'Standard' ? 'bg-white text-blue-700 shadow' : 'text-gray-600'}`}
+                                    onClick={() => selectCampaign(c.id, currentType)}
+                                    className="text-xs bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 whitespace-nowrap"
                                   >
-                                    Std
-                                  </button>
-                                  <button
-                                    onClick={() => setCampaignTypes(prev => ({ ...prev, [c.id]: 'Promotional' }))}
-                                    className={`px-2 py-0.5 rounded text-xs font-medium ${currentType === 'Promotional' ? 'bg-white text-purple-700 shadow' : 'text-gray-600'}`}
-                                  >
-                                    Promo
+                                    Select
                                   </button>
                                 </div>
-                                <button
-                                  onClick={() => selectCampaign(c.id, currentType)}
-                                  className="text-xs bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700"
-                                >
-                                  Select
-                                </button>
                               </div>
                             </div>
                           );
@@ -337,81 +345,80 @@ export const NewHome = () => {
                 </div>
               ) : !selectedSegment ? (
                 // SEGMENT SELECTION VIEW
-                <div className="w-full bg-gray-50 rounded-lg p-6 max-h-[70vh] overflow-y-auto">
-                  <div className="mb-4 flex items-center gap-2">
-                    <button
+                <div className="w-full bg-neutral-900 rounded-lg p-6 max-h-[70vh] overflow-y-auto border border-neutral-800">
+                  <div className="mb-6 flex items-center gap-3">
+                    <Button
                       onClick={backToCampaigns}
-                      className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                      variant="ghost"
+                      className="text-neutral-400 hover:text-neutral-200 p-0 h-auto font-medium text-sm"
                     >
                       ← Back
-                    </button>
-                    <h3 className="text-lg font-semibold text-gray-800">
+                    </Button>
+                    <h3 className="text-lg font-semibold text-neutral-100">
                       Campaign Segments - {selectedCampaignType}
                     </h3>
                   </div>
 
-                  <div className="mb-4 p-3 bg-white rounded border">
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <span className={`text-xs font-medium px-2 py-1 rounded ${
+                  <div className="mb-6 p-4 bg-neutral-800 rounded-lg border border-neutral-700">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <span className={`text-xs font-medium px-3 py-1.5 rounded-md ${
                         selectedCampaignType === 'Standard'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-purple-100 text-purple-800'
+                          ? 'bg-blue-600 text-blue-100'
+                          : 'bg-purple-600 text-purple-100'
                       }`}>
                         {selectedCampaignType} Campaign
                       </span>
-                      <span className="text-xs text-gray-600">{segments.length} segments</span>
-                      <button
+                      <span className="text-xs text-neutral-400">{segments.length} segments</span>
+                      <Button
                         onClick={createCampaignsForSegments}
                         disabled={selectedSegments.length === 0 || loading}
-                        className={`text-xs px-3 py-1 rounded font-medium ${
-                          selectedSegments.length > 0 && !loading
-                            ? 'bg-purple-600 text-white hover:bg-purple-700'
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        }`}
+                        className="text-xs px-3 py-1.5 rounded-md font-medium bg-purple-600 text-white hover:bg-purple-700 disabled:bg-neutral-700 disabled:text-neutral-500"
                       >
                         Create ({selectedSegments.length})
-                      </button>
+                      </Button>
                     </div>
                   </div>
 
                   {loading ? (
-                    <div className="text-center py-6 text-gray-500">Loading segments...</div>
+                    <div className="text-center py-6 text-neutral-400">Loading segments...</div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {segments.map((segment) => (
                         <div
                           key={segment.id}
-                          className={`p-3 border-2 rounded transition-all ${
+                          onClick={() => toggleSegmentSelection(segment.id)}
+                          className={`p-4 border-2 rounded-lg transition-all cursor-pointer ${
                             selectedSegments.includes(segment.id)
-                              ? 'border-purple-500 bg-purple-50'
-                              : 'border-gray-200 bg-white hover:border-gray-300'
+                              ? 'border-purple-500 bg-neutral-800'
+                              : 'border-neutral-700 bg-neutral-850 hover:border-neutral-600'
                           }`}
                         >
-                          <div className="flex items-start gap-2">
+                          <div className="flex items-start gap-3">
                             <input
                               type="checkbox"
                               checked={selectedSegments.includes(segment.id)}
                               onChange={() => toggleSegmentSelection(segment.id)}
-                              className="mt-0.5 w-4 h-4 text-purple-600 rounded"
+                              className="mt-0.5 w-4 h-4 text-purple-600 rounded accent-purple-600"
                             />
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-xs font-bold text-gray-800 mb-1">{segment.name}</h4>
-                              <div className="space-y-0.5 text-xs text-gray-600">
+                              <h4 className="text-xs font-bold text-neutral-100 mb-2">{segment.name}</h4>
+                              <div className="space-y-1 text-xs text-neutral-400">
                                 <div className="flex justify-between">
                                   <span>Age:</span>
-                                  <span>{segment.parent_age}y</span>
+                                  <span className="text-neutral-200">{segment.parent_age}y</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span>Engagement:</span>
-                                  <span>{segment.engagement_propensity}%</span>
+                                  <span className="text-neutral-200">{segment.engagement_propensity}%</span>
                                 </div>
                               </div>
-                              <button
+                              <Button
                                 onClick={() => selectSegment(segment)}
-                                className="mt-1 text-xs text-purple-600 hover:text-purple-800 font-medium"
+                                variant="ghost"
+                                className="mt-2 text-xs text-purple-400 hover:text-purple-300 p-0 h-auto font-medium"
                               >
                                 View →
-                              </button>
+                              </Button>
                             </div>
                           </div>
                         </div>
@@ -421,21 +428,22 @@ export const NewHome = () => {
                 </div>
               ) : (
                 // CAMPAIGN COPY VIEW
-                <div className="w-full bg-gray-50 rounded-lg p-6 max-h-[70vh] overflow-y-auto">
-                  <div className="mb-4 flex items-center gap-2">
-                    <button
+                <div className="w-full bg-neutral-900 rounded-lg p-6 max-h-[70vh] overflow-y-auto border border-neutral-800">
+                  <div className="mb-6 flex items-center gap-3">
+                    <Button
                       onClick={backToSegments}
-                      className="text-blue-600 hover:text-blue-800 font-medium text-sm"
+                      variant="ghost"
+                      className="text-neutral-400 hover:text-neutral-200 p-0 h-auto font-medium text-sm"
                     >
                       ← Back
-                    </button>
-                    <h3 className="text-lg font-semibold text-gray-800">
+                    </Button>
+                    <h3 className="text-lg font-semibold text-neutral-100">
                       {selectedSegment.name} - Campaign Copy
                     </h3>
                   </div>
 
                   {loading ? (
-                    <div className="text-center py-6 text-gray-500">Loading campaign copy...</div>
+                    <div className="text-center py-6 text-neutral-400">Loading campaign copy...</div>
                   ) : canvases.length > 0 ? (
                     <div className="space-y-4">
                       {canvases.map((canvas, index) => {
@@ -447,24 +455,39 @@ export const NewHome = () => {
                         });
 
                         return (
-                          <div key={index} className="bg-white rounded-lg border overflow-hidden">
-                            <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white p-4">
+                          <div key={index} className="bg-neutral-800 rounded-lg border border-neutral-700 overflow-hidden">
+                            <div className="bg-linear-to-r from-purple-600 to-blue-600 text-white p-5">
                               <h4 className="font-bold text-lg">{canvas.name}</h4>
+                              {canvas.country && (
+                                <p className="text-xs opacity-80 mt-1">Country: {canvas.country}</p>
+                              )}
                             </div>
 
-                            <div className="p-4">
-                              <div className="flex gap-2 mb-3 text-xs flex-wrap">
-                                <span className={`px-2 py-1 rounded ${canvas.draft ? 'bg-gray-200' : 'bg-green-100 text-green-800'}`}>
+                            <div className="p-5">
+                              {canvas.dispatch_id && (
+                                <div className="mb-4 p-3 bg-green-950 border border-green-800 rounded-lg">
+                                  <div className="font-semibold text-green-300 text-sm">Scheduled to Braze</div>
+                                  <div className="text-green-200 mt-1 font-mono text-xs">
+                                    Dispatch: {canvas.dispatch_id}
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="flex gap-2 mb-4 text-xs flex-wrap">
+                                <span className={`px-2.5 py-1 rounded-md font-medium ${canvas.draft ? 'bg-neutral-700 text-neutral-300' : 'bg-green-900 text-green-200'}`}>
                                   {canvas.draft ? 'Draft' : 'Active'}
                                 </span>
-                                <span className="px-2 py-1 rounded bg-blue-100 text-blue-800">
+                                <span className="px-2.5 py-1 rounded-md bg-blue-900 text-blue-200 font-medium">
                                   {canvas.variants?.length || 0} variants
+                                </span>
+                                <span className="px-2.5 py-1 rounded-md bg-purple-900 text-purple-200 font-medium">
+                                  {canvas.steps?.length || 0} steps
                                 </span>
                               </div>
 
                               {allMessages.length > 0 ? (
-                                <div className="space-y-3">
-                                  <h5 className="font-semibold text-sm text-gray-800">Messages</h5>
+                                <div className="space-y-4">
+                                  <h5 className="font-semibold text-sm text-neutral-100">Messages</h5>
                                   {allMessages.map((message, msgIndex) => (
                                     <div key={msgIndex} className="text-sm">
                                       <MessagePreview message={message} />
@@ -472,7 +495,7 @@ export const NewHome = () => {
                                   ))}
                                 </div>
                               ) : (
-                                <p className="text-xs text-gray-500">No messages configured</p>
+                                <p className="text-xs text-neutral-400">No messages configured</p>
                               )}
                             </div>
                           </div>
@@ -480,7 +503,7 @@ export const NewHome = () => {
                       })}
                     </div>
                   ) : (
-                    <div className="text-center py-6 text-gray-500">No campaign copy available</div>
+                    <div className="text-center py-6 text-neutral-400">No campaign copy available</div>
                   )}
                 </div>
               )}

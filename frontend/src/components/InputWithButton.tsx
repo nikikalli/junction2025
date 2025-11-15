@@ -18,7 +18,7 @@ export function InputWithButton({ value, onChange, onSubmit, placeholder, classN
       }}
       className={`w-full ${className ?? ""}`}
     >
-      <div className="flex w-full max-w-sm items-center gap-2">
+      <div className="flex w-full items-center gap-2">
         <Input
           className="bg-gray-900 border-0"
           type="text"
