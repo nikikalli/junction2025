@@ -1,4 +1,5 @@
 # Dependencies
+*.terraform**
 node_modules/
 .pnp
 .pnp.js
@@ -15,6 +16,7 @@ output/
 .env.development.local
 .env.test.local
 .env.production.local
+*tfstate*
 
 # Logs
 logs

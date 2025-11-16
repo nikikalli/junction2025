@@ -16,6 +16,7 @@ export interface Campaign {
 export interface CampaignImplementation {
   id: number;
   campaign_id: number;
+  segment_name?: string;
   created_at?: string;
   updated_at?: string;
 }

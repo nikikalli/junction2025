@@ -11,6 +11,7 @@ interface UseSegmentSelectionReturn {
 }
 
 const COUNT = 20;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 export const useSegmentSelection = (
   selectedCanvasId: string | null,
@@ -27,7 +28,7 @@ export const useSegmentSelection = (
     try {
       if (!selectedCanvasId) return;
       const response = await fetch(
-        `http://localhost:3000/api/campaigns/generate/${selectedCanvasId}?count=${COUNT}`
+        `${API_URL}/campaigns/generate/${selectedCanvasId}?count=${COUNT}`
       );
       const data = await response.json();
       const segmentCanvas = data.canvases?.[segment.id - 1];
@@ -46,7 +47,7 @@ export const useSegmentSelection = (
       setLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:3000/api/campaigns/analyzedSegments?count=20"
+          `${API_URL}/campaigns/analyzedSegments?count=20`
         );
         const data = await response.json();
         const mappedSegments: Segment[] = data.segments.map(

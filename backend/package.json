@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx src/dev.ts",
-    "init": "tsx src/db/setup.ts && npm run db:migrate",
+    "init": "tsx src/db/setup.ts && npm run docker:up && npm run db:migrate",
     "dev:skip-db": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc && node build.mjs",
     "start": "node dist/index.js",
     "lint": "eslint src --ext .ts",
     "test": "jest",
@@ -17,7 +17,9 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f postgres",
-    "docker:clean": "docker-compose down -v"
+    "docker:clean": "docker-compose down -v",
+    "deploy": "npm run build && serverless deploy",
+    "deploy:prod": "npm run build && serverless deploy --stage prod"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +29,6 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "@prisma/client": "^6.19.0",
     "@types/pg": "^8.15.6",
     "axios": "^1.13.2",
     "cors": "^2.8.5",
@@ -35,6 +36,7 @@
     "express": "^4.18.2",
     "helmet": "^7.1.0",
     "pg": "^8.16.3",
+    "serverless-http": "^3.2.0",
     "uuid": "^13.0.0",
     "zod": "^3.22.4"
   },
@@ -46,8 +48,11 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
+    "esbuild": "^0.27.0",
     "eslint": "^8.56.0",
     "jest": "^30.2.0",
+    "serverless": "^3.39.0",
+    "serverless-offline": "^13.8.1",
     "ts-jest": "^29.4.5",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"

@@ -9,13 +9,13 @@ import { databaseService } from './services/database.service';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173'],
-  credentials: true,
+  origin: process.env.ALLOWED_ORIGINS === '*' ? '*' : (process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173']),
+  credentials: process.env.ALLOWED_ORIGINS === '*' ? false : true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

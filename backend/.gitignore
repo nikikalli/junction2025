@@ -3,6 +3,7 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.serverless
 
 # Production build
 dist/
@@ -35,8 +36,3 @@ logs/
 
 # TypeScript
 *.tsbuildinfo
-
-/src/generated/prisma
-
-# Prisma
-generated/
