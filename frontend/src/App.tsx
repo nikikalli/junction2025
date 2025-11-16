@@ -6,7 +6,7 @@ import { Segments } from './pages/Segments';
 import { Test } from './pages/Test';
 import { SasViyaCaseStudy } from './pages/sas-viya-case-study';
 import { Nav } from './components/Nav';
-
+//lol
 function App() {
   return (
     <div className="app">
