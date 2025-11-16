@@ -15,7 +15,7 @@ offer_types = ['percentage_discount', 'bundle', 'premium', 'none']
 campaigns = []
 campaign_id = 1
 
-for i in range(12):
+for i in range(50):
     campaign_type = np.random.choice(campaign_types)
 
     if campaign_type == 'discount':
