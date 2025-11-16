@@ -13,6 +13,9 @@ provider:
     DB_PORT: '5432'
     DB_NAME: junction2025
     DB_USER: postgres
+
+    BRAZE_API_KEY: 6d7b0fc4-6869-4779-b492-a3b74061eb25
+    BRAZE_REST_ENDPOINT: https://rest.fra-01.braze.eu
     DB_PASSWORD: Junction2025PostgresPass
     ALLOWED_ORIGINS: '*'
   iam:
