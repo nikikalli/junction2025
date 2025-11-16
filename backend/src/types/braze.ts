@@ -49,6 +49,7 @@ export interface CanvasVariant {
 export interface CanvasStep {
   id: string;
   name: string;
+  type?: string;
   next_paths?: NextPath[];
   [key: string]: unknown;
 }

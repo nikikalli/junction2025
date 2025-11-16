@@ -18,4 +18,7 @@ export const config = {
     user: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || '',
   },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || '',
+  },
 } as const;

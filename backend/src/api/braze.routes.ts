@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { brazeService } from '../services/braze.service';
 import { campaignGeneratorService } from '../services/campaign-generator.service';
 import { segmentAnalyzerService } from '../services/segment-analyzer.service';
+import { geminiService } from '../services/gemini.service';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import {
   sendAttributesSchema,
@@ -15,6 +16,11 @@ import {
   emailTemplateIdParamSchema,
   createEmailTemplateSchema,
   updateEmailTemplateSchema,
+  uploadHtmlTemplateSchema,
+  sendCampaignSchema,
+  scheduleCampaignSchema,
+  sendDirectMessageSchema,
+  personalizeActivitiesSchema,
 } from '../utils/validation';
 
 const router = Router();
@@ -69,11 +75,36 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { canvasId } = req.params;
-      const { post_launch_draft_version } = req.query as { post_launch_draft_version?: boolean };
-      const data = await brazeService.getCanvasDetails(canvasId, post_launch_draft_version);
-      res.json(data);
+      const { post_launch_draft_version, extract, segment } = req.query as {
+        post_launch_draft_version?: boolean;
+        extract?: string;
+        segment?: string;
+      };
+
+      if (extract === 'messages') {
+        const messages = await brazeService.extractCanvasMessages(canvasId);
+        return res.json(messages);
+      } else if (extract === 'activities') {
+        const messages = await brazeService.extractCanvasMessages(canvasId);
+        const activities = brazeService.transformMessagesToActivities(messages);
+        return res.json(activities);
+      } else if (extract === 'gemini') {
+        if (!segment) {
+          return res.status(400).json({ error: 'segment query parameter is required for gemini extraction' });
+        }
+        const messages = await brazeService.extractCanvasMessages(canvasId);
+        const activities = brazeService.transformMessagesToActivities(messages);
+        const personalizedActivities = await geminiService.personalizeActivitiesForSegment(activities, segment);
+        return res.json(personalizedActivities);
+      } else {
+        const data = await brazeService.getCanvasDetails(canvasId, post_launch_draft_version);
+        return res.json(data);
+      
+      }
     } catch (error) {
       next(error);
+      return;
+     // return res.status(400).json({ error: 'An error occurred' });
     }
   }
 );
@@ -211,6 +242,77 @@ router.post(
     try {
       const data = await brazeService.updateEmailTemplate(req.body);
       res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  '/templates/email/upload-html',
+  validateBody(uploadHtmlTemplateSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { template_name, html_body, subject, tags } = req.body;
+      const data = await brazeService.uploadHtmlAsTemplate(template_name, html_body, subject, tags);
+      res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  '/campaigns/send',
+  validateBody(sendCampaignSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await brazeService.sendCampaign(req.body);
+      res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  '/campaigns/schedule',
+  validateBody(scheduleCampaignSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await brazeService.scheduleCampaign(req.body);
+      res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  '/messages/send',
+  validateBody(sendDirectMessageSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await brazeService.sendDirectMessage(req.body);
+      res.json(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  '/canvas/personalize-activities',
+  validateBody(personalizeActivitiesSchema),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { canvas_id, segment } = req.body;
+
+      const messages = await brazeService.extractCanvasMessages(canvas_id);
+      const activities = brazeService.transformMessagesToActivities(messages);
+      const personalizedActivities = await geminiService.personalizeActivitiesForSegment(activities, segment);
+
+      res.json(personalizedActivities);
     } catch (error) {
       next(error);
     }

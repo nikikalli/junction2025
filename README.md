@@ -2,13 +2,42 @@
 
 AI-powered solution for automating and scaling personalized marketing campaigns across 20+ countries using Braze APIs.
 
-## Project Overview
+## Project Overview (Challenge description)
 
-This solution addresses the Junction 2025 P&G challenge by automating campaign creation and management, enabling personalization at scale while reducing manual work.
+Use AI to reinvent how personalized marketing campaigns can be automated and scaled across 20+ countries using Braze APIs.
+
+Today, Pampers Club reaches millions of families worldwide with loyalty rewards, personalized content, and direct communication. But running these campaigns across many countries is complex, time-consuming, and inefficient.
+
+At Junction, we invite you to tackle this challenge: how can AI and automation transform campaign creation into a faster, smarter, and more effective process? The opportunity is to shape how one of the world’s leading consumer brands connects with families in the digital era.
+
+Managing marketing campaigns today requires manual setup for every country, every message, and every channel — making innovation slow and repetitive.
+
+The challenge is to build an AI-powered solution that automates campaign creation and management, enabling personalization at scale while reducing manual work.
+
+Imagine a system that allows marketers to design, test, and optimize campaigns seamlessly across dozens of countries, languages, and audiences. How would you approach this problem to make the process more efficient, scalable, and impactful for millions of parents worldwide?
+
+# Getting started
+
+## Prerequisites
+
+- Node.js >= 20
+- npm
+- Docker
+- Braze API key (provided: `6d7b0fc4-6869-4779-b492-a3b74061eb25`)
+
+
+## Startin local server
+
+```bash
+npm install
+npm run init
+npm run dev
+```
+Yes. It should really be that easy. Otherwise, come to floor 3 where to the table where _the music plays_.
 
 ### Key Features
 
-- **AI-Powered Content Generation**: Automated campaign content creation using OpenAI GPT-4
+- **AI-Powered Content Generation**: Automated campaign content creation using [SAS Viay](https://www.sas.com/fi_fi/software/viya.html) + Gemini models
 - **Multi-Country Support**: Seamless campaign deployment across 20+ countries and languages
 - **Braze Integration**: Direct integration with Braze API for campaign management
 - **Performance Optimization**: AI-driven campaign optimization suggestions
@@ -16,113 +45,12 @@ This solution addresses the Junction 2025 P&G challenge by automating campaign c
 
 ## Tech Stack
 
-- **Frontend**: React + TypeScript
+- **Frontend**: React + TypeScript, Tailwind
 - **Backend**: Node.js + TypeScript + Express
-- **AI**: OpenAI GPT-4
+- **Infrastructure**: Terraform + AWS
+- **AI**: Gemini models (bc OpenAI team were sleeping and didn't share their API credits in the hackathon)
 - **CRM**: Braze API
-- **Deployment**: Vercel
-
-## Project Structure
-
-```
-Junction2025/
-├── frontend/              # React TypeScript frontend
-│   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Page components
-│   │   │   ├── Home.tsx
-│   │   │   └── NotFound.tsx
-│   │   ├── services/      # API client and services
-│   │   │   └── api.ts
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── types/         # TypeScript type definitions
-│   │   ├── utils/         # Utility functions
-│   │   ├── styles/        # CSS styles
-│   │   │   └── index.css
-│   │   ├── assets/        # Static assets
-│   │   ├── App.tsx        # Main app component
-│   │   ├── main.tsx       # Entry point
-│   │   └── vite-env.d.ts  # Vite environment types
-│   ├── index.html
-│   ├── vite.config.ts     # Vite configuration
-│   ├── tsconfig.json      # TypeScript configuration
-│   ├── .eslintrc.json     # ESLint configuration
-│   ├── .env.example       # Environment variables template
-│   └── package.json
-├── backend/               # Node.js TypeScript backend
-│   ├── src/
-│   │   ├── api/           # API routes
-│   │   │   └── index.ts
-│   │   ├── config/        # Configuration
-│   │   │   └── index.ts
-│   │   ├── middleware/    # Express middleware
-│   │   │   └── errorHandler.ts
-│   │   ├── models/        # Data models
-│   │   ├── services/      # Business logic
-│   │   │   ├── openai.service.ts
-│   │   │   └── braze.service.ts
-│   │   ├── types/         # TypeScript type definitions
-│   │   │   └── index.ts
-│   │   ├── utils/         # Utility functions
-│   │   └── index.ts       # Entry point
-│   ├── tsconfig.json      # TypeScript configuration
-│   ├── .eslintrc.json     # ESLint configuration
-│   ├── .env.example       # Environment variables template
-│   └── package.json
-├── vercel.json            # Vercel deployment configuration
-├── .gitignore             # Git ignore rules
-├── package.json           # Root package.json for workspaces
-└── README.md
-```
-
-## Setup Instructions
-
-### Prerequisites
-
-- Node.js >= 20
-- npm
-- OpenAI API key
-- Braze API key (provided: `6d7b0fc4-6869-4779-b492-a3b74061eb25`)
-
-### Installation
-
-1. **Clone and navigate to project**
-   ```bash
-   cd Junction2025
-   ```
-
-2. **Install Dependencies (all workspaces)**
-   ```bash
-   npm install
-   ```
-
-   Or install individually:
-   ```bash
-   cd backend && npm install
-   cd ../frontend && npm install
-   ```
-
-3. **Configure Environment Variables**
-
-   Backend (`backend/.env`):
-   ```env
-   NODE_ENV=development
-   PORT=3000
-   API_URL=http://localhost:3000
-   ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
-
-   # Add your API keys
-   OPENAI_API_KEY=your_openai_api_key_here
-   BRAZE_API_KEY=6d7b0fc4-6869-4779-b492-a3b74061eb25
-   BRAZE_REST_ENDPOINT=https://rest.iad-01.braze.com
-   DATABASE_URL=your_database_url_here
-   ```
-
-   Frontend (`frontend/.env`):
-   ```env
-   VITE_API_URL=http://localhost:3000
-   VITE_APP_NAME=Pampers Club AI Campaign Manager
-   ```
+- **Deployment**: Vercel + AWS
 
 ### Running Locally
 
@@ -130,126 +58,15 @@ Junction2025/
 ```bash
 npm run dev
 ```
-
-**Option 2: Run services separately**
-
-1. **Start Backend Server**
-   ```bash
-   npm run dev:backend
-   # or
-   cd backend && npm run dev
-   ```
-   Server runs on `http://localhost:3000`
-
-2. **Start Frontend** (in new terminal)
-   ```bash
-   npm run dev:frontend
-   # or
-   cd frontend && npm run dev
-   ```
-   App runs on `http://localhost:5173`
-
-**Other useful commands:**
-```bash
-npm run build              # Build all workspaces
-npm run build:backend      # Build backend only
-npm run build:frontend     # Build frontend only
-npm run lint               # Lint all workspaces
-npm run type-check         # Type check all workspaces
-```
-
-## API Endpoints
-
-### Campaign Management
-
-- `POST /api/braze/generate` - Generate AI campaign content
-  ```json
-  {
-    "prompt": "Create a welcome email for new parents",
-    "language": "English",
-    "country": "USA"
-  }
-  ```
-
-- `POST /api/braze/create` - Create campaign in Braze
-  ```json
-  {
-    "name": "Welcome Campaign",
-    "message": "Welcome to Pampers Club!",
-    "countries": ["USA", "UK", "Germany"]
-  }
-  ```
-
-- `GET /api/braze/analytics/:campaignId` - Get campaign analytics
-
-- `POST /api/braze/optimize` - Get AI optimization suggestions
-  ```json
-  {
-    "campaignData": "Campaign details...",
-    "performanceMetrics": "Open rate: 42%, Click rate: 27%"
-  }
-  ```
-
-## Deployment
-
-### Vercel Deployment
-
-1. **Install Vercel CLI**
-   ```bash
-   npm i -g vercel
-   ```
-
-2. **Deploy Backend**
-   ```bash
-   cd backend
-   vercel
-   ```
-
-3. **Deploy Frontend**
-   ```bash
-   cd frontend
-   vercel
-   ```
-
-4. **Set Environment Variables in Vercel Dashboard**
-   - Add `OPENAI_API_KEY`
-   - Add `BRAZE_API_KEY`
-   - Add `REACT_APP_API_URL` (backend URL)
-
-## Solution Highlights
-
-### Judging Criteria Alignment
-
-1. **Effective use of AI (25%)**
-   - GPT-4 for multi-language content generation
-   - AI-driven campaign optimization
-   - Automated personalization at scale
-
-2. **Creativity (25%)**
-   - Novel approach to campaign automation
-   - Intelligent content adaptation per country/language
-   - AI-powered performance insights
-
-3. **Scalability (25%)**
-   - Designed for 20+ countries
-   - Serverless architecture (Vercel)
-   - Modular service architecture
-
-4. **Efficiency (25%)**
-   - Reduces manual campaign setup time by 80%+
-   - Automated multi-country deployment
-   - Real-time optimization suggestions
-
-## Resources
-
 - [Challenge Resources](https://drive.google.com/drive/u/1/folders/1WRlNZ9Tc73ktWEwuyIKLnLEGLBnIcbIT)
 - [Braze API Documentation](https://www.braze.com/docs/api/basics/)
 - API Key: `6d7b0fc4-6869-4779-b492-a3b74061eb25`
 
 ## Development Team
+Built for Junction 2025 - P&G Challenge, by
 
-Built for Junction 2025 - P&G Challenge
-
-## License
-
-MIT
+[Calvin Otewa](https://linkedin.com/in/otewa)
+[Faeq Qanezadeh](https://www.linkedin.com/in/faeqqanezadeh/)
+[Santeri Helminen](https://www.linkedin.com/in/santeri-helminen/)
+[Nikita Kallio](https://linkedin.com/in/otewa)
+[Daniela Burnaz](https://www.linkedin.com/in/danielaburnaz/)
