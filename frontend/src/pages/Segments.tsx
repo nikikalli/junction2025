@@ -71,7 +71,7 @@ export const Segments = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [campaignName, setCampaignName] = useState<string>("");
-  const [campaignType, setCampaignType] = useState<"Standard" | "Promotional">("Standard");
+  const [campaignType, setCampaignType] = useState<"Awareness" | "Promotional">("Awareness");
   const [campaignData, setCampaignData] = useState<CampaignWithImplementations | null>(null);
   const [segments, setSegments] = useState<Segment[]>([]);
   const [selectedSegment, setSelectedSegment] = useState<Segment | null>(null);
@@ -83,7 +83,7 @@ export const Segments = () => {
 
   useEffect(() => {
     const typeParam = searchParams.get('type');
-    if (typeParam === 'Standard' || typeParam === 'Promotional') {
+    if (typeParam === 'Awareness' || typeParam === 'Promotional') {
       setCampaignType(typeParam);
     }
   }, [searchParams]);

@@ -1,70 +1,51 @@
 import type { AnalyzedSegment, AnalyzedSegmentsResponse } from '../types/segment';
+import { databaseService } from './database.service';
 
 class SegmentAnalyzerService {
-  private readonly COUNTRIES = [
-    'US', 'UK', 'DE', 'FR', 'IT', 'ES', 'PL', 'NL',
-    'BE', 'AT', 'CH', 'SE', 'NO', 'DK', 'FI', 'IE',
-    'PT', 'GR', 'CZ', 'RO'
-  ];
+  /**
+   * Get analyzed segments from the database
+   * @param count - Maximum number of segments to return (default: all segments)
+   */
+  async getAnalyzedSegments(count?: number): Promise<AnalyzedSegmentsResponse> {
+    const segments = await databaseService.getEnrichedSegments(count);
+    
+    // Transform database segments to API format with calculated boolean preferences
+    const analyzedSegments: AnalyzedSegment[] = segments.map(seg => {
+      // Convert 0-1 scale to 0-100 scale and round
+      const toPercentage = (val: number) => Math.round(val * 100);
+      
+      // Determine channel preferences based on performance scores
+      // A channel is "preferred" if its performance is above 0.5
+      const prefers_email = seg.channel_perf_email > 0.5;
+      const prefers_push = seg.channel_perf_push > 0.5;
+      const prefers_inapp = seg.channel_perf_inapp > 0.5;
 
-  private readonly LANGUAGES = ['en', 'de', 'fr', 'es', 'it', 'pl', 'nl', 'sv', 'no', 'da', 'fi'];
-  private readonly GENDERS = ['male', 'female', 'other'];
-
-  private randomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  private randomFloat(min: number, max: number): number {
-    return Math.random() * (max - min) + min;
-  }
-
-  private randomBoolean(): boolean {
-    return Math.random() > 0.5;
-  }
-
-  async getAnalyzedSegments(count: number = 20): Promise<AnalyzedSegmentsResponse> {
-    const segments: AnalyzedSegment[] = [];
-
-    for (let i = 0; i < count; i++) {
-      const segment: AnalyzedSegment = {
-        // Identifiers
-        segment_id: `SEG-${String(i + 1).padStart(3, '0')}-${this.COUNTRIES[i % this.COUNTRIES.length]}`,
-
-        // Demographics
-        language: this.LANGUAGES[i % this.LANGUAGES.length],
-        parent_age: this.randomInt(20, 45),
-        parent_gender: this.GENDERS[i % this.GENDERS.length],
-        baby_count: this.randomInt(1, 3),
-        baby_age_week_1: this.randomInt(0, 156), // 0-3 years in weeks
-
-        // Behavioral
-        event_count: this.randomInt(5, 200),
-
-        // Sentiment/Engagement (0-100 scale)
-        engagement_propensity: Math.round(this.randomFloat(30, 95)),
-        price_sensitivity: Math.round(this.randomFloat(20, 90)),
-        brand_loyalty: Math.round(this.randomFloat(40, 95)),
-        contact_frequency_tolerance: Math.round(this.randomFloat(30, 80)),
-        content_engagement_rate: Math.round(this.randomFloat(25, 85)),
-
-        // Channel Preferences
-        prefers_email: this.randomBoolean(),
-        prefers_push: this.randomBoolean(),
-        prefers_inapp: this.randomBoolean(),
-
-        // Values (0-100 scale)
-        values_family: Math.round(this.randomFloat(60, 100)),
-        values_eco_conscious: Math.round(this.randomFloat(30, 90)),
-        values_convenience: Math.round(this.randomFloat(40, 95)),
-        values_quality: Math.round(this.randomFloat(50, 100)),
+      return {
+        segment_id: `SEG-${seg.segment_id}`,
+        language: seg.language,
+        parent_age: Math.round(seg.parent_age),
+        parent_gender: seg.parent_gender,
+        baby_count: Math.round(seg.baby_count),
+        baby_age_week_1: 0, // Not stored in DB, defaulting to 0
+        event_count: 0, // Not stored in DB, defaulting to 0
+        engagement_propensity: toPercentage(seg.engagement_propensity),
+        price_sensitivity: toPercentage(seg.price_sensitivity),
+        brand_loyalty: toPercentage(seg.brand_loyalty),
+        contact_frequency_tolerance: toPercentage(seg.contact_frequency_tolerance),
+        content_engagement_rate: toPercentage(seg.content_engagement_rate),
+        prefers_email,
+        prefers_push,
+        prefers_inapp,
+        values_family: toPercentage(seg.values_family),
+        values_eco_conscious: toPercentage(seg.values_eco_conscious),
+        values_convenience: toPercentage(seg.values_convenience),
+        values_quality: toPercentage(seg.values_quality),
       };
-
-      segments.push(segment);
-    }
+    });
 
     return {
-      segments,
-      total: segments.length,
+      segments: analyzedSegments,
+      total: analyzedSegments.length,
     };
   }
 }

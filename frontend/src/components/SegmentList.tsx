@@ -5,7 +5,7 @@ import { HeaderWithBackButton } from "@/components/HeaderWithBackButton";
 interface SegmentListProps {
   segments: Segment[];
   loading: boolean;
-  campaignType: "Standard" | "Promotional";
+  campaignType: "Awareness" | "Promotional";
   canvasName: string;
   onBack: () => void;
   onSegmentSelect: (segment: Segment) => void;
@@ -20,7 +20,7 @@ export const SegmentList = ({
   onSegmentSelect,
 }: SegmentListProps) => {
   return (
-    <div className="w-full bg-neutral-900 rounded-lg overflow-y-auto max-h-[70vh]">
+    <div className="w-full bg-neutral-900 rounded-lg max-h-[70vh]">
       <div className="flex flex-col mb-6 gap-3">
         <HeaderWithBackButton
           onBack={onBack}

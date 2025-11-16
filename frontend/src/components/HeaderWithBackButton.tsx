@@ -12,12 +12,12 @@ export const HeaderWithBackButton = ({
   subtitle,
 }: HeaderWithBackButtonProps) => {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-row gap-3 relative">
       <div className="flex flex-row gap-3 items-center">
         <Button
           onClick={onBack}
           variant="ghost"
-          className="text-neutral-400 hover:text-neutral-200 p-0 h-auto font-medium text-sm"
+          className="text-neutral-400 hover:text-gray-600 p-0 h-auto font-medium text-sm absolute -top-12"
         >
           ← Back
         </Button>

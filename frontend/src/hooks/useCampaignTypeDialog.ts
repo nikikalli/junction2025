@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AudienceSpecification } from "@/types/audience";
 
 interface UseCampaignTypeDialogReturn {
   dialogOpen: boolean;
@@ -9,14 +10,14 @@ interface UseCampaignTypeDialogReturn {
   setSelectedCampaignType: (type: "Standard" | "Promotional") => void;
   openCampaignDialog: (canvasId: string, canvasName: string) => void;
   confirmCampaignType: (
-    type: "Standard" | "Promotional"
-  ) => { canvasId: string; type: "Standard" | "Promotional" } | null;
+    audienceSpec: AudienceSpecification
+  ) => { canvasId: string; audienceSpec: AudienceSpecification } | null;
 }
 
 export const useCampaignTypeDialog = (
   onCampaignSelected: (
     canvasId: string,
-    campaignType: "Standard" | "Promotional"
+    audienceSpec: AudienceSpecification
   ) => void
 ): UseCampaignTypeDialogReturn => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -34,11 +35,11 @@ export const useCampaignTypeDialog = (
     setDialogOpen(true);
   };
 
-  const confirmCampaignType = (type: "Standard" | "Promotional") => {
+  const confirmCampaignType = (audienceSpec: AudienceSpecification) => {
     if (pendingCanvasId) {
-      onCampaignSelected(pendingCanvasId, type);
+      onCampaignSelected(pendingCanvasId, audienceSpec);
       setDialogOpen(false);
-      return { canvasId: pendingCanvasId, type };
+      return { canvasId: pendingCanvasId, audienceSpec };
     }
     return null;
   };

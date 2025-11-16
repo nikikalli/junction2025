@@ -31272,6 +31272,30 @@ var require_database_service = __commonJS({
           client.release();
         }
       }
+      /**
+       * Get enriched segments from the database
+       * @param limit - Maximum number of segments to return (optional, returns all if not specified)
+       */
+      async getEnrichedSegments(limit) {
+        let query = `
+      SELECT 
+        id, segment_id, language, parent_age, parent_gender, baby_count,
+        engagement_propensity, price_sensitivity, brand_loyalty,
+        channel_perf_email, channel_perf_push, channel_perf_inapp,
+        values_family, values_eco_conscious, values_convenience, values_quality,
+        contact_frequency_tolerance, content_engagement_rate,
+        created_at, updated_at
+      FROM user_segments_enriched
+      ORDER BY segment_id
+    `;
+        const values = [];
+        if (limit) {
+          query += " LIMIT $1";
+          values.push(limit);
+        }
+        const result = await this.pool.query(query, values);
+        return result.rows;
+      }
     };
     exports2.DatabaseService = DatabaseService;
     exports2.databaseService = new DatabaseService();
@@ -37417,76 +37441,46 @@ var require_segment_analyzer_service = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.segmentAnalyzerService = void 0;
+    var database_service_1 = require_database_service();
     var SegmentAnalyzerService = class {
-      COUNTRIES = [
-        "US",
-        "UK",
-        "DE",
-        "FR",
-        "IT",
-        "ES",
-        "PL",
-        "NL",
-        "BE",
-        "AT",
-        "CH",
-        "SE",
-        "NO",
-        "DK",
-        "FI",
-        "IE",
-        "PT",
-        "GR",
-        "CZ",
-        "RO"
-      ];
-      LANGUAGES = ["en", "de", "fr", "es", "it", "pl", "nl", "sv", "no", "da", "fi"];
-      GENDERS = ["male", "female", "other"];
-      randomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-      randomFloat(min, max) {
-        return Math.random() * (max - min) + min;
-      }
-      randomBoolean() {
-        return Math.random() > 0.5;
-      }
-      async getAnalyzedSegments(count = 20) {
-        const segments = [];
-        for (let i = 0; i < count; i++) {
-          const segment = {
-            // Identifiers
-            segment_id: `SEG-${String(i + 1).padStart(3, "0")}-${this.COUNTRIES[i % this.COUNTRIES.length]}`,
-            // Demographics
-            language: this.LANGUAGES[i % this.LANGUAGES.length],
-            parent_age: this.randomInt(20, 45),
-            parent_gender: this.GENDERS[i % this.GENDERS.length],
-            baby_count: this.randomInt(1, 3),
-            baby_age_week_1: this.randomInt(0, 156),
-            // 0-3 years in weeks
-            // Behavioral
-            event_count: this.randomInt(5, 200),
-            // Sentiment/Engagement (0-100 scale)
-            engagement_propensity: Math.round(this.randomFloat(30, 95)),
-            price_sensitivity: Math.round(this.randomFloat(20, 90)),
-            brand_loyalty: Math.round(this.randomFloat(40, 95)),
-            contact_frequency_tolerance: Math.round(this.randomFloat(30, 80)),
-            content_engagement_rate: Math.round(this.randomFloat(25, 85)),
-            // Channel Preferences
-            prefers_email: this.randomBoolean(),
-            prefers_push: this.randomBoolean(),
-            prefers_inapp: this.randomBoolean(),
-            // Values (0-100 scale)
-            values_family: Math.round(this.randomFloat(60, 100)),
-            values_eco_conscious: Math.round(this.randomFloat(30, 90)),
-            values_convenience: Math.round(this.randomFloat(40, 95)),
-            values_quality: Math.round(this.randomFloat(50, 100))
+      /**
+       * Get analyzed segments from the database
+       * @param count - Maximum number of segments to return (default: all segments)
+       */
+      async getAnalyzedSegments(count) {
+        const segments = await database_service_1.databaseService.getEnrichedSegments(count);
+        const analyzedSegments = segments.map((seg) => {
+          const toPercentage = (val) => Math.round(val * 100);
+          const prefers_email = seg.channel_perf_email > 0.5;
+          const prefers_push = seg.channel_perf_push > 0.5;
+          const prefers_inapp = seg.channel_perf_inapp > 0.5;
+          return {
+            segment_id: `SEG-${seg.segment_id}`,
+            language: seg.language,
+            parent_age: Math.round(seg.parent_age),
+            parent_gender: seg.parent_gender,
+            baby_count: Math.round(seg.baby_count),
+            baby_age_week_1: 0,
+            // Not stored in DB, defaulting to 0
+            event_count: 0,
+            // Not stored in DB, defaulting to 0
+            engagement_propensity: toPercentage(seg.engagement_propensity),
+            price_sensitivity: toPercentage(seg.price_sensitivity),
+            brand_loyalty: toPercentage(seg.brand_loyalty),
+            contact_frequency_tolerance: toPercentage(seg.contact_frequency_tolerance),
+            content_engagement_rate: toPercentage(seg.content_engagement_rate),
+            prefers_email,
+            prefers_push,
+            prefers_inapp,
+            values_family: toPercentage(seg.values_family),
+            values_eco_conscious: toPercentage(seg.values_eco_conscious),
+            values_convenience: toPercentage(seg.values_convenience),
+            values_quality: toPercentage(seg.values_quality)
           };
-          segments.push(segment);
-        }
+        });
         return {
-          segments,
-          total: segments.length
+          segments: analyzedSegments,
+          total: analyzedSegments.length
         };
       }
     };
@@ -43232,7 +43226,7 @@ var require_braze_routes = __commonJS({
     });
     router.get("/analyzedSegments", async (req, res, next) => {
       try {
-        const count = parseInt(req.query.count) || 20;
+        const count = req.query.count ? parseInt(req.query.count) : void 0;
         const data = await segment_analyzer_service_1.segmentAnalyzerService.getAnalyzedSegments(count);
         res.json(data);
       } catch (error) {
@@ -43424,6 +43418,66 @@ var require_braze_routes = __commonJS({
   }
 });
 
+// dist/api/segments.routes.js
+var require_segments_routes = __commonJS({
+  "dist/api/segments.routes.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.router = void 0;
+    var express_1 = require_express2();
+    var database_service_1 = require_database_service();
+    var router = (0, express_1.Router)();
+    exports2.router = router;
+    router.post("/filter", async (req, res) => {
+      try {
+        const spec = req.body;
+        const allSegments = await database_service_1.databaseService.getEnrichedSegments();
+        const matchingSegments = allSegments.filter((segment) => {
+          if (spec.parentGender && spec.parentGender !== "any") {
+            if (segment.parent_gender !== spec.parentGender) {
+              return false;
+            }
+          }
+          if (spec.parentAgeMin !== void 0 && segment.parent_age < spec.parentAgeMin) {
+            return false;
+          }
+          if (spec.parentAgeMax !== void 0 && segment.parent_age > spec.parentAgeMax) {
+            return false;
+          }
+          if (spec.babyCount !== void 0 && segment.baby_count !== spec.babyCount) {
+            return false;
+          }
+          if (spec.language && spec.language !== "any") {
+            if (segment.language !== spec.language) {
+              return false;
+            }
+          }
+          const engagementPropensityPercent = segment.engagement_propensity * 100;
+          if (spec.engagementMin !== void 0 && engagementPropensityPercent < spec.engagementMin) {
+            return false;
+          }
+          if (spec.engagementMax !== void 0 && engagementPropensityPercent > spec.engagementMax) {
+            return false;
+          }
+          return true;
+        });
+        const result = {
+          matchingSegments: matchingSegments.length,
+          totalSegments: allSegments.length,
+          specifications: spec
+        };
+        res.json(result);
+      } catch (error) {
+        console.error("Error filtering segments:", error);
+        res.status(500).json({
+          error: "Failed to filter segments",
+          message: error instanceof Error ? error.message : "Unknown error"
+        });
+      }
+    });
+  }
+});
+
 // dist/api/index.js
 var require_api = __commonJS({
   "dist/api/index.js"(exports2) {
@@ -43470,6 +43524,7 @@ var require_api = __commonJS({
     var express_1 = require_express2();
     var Campaigns = __importStar(require_campaigns_routes());
     var Braze = __importStar(require_braze_routes());
+    var Segments = __importStar(require_segments_routes());
     var router = (0, express_1.Router)();
     exports2.apiRouter = router;
     router.get("/health", (_req, res) => {
@@ -43477,6 +43532,7 @@ var require_api = __commonJS({
     });
     router.use("/braze", Braze.router);
     router.use("/campaigns", Campaigns.router);
+    router.use("/segments", Segments.router);
   }
 });
 

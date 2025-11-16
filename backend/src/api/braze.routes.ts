@@ -39,7 +39,8 @@ router.get('/generate/:canvasId', async (req: Request, res: Response, next: Next
 
 router.get('/analyzedSegments', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const count = parseInt(req.query.count as string) || 20;
+    // Default to all segments if no count specified, or use the provided count
+    const count = req.query.count ? parseInt(req.query.count as string) : undefined;
     const data = await segmentAnalyzerService.getAnalyzedSegments(count);
     res.json(data);
   } catch (error) {
@@ -99,7 +100,7 @@ router.get(
       } else {
         const data = await brazeService.getCanvasDetails(canvasId, post_launch_draft_version);
         return res.json(data);
-      
+
       }
     } catch (error) {
       next(error);

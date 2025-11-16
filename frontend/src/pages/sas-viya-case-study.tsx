@@ -82,7 +82,7 @@ export const SasViyaCaseStudy = () => {
             Advanced predictive analytics and behavioral clustering for personalized marketing
             campaigns across 40 user segments
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <div className="mt-6 flex justify-center gap-4">
             <div className="bg-purple-600/20 border border-purple-500/30 rounded-lg px-6 py-3">
               <div className="text-2xl font-bold text-purple-400">40</div>
               <div className="text-sm text-gray-400">User Segments</div>

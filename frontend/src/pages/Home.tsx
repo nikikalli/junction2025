@@ -7,9 +7,10 @@ import { useCampaignSearch } from "@/hooks/useCampaignSearch";
 import { useCampaignTypeDialog } from "@/hooks/useCampaignTypeDialog";
 import { CampaignSearch } from "@/components/CampaignSearch";
 import { CampaignTypeDialog } from "@/components/CampaignTypeDialog";
-import type { Campaign } from "@/types";
+import { Campaign } from "@/types/campaigns";
 import { MyCampaigns } from "@/components/MyCampaigns";
 import { campaignsApi } from "@/services/campaigns.api";
+import { ArrowDown } from "lucide-react";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -31,6 +32,13 @@ export const Home = () => {
     fetchCampaigns();
   });
 
+  const scrollToCampaigns = () => {
+    const campaignsSection = document.getElementById('my-campaigns');
+    if (campaignsSection) {
+      campaignsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const { searchTerm, setSearchTerm, filteredCanvasList, loadingList } =
     useCampaignSearch();
 
@@ -40,13 +48,13 @@ export const Home = () => {
     pendingCanvasName,
     openCampaignDialog,
     confirmCampaignType,
-  } = useCampaignTypeDialog(async (canvasId, type) => {
+  } = useCampaignTypeDialog(async (canvasId, audienceSpec) => {
     try {
-      // Create campaign from canvas with the selected audience type
+      // Create campaign from canvas with the audience specification
       const newCampaign = await campaignsApi.createCampaignFromCanvas(
         canvasId,
         pendingCanvasName || 'New Campaign',
-        [{ segment_name: type }] // type is "Standard" or "Promotional"
+        [{ segment_name: audienceSpec.campaignType }]
       );
 
       // Refresh campaigns list
@@ -54,7 +62,7 @@ export const Home = () => {
       setCampaigns(updatedCampaigns);
 
       // Navigate to the new campaign's segments page
-      navigate(`/segments/${newCampaign.id}?type=${type}`);
+      navigate(`/segments/${newCampaign.id}?type=${audienceSpec.campaignType}`);
     } catch (error) {
       console.error('Error creating campaign from canvas:', error);
       alert('Failed to create campaign. Please try again.');
@@ -104,10 +112,18 @@ export const Home = () => {
             />
           </SpotlightCard>
         </div>
+
+        <button
+          onClick={scrollToCampaigns}
+          className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-20 border border-white/30 rounded-full p-2 h-12 w-12 hover:bg-white/10 hover:border-white/50 transition-all duration-300 cursor-pointer animate-bounce"
+          aria-label="Scroll to campaigns"
+        >
+          <ArrowDown className="w-full h-full text-white" />
+        </button>
       </div>
 
       {/* Scrollable Campaigns Section */}
-      <div className="w-full bg-black py-12 px-4">
+      <div id="my-campaigns" className="w-full bg-black py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <MyCampaigns campaigns={campaigns} />
         </div>
