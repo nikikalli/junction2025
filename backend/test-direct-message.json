@@ -1,0 +1,10 @@
+{
+  "external_user_ids": ["74faa716-4198-429f-958d-b42938aa1c7a"],
+  "web_push": {
+    "title": "Junction 2025 Special Offer!",
+    "alert": "Get 20% off with code SAVE20"
+  },
+  "in_app_message": {
+    "message": "<h1>Hello!</h1><p>Welcome to our special promotion. Use code <strong>SAVE20</strong> for 20% off!</p>"
+  }
+}
