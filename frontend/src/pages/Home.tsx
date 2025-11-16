@@ -200,7 +200,7 @@ export const Home = () => {
               )}
             </SpotlightCard>
           </div>
-          <MyCampaigns></MyCampaigns>
+          <MyCampaigns campaigns={[]} />
         </div>
       </div>
 

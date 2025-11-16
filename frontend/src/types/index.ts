@@ -42,6 +42,11 @@ export interface Canvas {
 }
 
 export interface Segment {
+  type: string;
+  id: number;
+  name: string;
+  subject: string;
+  message: string;
   segment_id: string;
   language: string;
   parent_age: number;
@@ -61,12 +66,17 @@ export interface Segment {
   values_eco_conscious: number;
   values_convenience: number;
   values_quality: number;
-  type: string;
-  id: number;
-  name: string;
 }
 
 export interface MessageWithKey {
   key: string;
   message: CanvasMessage;
+}
+
+export interface Campaign {
+  id: string;
+  name: string;
+  canvas_id: string;
+  start_date: string;
+  segment: Segment[];
 }
