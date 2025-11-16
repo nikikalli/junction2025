@@ -19,12 +19,6 @@ export const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
           </h4>
           <div className="space-y-1 text-xs text-neutral-400">
             <div className="flex justify-between">
-              <span>Canvas ID:</span>
-              <span className="text-neutral-200 truncate">
-                {campaign.canvas_id}
-              </span>
-            </div>
-            <div className="flex justify-between">
               <span>Start Date:</span>
               <span className="text-neutral-200">
                 {new Date(campaign.start_date).toLocaleDateString()}
