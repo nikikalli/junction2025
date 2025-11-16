@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ClusterProfile {
+  id                    Int     @id @default(autoincrement())
+  clusterId             Int     @map("cluster_id")
+  clusterName           String  @map("cluster_name")
+  size                  Int
+  avgEduAffinity        Float   @map("avg_edu_affinity")
+  avgPremiumAffinity    Float   @map("avg_premium_affinity")
+  avgDiscountAffinity   Float   @map("avg_discount_affinity")
+  avgEmailPreference    Float   @map("avg_email_preference")
+  avgPushPreference     Float   @map("avg_push_preference")
+  avgInappPreference    Float   @map("avg_inapp_preference")
+  topCampaignType       String  @map("top_campaign_type")
+  topChannel            String  @map("top_channel")
+  topValue              String  @map("top_value")
+
+  @@map("cluster_profiles")
+}
+
+model SegmentCluster {
+  id                      Int     @id @default(autoincrement())
+  segmentId               Float   @map("segment_id")
+  clusterId               Int     @map("cluster_id")
+  clusterName             String  @map("cluster_name")
+  recommendedCampaignType String  @map("recommended_campaign_type")
+  recommendedChannel      String  @map("recommended_channel")
+  recommendedTheme        String  @map("recommended_theme")
+  expectedConversion      String  @map("expected_conversion")
+
+  @@map("segment_clusters")
+}
+
+model ModelSummary {
+  id      Int     @id @default(autoincrement())
+  section String
+  metric  String
+  value   Float
+  rank    Int?
+
+  @@map("model_summary")
+}
+
+model AttributeEffectiveness {
+  id                 Int     @id @default(autoincrement())
+  campaignType       String  @map("campaign_type")
+  channel            String
+  sentiment          String
+  valueTheme         String  @map("value_theme")
+  avgEngagement      Float   @map("avg_engagement")
+  avgConversion      Float   @map("avg_conversion")
+  sampleSize         Int     @map("sample_size")
+  stdError           Float   @map("std_error")
+
+  @@map("attribute_effectiveness")
+}
+
+model ChannelVersatility {
+  id                 Int     @id @default(autoincrement())
+  segmentId          Float   @map("segment_id")
+  emailEngagement    Float   @map("email_engagement")
+  pushEngagement     Float   @map("push_engagement")
+  inappEngagement    Float   @map("inapp_engagement")
+  engagementVariance Float   @map("engagement_variance")
+  classification     String
+
+  @@map("channel_versatility")
+}
+
+model InteractionEffect {
+  id              Int     @id @default(autoincrement())
+  campaignType    String  @map("campaign_type")
+  channel         String
+  actualConv      Float   @map("actual_conv")
+  expectedConv    Float   @map("expected_conv")
+  interactionLift Float   @map("interaction_lift")
+
+  @@map("interaction_effects")
+}
+
+model ValueAlignmentImpact {
+  id                 Int     @id @default(autoincrement())
+  valueTheme         String  @map("value_theme")
+  avgConversionAlign Float   @map("avg_conversion_aligned")
+  avgConversionNoAlign Float @map("avg_conversion_not_aligned")
+  alignmentLift      Float   @map("alignment_lift")
+
+  @@map("value_alignment_impact")
+}
+
+model PrimingEffectSummary {
+  id              Int     @id @default(autoincrement())
+  exposureLevel   String  @map("exposure_level")
+  avgPremiumConv  Float   @map("avg_premium_conversion")
+  segmentCount    Int     @map("segment_count")
+
+  @@map("priming_effect_summary")
+}

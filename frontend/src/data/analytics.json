@@ -1,0 +1,1418 @@
+{
+  "clusterProfiles": [
+    {
+      "id": 26,
+      "clusterId": 0,
+      "clusterName": "budget_hunters",
+      "size": 6,
+      "avgEduAffinity": 0.02062331767887167,
+      "avgPremiumAffinity": 0.02011443963620333,
+      "avgDiscountAffinity": 0.02096459414652833,
+      "avgEmailPreference": 0.1052408902135,
+      "avgPushPreference": 0.1059058836457383,
+      "avgInappPreference": 0.1110492614613283,
+      "topCampaignType": "discount",
+      "topChannel": "email",
+      "topValue": "convenience"
+    },
+    {
+      "id": 27,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "size": 12,
+      "avgEduAffinity": 0.02060206115857583,
+      "avgPremiumAffinity": 0.02088657651983833,
+      "avgDiscountAffinity": 0.02855370816633084,
+      "avgEmailPreference": 0.09497100714532751,
+      "avgPushPreference": 0.09173045542766667,
+      "avgInappPreference": 0.09930134985044835,
+      "topCampaignType": "educational",
+      "topChannel": "push",
+      "topValue": "eco_conscious"
+    },
+    {
+      "id": 28,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "size": 13,
+      "avgEduAffinity": 0.02096942085982231,
+      "avgPremiumAffinity": 0.02085933751114,
+      "avgDiscountAffinity": 0.02049408877943461,
+      "avgEmailPreference": 0.08747835237555769,
+      "avgPushPreference": 0.08425036594384154,
+      "avgInappPreference": 0.0906470613181777,
+      "topCampaignType": "premium",
+      "topChannel": "email",
+      "topValue": "quality"
+    },
+    {
+      "id": 29,
+      "clusterId": 3,
+      "clusterName": "convenience_seekers",
+      "size": 6,
+      "avgEduAffinity": 0.021905314254185,
+      "avgPremiumAffinity": 0.02127342799065167,
+      "avgDiscountAffinity": 0.02103404932267,
+      "avgEmailPreference": 0.083280475337355,
+      "avgPushPreference": 0.09636894840758832,
+      "avgInappPreference": 0.088502056895245,
+      "topCampaignType": "educational",
+      "topChannel": "inapp",
+      "topValue": "convenience"
+    },
+    {
+      "id": 30,
+      "clusterId": 4,
+      "clusterName": "multi_channel_engagers",
+      "size": 3,
+      "avgEduAffinity": 0.02096229593839667,
+      "avgPremiumAffinity": 0.02670870845820333,
+      "avgDiscountAffinity": 0.02099585987386667,
+      "avgEmailPreference": 0.09430405840953666,
+      "avgPushPreference": 0.1047324292999267,
+      "avgInappPreference": 0.10549002781727,
+      "topCampaignType": "premium",
+      "topChannel": "inapp",
+      "topValue": "family"
+    }
+  ],
+  "segmentClusters": [
+    {
+      "id": 226,
+      "segmentId": 1,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 224,
+      "segmentId": 2,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 222,
+      "segmentId": 3,
+      "clusterId": 0,
+      "clusterName": "budget_hunters",
+      "recommendedCampaignType": "discount",
+      "recommendedChannel": "email",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "3.1%"
+    },
+    {
+      "id": 220,
+      "segmentId": 4,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 218,
+      "segmentId": 5,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 216,
+      "segmentId": 6,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 214,
+      "segmentId": 7,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 213,
+      "segmentId": 8,
+      "clusterId": 4,
+      "clusterName": "multi_channel_engagers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "family",
+      "expectedConversion": "2.8%"
+    },
+    {
+      "id": 211,
+      "segmentId": 9,
+      "clusterId": 3,
+      "clusterName": "convenience_seekers",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "2.5%"
+    },
+    {
+      "id": 202,
+      "segmentId": 10,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 236,
+      "segmentId": 11,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 230,
+      "segmentId": 12,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 221,
+      "segmentId": 13,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 209,
+      "segmentId": 14,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 239,
+      "segmentId": 15,
+      "clusterId": 0,
+      "clusterName": "budget_hunters",
+      "recommendedCampaignType": "discount",
+      "recommendedChannel": "email",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "3.1%"
+    },
+    {
+      "id": 233,
+      "segmentId": 16,
+      "clusterId": 3,
+      "clusterName": "convenience_seekers",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "2.5%"
+    },
+    {
+      "id": 227,
+      "segmentId": 17,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 215,
+      "segmentId": 18,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 203,
+      "segmentId": 19,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 204,
+      "segmentId": 20,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 237,
+      "segmentId": 21,
+      "clusterId": 3,
+      "clusterName": "convenience_seekers",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "2.5%"
+    },
+    {
+      "id": 231,
+      "segmentId": 22,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 223,
+      "segmentId": 23,
+      "clusterId": 4,
+      "clusterName": "multi_channel_engagers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "family",
+      "expectedConversion": "2.8%"
+    },
+    {
+      "id": 210,
+      "segmentId": 24,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 240,
+      "segmentId": 25,
+      "clusterId": 0,
+      "clusterName": "budget_hunters",
+      "recommendedCampaignType": "discount",
+      "recommendedChannel": "email",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "3.1%"
+    },
+    {
+      "id": 234,
+      "segmentId": 26,
+      "clusterId": 3,
+      "clusterName": "convenience_seekers",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "2.5%"
+    },
+    {
+      "id": 228,
+      "segmentId": 27,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 217,
+      "segmentId": 28,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 205,
+      "segmentId": 29,
+      "clusterId": 3,
+      "clusterName": "convenience_seekers",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "2.5%"
+    },
+    {
+      "id": 206,
+      "segmentId": 30,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 238,
+      "segmentId": 31,
+      "clusterId": 1,
+      "clusterName": "eco_conscious_parents",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "push",
+      "recommendedTheme": "eco_conscious",
+      "expectedConversion": "2.4%"
+    },
+    {
+      "id": 232,
+      "segmentId": 32,
+      "clusterId": 0,
+      "clusterName": "budget_hunters",
+      "recommendedCampaignType": "discount",
+      "recommendedChannel": "email",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "3.1%"
+    },
+    {
+      "id": 225,
+      "segmentId": 33,
+      "clusterId": 3,
+      "clusterName": "convenience_seekers",
+      "recommendedCampaignType": "educational",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "2.5%"
+    },
+    {
+      "id": 212,
+      "segmentId": 34,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 201,
+      "segmentId": 35,
+      "clusterId": 0,
+      "clusterName": "budget_hunters",
+      "recommendedCampaignType": "discount",
+      "recommendedChannel": "email",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "3.1%"
+    },
+    {
+      "id": 235,
+      "segmentId": 36,
+      "clusterId": 0,
+      "clusterName": "budget_hunters",
+      "recommendedCampaignType": "discount",
+      "recommendedChannel": "email",
+      "recommendedTheme": "convenience",
+      "expectedConversion": "3.1%"
+    },
+    {
+      "id": 229,
+      "segmentId": 37,
+      "clusterId": 4,
+      "clusterName": "multi_channel_engagers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "inapp",
+      "recommendedTheme": "family",
+      "expectedConversion": "2.8%"
+    },
+    {
+      "id": 219,
+      "segmentId": 38,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 207,
+      "segmentId": 39,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    },
+    {
+      "id": 208,
+      "segmentId": 40,
+      "clusterId": 2,
+      "clusterName": "premium_quality_seekers",
+      "recommendedCampaignType": "premium",
+      "recommendedChannel": "email",
+      "recommendedTheme": "quality",
+      "expectedConversion": "2.9%"
+    }
+  ],
+  "modelSummary": [
+    {
+      "id": 76,
+      "section": "performance",
+      "metric": "r_squared",
+      "value": 0.5732,
+      "rank": null
+    },
+    {
+      "id": 77,
+      "section": "performance",
+      "metric": "rmse",
+      "value": 0.002708,
+      "rank": null
+    },
+    {
+      "id": 78,
+      "section": "performance",
+      "metric": "mae",
+      "value": 0.002193,
+      "rank": null
+    },
+    {
+      "id": 79,
+      "section": "performance",
+      "metric": "train_size",
+      "value": 1600,
+      "rank": null
+    },
+    {
+      "id": 80,
+      "section": "performance",
+      "metric": "test_size",
+      "value": 400,
+      "rank": null
+    },
+    {
+      "id": 81,
+      "section": "feature_importance",
+      "metric": "campaign_type",
+      "value": 0.3237,
+      "rank": 1
+    },
+    {
+      "id": 82,
+      "section": "feature_importance",
+      "metric": "value_match",
+      "value": 0.3195,
+      "rank": 2
+    },
+    {
+      "id": 83,
+      "section": "feature_importance",
+      "metric": "price_sensitivity",
+      "value": 0.0838,
+      "rank": 3
+    },
+    {
+      "id": 84,
+      "section": "feature_importance",
+      "metric": "channel_match_score",
+      "value": 0.0433,
+      "rank": 4
+    },
+    {
+      "id": 85,
+      "section": "feature_importance",
+      "metric": "message_sentiment",
+      "value": 0.0415,
+      "rank": 5
+    },
+    {
+      "id": 86,
+      "section": "top_opportunities",
+      "metric": "seg4_discount_email",
+      "value": 0.039,
+      "rank": 994
+    },
+    {
+      "id": 87,
+      "section": "top_opportunities",
+      "metric": "seg4_discount_email",
+      "value": 0.039,
+      "rank": 705
+    },
+    {
+      "id": 88,
+      "section": "top_opportunities",
+      "metric": "seg4_discount_email",
+      "value": 0.0373,
+      "rank": 1035
+    },
+    {
+      "id": 89,
+      "section": "top_opportunities",
+      "metric": "seg4_discount_push",
+      "value": 0.0341,
+      "rank": 622
+    },
+    {
+      "id": 90,
+      "section": "top_opportunities",
+      "metric": "seg4_discount_push",
+      "value": 0.0341,
+      "rank": 1915
+    }
+  ],
+  "attributeEffectiveness": [
+    {
+      "id": 142,
+      "campaignType": "discount",
+      "channel": "email",
+      "sentiment": "friendly",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09374718962542,
+      "avgConversion": 0.02400861378276,
+      "sampleSize": 40,
+      "stdError": 0.00074373818478
+    },
+    {
+      "id": 130,
+      "campaignType": "discount",
+      "channel": "email",
+      "sentiment": "urgent",
+      "valueTheme": "family",
+      "avgEngagement": 0.09215032002497,
+      "avgConversion": 0.02346644626841,
+      "sampleSize": 40,
+      "stdError": 0.00093118192932
+    },
+    {
+      "id": 146,
+      "campaignType": "discount",
+      "channel": "email",
+      "sentiment": "friendly",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09099786720559,
+      "avgConversion": 0.02341131985844,
+      "sampleSize": 80,
+      "stdError": 0.00058076218646
+    },
+    {
+      "id": 150,
+      "campaignType": "discount",
+      "channel": "email",
+      "sentiment": "urgent",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09416199041637,
+      "avgConversion": 0.02318912954099,
+      "sampleSize": 40,
+      "stdError": 0.00078705512932
+    },
+    {
+      "id": 125,
+      "campaignType": "discount",
+      "channel": "push",
+      "sentiment": "friendly",
+      "valueTheme": "eco_conscious",
+      "avgEngagement": 0.09270047143377,
+      "avgConversion": 0.02309862747659,
+      "sampleSize": 120,
+      "stdError": 0.00043782011013
+    },
+    {
+      "id": 133,
+      "campaignType": "discount",
+      "channel": "push",
+      "sentiment": "urgent",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09379356129421,
+      "avgConversion": 0.02304228667839,
+      "sampleSize": 80,
+      "stdError": 0.00056226669701
+    },
+    {
+      "id": 147,
+      "campaignType": "discount",
+      "channel": "inapp",
+      "sentiment": "urgent",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.10064864865808,
+      "avgConversion": 0.02286879040679,
+      "sampleSize": 40,
+      "stdError": 0.00078861629126
+    },
+    {
+      "id": 138,
+      "campaignType": "discount",
+      "channel": "inapp",
+      "sentiment": "friendly",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09835603572651,
+      "avgConversion": 0.02283764051581,
+      "sampleSize": 40,
+      "stdError": 0.00072536165427
+    },
+    {
+      "id": 129,
+      "campaignType": "discount",
+      "channel": "inapp",
+      "sentiment": "friendly",
+      "valueTheme": "eco_conscious",
+      "avgEngagement": 0.09583738307038,
+      "avgConversion": 0.0227290262565,
+      "sampleSize": 40,
+      "stdError": 0.00075865374393
+    },
+    {
+      "id": 155,
+      "campaignType": "premium",
+      "channel": "inapp",
+      "sentiment": "informative",
+      "valueTheme": "family",
+      "avgEngagement": 0.09504749920424,
+      "avgConversion": 0.02234888161699,
+      "sampleSize": 40,
+      "stdError": 0.00057269337925
+    },
+    {
+      "id": 139,
+      "campaignType": "educational",
+      "channel": "push",
+      "sentiment": "friendly",
+      "valueTheme": "family",
+      "avgEngagement": 0.09375336881742,
+      "avgConversion": 0.02221515068236,
+      "sampleSize": 40,
+      "stdError": 0.0006173209199
+    },
+    {
+      "id": 153,
+      "campaignType": "discount",
+      "channel": "email",
+      "sentiment": "urgent",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09146826453466,
+      "avgConversion": 0.02211374012319,
+      "sampleSize": 40,
+      "stdError": 0.00063866879571
+    },
+    {
+      "id": 144,
+      "campaignType": "premium",
+      "channel": "email",
+      "sentiment": "informative",
+      "valueTheme": "family",
+      "avgEngagement": 0.09236848961485,
+      "avgConversion": 0.02203334264632,
+      "sampleSize": 120,
+      "stdError": 0.00038305151116
+    },
+    {
+      "id": 131,
+      "campaignType": "premium",
+      "channel": "push",
+      "sentiment": "informative",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09118012926743,
+      "avgConversion": 0.02202547904388,
+      "sampleSize": 40,
+      "stdError": 0.00056511032447
+    },
+    {
+      "id": 141,
+      "campaignType": "educational",
+      "channel": "inapp",
+      "sentiment": "friendly",
+      "valueTheme": "family",
+      "avgEngagement": 0.09622570897378,
+      "avgConversion": 0.02154584013916,
+      "sampleSize": 120,
+      "stdError": 0.00031503687634
+    },
+    {
+      "id": 137,
+      "campaignType": "premium",
+      "channel": "inapp",
+      "sentiment": "informative",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09624315156519,
+      "avgConversion": 0.02148796662403,
+      "sampleSize": 40,
+      "stdError": 0.00059190710723
+    },
+    {
+      "id": 145,
+      "campaignType": "premium",
+      "channel": "email",
+      "sentiment": "informative",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09271548781172,
+      "avgConversion": 0.0211648789604,
+      "sampleSize": 80,
+      "stdError": 0.00034527871995
+    },
+    {
+      "id": 140,
+      "campaignType": "educational",
+      "channel": "inapp",
+      "sentiment": "friendly",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09750428459667,
+      "avgConversion": 0.02110457447624,
+      "sampleSize": 40,
+      "stdError": 0.00055285987002
+    },
+    {
+      "id": 149,
+      "campaignType": "premium",
+      "channel": "email",
+      "sentiment": "informative",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09225283032195,
+      "avgConversion": 0.02109625785425,
+      "sampleSize": 40,
+      "stdError": 0.00059537767077
+    },
+    {
+      "id": 154,
+      "campaignType": "educational",
+      "channel": "push",
+      "sentiment": "friendly",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09298910648933,
+      "avgConversion": 0.02105689614254,
+      "sampleSize": 40,
+      "stdError": 0.00041510437089
+    },
+    {
+      "id": 151,
+      "campaignType": "educational",
+      "channel": "push",
+      "sentiment": "friendly",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09193369847669,
+      "avgConversion": 0.0208764288044,
+      "sampleSize": 80,
+      "stdError": 0.00034299817188
+    },
+    {
+      "id": 135,
+      "campaignType": "premium",
+      "channel": "inapp",
+      "sentiment": "informative",
+      "valueTheme": "eco_conscious",
+      "avgEngagement": 0.09843943460468,
+      "avgConversion": 0.02085926814029,
+      "sampleSize": 120,
+      "stdError": 0.00029587091616
+    },
+    {
+      "id": 152,
+      "campaignType": "educational",
+      "channel": "email",
+      "sentiment": "friendly",
+      "valueTheme": "family",
+      "avgEngagement": 0.09372029875206,
+      "avgConversion": 0.02080771322169,
+      "sampleSize": 40,
+      "stdError": 0.0005619663955
+    },
+    {
+      "id": 128,
+      "campaignType": "educational",
+      "channel": "email",
+      "sentiment": "friendly",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09164863705439,
+      "avgConversion": 0.02079504289866,
+      "sampleSize": 120,
+      "stdError": 0.00031148352919
+    },
+    {
+      "id": 127,
+      "campaignType": "premium",
+      "channel": "push",
+      "sentiment": "informative",
+      "valueTheme": "eco_conscious",
+      "avgEngagement": 0.09356384368026,
+      "avgConversion": 0.02079054863187,
+      "sampleSize": 80,
+      "stdError": 0.00032155155892
+    },
+    {
+      "id": 136,
+      "campaignType": "educational",
+      "channel": "email",
+      "sentiment": "friendly",
+      "valueTheme": "eco_conscious",
+      "avgEngagement": 0.09282717189919,
+      "avgConversion": 0.02071737682312,
+      "sampleSize": 40,
+      "stdError": 0.00049421965914
+    },
+    {
+      "id": 134,
+      "campaignType": "educational",
+      "channel": "inapp",
+      "sentiment": "friendly",
+      "valueTheme": "quality",
+      "avgEngagement": 0.09725789218764,
+      "avgConversion": 0.02071110706884,
+      "sampleSize": 40,
+      "stdError": 0.00046602108694
+    },
+    {
+      "id": 126,
+      "campaignType": "premium",
+      "channel": "push",
+      "sentiment": "informative",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09437352506989,
+      "avgConversion": 0.020660488465,
+      "sampleSize": 80,
+      "stdError": 0.00039533630505
+    },
+    {
+      "id": 148,
+      "campaignType": "educational",
+      "channel": "inapp",
+      "sentiment": "friendly",
+      "valueTheme": "eco_conscious",
+      "avgEngagement": 0.09444177038246,
+      "avgConversion": 0.02052952545956,
+      "sampleSize": 40,
+      "stdError": 0.00049715498646
+    },
+    {
+      "id": 132,
+      "campaignType": "educational",
+      "channel": "email",
+      "sentiment": "friendly",
+      "valueTheme": "convenience",
+      "avgEngagement": 0.09203930869735,
+      "avgConversion": 0.02051948613452,
+      "sampleSize": 160,
+      "stdError": 0.00023232941559
+    },
+    {
+      "id": 143,
+      "campaignType": "premium",
+      "channel": "email",
+      "sentiment": "informative",
+      "valueTheme": "eco_conscious",
+      "avgEngagement": 0.09203767893156,
+      "avgConversion": 0.02049379611941,
+      "sampleSize": 40,
+      "stdError": 0.00058486630309
+    }
+  ],
+  "channelVersatility": [
+    {
+      "id": 146,
+      "segmentId": 1,
+      "emailEngagement": 0.08137207469679,
+      "pushEngagement": 0.07657363500308,
+      "inappEngagement": 0.10654359845817,
+      "engagementVariance": 0.01436415299207,
+      "classification": "single_channel"
+    },
+    {
+      "id": 144,
+      "segmentId": 2,
+      "emailEngagement": 0.09881726867597,
+      "pushEngagement": 0.09487160063128,
+      "inappEngagement": 0.09595871831503,
+      "engagementVariance": 0.00765198629718,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 142,
+      "segmentId": 3,
+      "emailEngagement": 0.09736817412089,
+      "pushEngagement": 0.09872777884154,
+      "inappEngagement": 0.12413146311803,
+      "engagementVariance": 0.01497208873776,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 140,
+      "segmentId": 4,
+      "emailEngagement": 0.10292902896402,
+      "pushEngagement": 0.07883706892341,
+      "inappEngagement": 0.08168338665084,
+      "engagementVariance": 0.01388866182563,
+      "classification": "single_channel"
+    },
+    {
+      "id": 138,
+      "segmentId": 5,
+      "emailEngagement": 0.09602067970287,
+      "pushEngagement": 0.09279185555558,
+      "inappEngagement": 0.12753657909696,
+      "engagementVariance": 0.01764400819668,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 136,
+      "segmentId": 6,
+      "emailEngagement": 0.07944047075403,
+      "pushEngagement": 0.10861743987244,
+      "inappEngagement": 0.08151258007864,
+      "engagementVariance": 0.01450945177713,
+      "classification": "single_channel"
+    },
+    {
+      "id": 134,
+      "segmentId": 7,
+      "emailEngagement": 0.10349853961694,
+      "pushEngagement": 0.07941158545456,
+      "inappEngagement": 0.08009153317281,
+      "engagementVariance": 0.01418265047328,
+      "classification": "single_channel"
+    },
+    {
+      "id": 133,
+      "segmentId": 8,
+      "emailEngagement": 0.09676827153078,
+      "pushEngagement": 0.0930175263244,
+      "inappEngagement": 0.12437351274788,
+      "engagementVariance": 0.01554275954363,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 131,
+      "segmentId": 9,
+      "emailEngagement": 0.0809045749266,
+      "pushEngagement": 0.07911913769029,
+      "inappEngagement": 0.10421816908107,
+      "engagementVariance": 0.01363621096948,
+      "classification": "single_channel"
+    },
+    {
+      "id": 122,
+      "segmentId": 10,
+      "emailEngagement": 0.07967363656402,
+      "pushEngagement": 0.07837667007248,
+      "inappEngagement": 0.09952375328162,
+      "engagementVariance": 0.01217712586834,
+      "classification": "single_channel"
+    },
+    {
+      "id": 156,
+      "segmentId": 11,
+      "emailEngagement": 0.07827587730643,
+      "pushEngagement": 0.08198487008392,
+      "inappEngagement": 0.10403410141278,
+      "engagementVariance": 0.01337576047705,
+      "classification": "single_channel"
+    },
+    {
+      "id": 150,
+      "segmentId": 12,
+      "emailEngagement": 0.08000674876472,
+      "pushEngagement": 0.08151720829468,
+      "inappEngagement": 0.10497097532856,
+      "engagementVariance": 0.01315227855178,
+      "classification": "single_channel"
+    },
+    {
+      "id": 141,
+      "segmentId": 13,
+      "emailEngagement": 0.08353683571064,
+      "pushEngagement": 0.081007309708,
+      "inappEngagement": 0.10508252213811,
+      "engagementVariance": 0.01222204071795,
+      "classification": "single_channel"
+    },
+    {
+      "id": 129,
+      "segmentId": 14,
+      "emailEngagement": 0.07843815023153,
+      "pushEngagement": 0.10410149165271,
+      "inappEngagement": 0.07960162531921,
+      "engagementVariance": 0.01342767175134,
+      "classification": "single_channel"
+    },
+    {
+      "id": 159,
+      "segmentId": 15,
+      "emailEngagement": 0.09450077217303,
+      "pushEngagement": 0.12972083372445,
+      "inappEngagement": 0.09521830189122,
+      "engagementVariance": 0.01819031334299,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 153,
+      "segmentId": 16,
+      "emailEngagement": 0.08016965977611,
+      "pushEngagement": 0.10454547172787,
+      "inappEngagement": 0.08142593096051,
+      "engagementVariance": 0.0129536190149,
+      "classification": "single_channel"
+    },
+    {
+      "id": 147,
+      "segmentId": 17,
+      "emailEngagement": 0.09552083921428,
+      "pushEngagement": 0.10036662655931,
+      "inappEngagement": 0.09770328246294,
+      "engagementVariance": 0.00788881525956,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 135,
+      "segmentId": 18,
+      "emailEngagement": 0.08053601703698,
+      "pushEngagement": 0.07619092885417,
+      "inappEngagement": 0.08144982018256,
+      "engagementVariance": 0.0075368515826,
+      "classification": "single_channel"
+    },
+    {
+      "id": 123,
+      "segmentId": 19,
+      "emailEngagement": 0.08110509926134,
+      "pushEngagement": 0.08144341529926,
+      "inappEngagement": 0.10746043234948,
+      "engagementVariance": 0.01411395502363,
+      "classification": "single_channel"
+    },
+    {
+      "id": 124,
+      "segmentId": 20,
+      "emailEngagement": 0.08104144235333,
+      "pushEngagement": 0.09896510093466,
+      "inappEngagement": 0.10596553511855,
+      "engagementVariance": 0.01301644190859,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 157,
+      "segmentId": 21,
+      "emailEngagement": 0.07764105889899,
+      "pushEngagement": 0.10198330388741,
+      "inappEngagement": 0.10668853704947,
+      "engagementVariance": 0.01552666451322,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 151,
+      "segmentId": 22,
+      "emailEngagement": 0.08274611721916,
+      "pushEngagement": 0.08085788650976,
+      "inappEngagement": 0.10433890879272,
+      "engagementVariance": 0.01268864603846,
+      "classification": "single_channel"
+    },
+    {
+      "id": 143,
+      "segmentId": 23,
+      "emailEngagement": 0.09587879726614,
+      "pushEngagement": 0.12462451818956,
+      "inappEngagement": 0.09804871603623,
+      "engagementVariance": 0.01564700139875,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 130,
+      "segmentId": 24,
+      "emailEngagement": 0.09821250057205,
+      "pushEngagement": 0.0978027745375,
+      "inappEngagement": 0.11976917080078,
+      "engagementVariance": 0.01297090705397,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 160,
+      "segmentId": 25,
+      "emailEngagement": 0.12139597327997,
+      "pushEngagement": 0.09407916655601,
+      "inappEngagement": 0.09707042991156,
+      "engagementVariance": 0.01577712016923,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 154,
+      "segmentId": 26,
+      "emailEngagement": 0.07988389155808,
+      "pushEngagement": 0.10550320389615,
+      "inappEngagement": 0.08137008678333,
+      "engagementVariance": 0.01375799177047,
+      "classification": "single_channel"
+    },
+    {
+      "id": 148,
+      "segmentId": 27,
+      "emailEngagement": 0.07834333859283,
+      "pushEngagement": 0.08204462818872,
+      "inappEngagement": 0.10290734924685,
+      "engagementVariance": 0.01346050247245,
+      "classification": "single_channel"
+    },
+    {
+      "id": 137,
+      "segmentId": 28,
+      "emailEngagement": 0.12281542016129,
+      "pushEngagement": 0.09509735198225,
+      "inappEngagement": 0.09769857518483,
+      "engagementVariance": 0.01603058199968,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 125,
+      "segmentId": 29,
+      "emailEngagement": 0.07771638762845,
+      "pushEngagement": 0.10650731262058,
+      "inappEngagement": 0.07615156877124,
+      "engagementVariance": 0.01535861486461,
+      "classification": "single_channel"
+    },
+    {
+      "id": 126,
+      "segmentId": 30,
+      "emailEngagement": 0.09946562490738,
+      "pushEngagement": 0.09462132273203,
+      "inappEngagement": 0.0928011858852,
+      "engagementVariance": 0.00873851669826,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 158,
+      "segmentId": 31,
+      "emailEngagement": 0.10047990003128,
+      "pushEngagement": 0.08121337869246,
+      "inappEngagement": 0.07936106401533,
+      "engagementVariance": 0.01319748184016,
+      "classification": "single_channel"
+    },
+    {
+      "id": 152,
+      "segmentId": 32,
+      "emailEngagement": 0.1253559595518,
+      "pushEngagement": 0.09447019843464,
+      "inappEngagement": 0.12872451280307,
+      "engagementVariance": 0.01767095367951,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 145,
+      "segmentId": 33,
+      "emailEngagement": 0.1033672792359,
+      "pushEngagement": 0.08055526062323,
+      "inappEngagement": 0.08115804872585,
+      "engagementVariance": 0.01371745290271,
+      "classification": "single_channel"
+    },
+    {
+      "id": 132,
+      "segmentId": 34,
+      "emailEngagement": 0.10551006210248,
+      "pushEngagement": 0.08187336005911,
+      "inappEngagement": 0.07785232777669,
+      "engagementVariance": 0.01524463806289,
+      "classification": "single_channel"
+    },
+    {
+      "id": 121,
+      "segmentId": 35,
+      "emailEngagement": 0.09480286403442,
+      "pushEngagement": 0.11936423440879,
+      "inappEngagement": 0.09570558100628,
+      "engagementVariance": 0.01381367865257,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 155,
+      "segmentId": 36,
+      "emailEngagement": 0.09802159812089,
+      "pushEngagement": 0.099073089909,
+      "inappEngagement": 0.12544528003781,
+      "engagementVariance": 0.01542089665763,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 149,
+      "segmentId": 37,
+      "emailEngagement": 0.09026510643169,
+      "pushEngagement": 0.09655524338582,
+      "inappEngagement": 0.0940478546677,
+      "engagementVariance": 0.00813697105131,
+      "classification": "multi_channel"
+    },
+    {
+      "id": 139,
+      "segmentId": 38,
+      "emailEngagement": 0.10296387200737,
+      "pushEngagement": 0.0803189446403,
+      "inappEngagement": 0.07613909569794,
+      "engagementVariance": 0.01518121202274,
+      "classification": "single_channel"
+    },
+    {
+      "id": 127,
+      "segmentId": 39,
+      "emailEngagement": 0.08010142183666,
+      "pushEngagement": 0.10435117674974,
+      "inappEngagement": 0.07991406093271,
+      "engagementVariance": 0.01344102316076,
+      "classification": "single_channel"
+    },
+    {
+      "id": 128,
+      "segmentId": 40,
+      "emailEngagement": 0.10601970034179,
+      "pushEngagement": 0.08278259141053,
+      "inappEngagement": 0.08012781364238,
+      "engagementVariance": 0.01478110007481,
+      "classification": "single_channel"
+    }
+  ],
+  "interactionEffects": [
+    {
+      "id": 26,
+      "campaignType": "discount",
+      "channel": "email",
+      "actualConv": 0.02326676157204,
+      "expectedConv": 0.02235987439672,
+      "interactionLift": 0.00090688717532
+    },
+    {
+      "id": 24,
+      "campaignType": "discount",
+      "channel": "push",
+      "actualConv": 0.02307609115731,
+      "expectedConv": 0.02245533556628,
+      "interactionLift": 0.00062075559103
+    },
+    {
+      "id": 27,
+      "campaignType": "discount",
+      "channel": "inapp",
+      "actualConv": 0.0228118190597,
+      "expectedConv": 0.02233033284504,
+      "interactionLift": 0.00048148621466
+    },
+    {
+      "id": 25,
+      "campaignType": "premium",
+      "channel": "email",
+      "actualConv": 0.02143140569049,
+      "expectedConv": 0.02143758120238,
+      "interactionLift": -0.0000061755118935143
+    },
+    {
+      "id": 20,
+      "campaignType": "educational",
+      "channel": "inapp",
+      "actualConv": 0.02116378790369,
+      "expectedConv": 0.02125331774414,
+      "interactionLift": -0.00008952984045
+    },
+    {
+      "id": 19,
+      "campaignType": "educational",
+      "channel": "push",
+      "actualConv": 0.02125622610843,
+      "expectedConv": 0.02137832046539,
+      "interactionLift": -0.00012209435695
+    },
+    {
+      "id": 22,
+      "campaignType": "premium",
+      "channel": "inapp",
+      "actualConv": 0.02128293053238,
+      "expectedConv": 0.0214080396507,
+      "interactionLift": -0.00012510911832
+    },
+    {
+      "id": 21,
+      "campaignType": "premium",
+      "channel": "push",
+      "actualConv": 0.02098551064752,
+      "expectedConv": 0.02153304237194,
+      "interactionLift": -0.00054753172441
+    },
+    {
+      "id": 23,
+      "campaignType": "educational",
+      "channel": "email",
+      "actualConv": 0.02066535147543,
+      "expectedConv": 0.02128285929582,
+      "interactionLift": -0.00061750782039
+    }
+  ],
+  "valueAlignmentImpact": [
+    {
+      "id": 6,
+      "valueTheme": "quality",
+      "avgConversionAlign": 0.02553751638287,
+      "avgConversionNoAlign": 0.02146392313692,
+      "alignmentLift": 0.1897879162147683
+    },
+    {
+      "id": 7,
+      "valueTheme": "family",
+      "avgConversionAlign": 0.02510711616822,
+      "avgConversionNoAlign": 0.02203434966643,
+      "alignmentLift": 0.1394534691655299
+    },
+    {
+      "id": 5,
+      "valueTheme": "convenience",
+      "avgConversionAlign": 0.02363893771018,
+      "avgConversionNoAlign": 0.02085903232159,
+      "alignmentLift": 0.133271061942441
+    },
+    {
+      "id": 8,
+      "valueTheme": "eco_conscious",
+      "avgConversionAlign": 0.02446726244583,
+      "avgConversionNoAlign": 0.02179796022695,
+      "alignmentLift": 0.1224565138704951
+    }
+  ],
+  "primingEffectSummary": [
+    {
+      "id": 1,
+      "exposureLevel": "high_edu_exposure",
+      "avgPremiumConv": 0.02186512622613,
+      "segmentCount": 12
+    },
+    {
+      "id": 2,
+      "exposureLevel": "low_edu_exposure",
+      "avgPremiumConv": 0.02142862797119,
+      "segmentCount": 3
+    },
+    {
+      "id": 3,
+      "exposureLevel": "medium_edu_exposure",
+      "avgPremiumConv": 0.02094384953566,
+      "segmentCount": 25
+    }
+  ],
+  "generatedAt": "2025-11-16T04:31:08.892Z"
+}
