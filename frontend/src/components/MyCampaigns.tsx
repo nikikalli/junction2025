@@ -6,7 +6,7 @@ interface CampaignCardProps {
   onClick: () => void;
 }
 
-export const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
+const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
   return (
     <div
       onClick={onClick}
@@ -32,10 +32,6 @@ export const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
 };
 
 export const MyCampaigns = ({ campaigns }: { campaigns: Campaign[] }) => {
-  if (campaigns.length === 0) {
-    return null;
-  }
-
   return (
     <SpotlightCard>
       <div className="flex flex-col mb-6 gap-3">

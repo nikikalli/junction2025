@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextType from "@/components/TextType";
 import SpotlightCard from "@/components/SpotlightCard";
 import PrismaticBurst from "@/components/PrismaticBurst";
-import { Nav } from "@/components/Nav";
 import { useCampaignSearch } from "@/hooks/useCampaignSearch";
 import { useSegmentSelection } from "@/hooks/useSegmentSelection";
 import { useCanvasMessages } from "@/hooks/useCanvasMessages";
@@ -11,8 +10,9 @@ import { CampaignSearch } from "@/components/CampaignSearch";
 import { SegmentList } from "@/components/SegmentList";
 import { MessageListPanel } from "@/components/MessageListPanel";
 import { CampaignTypeDialog } from "@/components/CampaignTypeDialog";
-import type { CanvasMessage } from "@/types";
+import type { Campaign, CanvasMessage } from "@/types";
 import { MyCampaigns } from "@/components/MyCampaigns";
+import { campaignsApi } from "@/services/campaigns.api";
 
 const MessagePreview = ({ message }: { message: CanvasMessage }) => {
   if (message.channel === "email" && message.body) {
@@ -76,6 +76,20 @@ export const Home = () => {
   const [selectedCampaignType, setSelectedCampaignType] = useState<
     "Standard" | "Promotional"
   >("Standard");
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const data = await campaignsApi.getAllCampaigns();
+        setCampaigns(data);
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
+    };
+
+    fetchCampaigns();
+  });
 
   const { searchTerm, setSearchTerm, filteredCanvasList, loadingList } =
     useCampaignSearch();
@@ -118,8 +132,8 @@ export const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      <div style={{ width: "100%", height: "130vh", position: "relative" }}>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white relative ">
+      <div style={{ width: "100%", height: "100vh", position: "relative" }}>
         <PrismaticBurst
           animationType="rotate3d"
           intensity={2}
@@ -133,7 +147,6 @@ export const Home = () => {
           colors={["#ff007a", "#4d3dff", "#ffffff"]}
         />
         <div className="absolute inset-0 z-10 flex flex-col items-center h-full">
-          <Nav />
           <div className="flex flex-col items-center justify-center h-full gap-6 w-full">
             {!selectedCanvasId && (
               <>
@@ -200,7 +213,7 @@ export const Home = () => {
               )}
             </SpotlightCard>
           </div>
-          <MyCampaigns campaigns={[]} />
+          <MyCampaigns campaigns={campaigns} />
         </div>
       </div>
 
