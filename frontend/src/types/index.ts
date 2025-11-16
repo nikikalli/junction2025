@@ -16,6 +16,7 @@ export interface CanvasMessage {
   subject?: string;
   body?: string;
   message?: string;
+  day_of_campaign?: string;
 }
 
 export interface CanvasStep {

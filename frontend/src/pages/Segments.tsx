@@ -77,6 +77,7 @@ export const Segments = () => {
   const [selectedSegment, setSelectedSegment] = useState<Segment | null>(null);
   const [canvases, setCanvases] = useState<Canvas[]>([]);
   const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const { selectedMessageKey, setSelectedMessageKey, allMessages, selectedMessage } =
     useCanvasMessages(canvases);
@@ -188,6 +189,7 @@ export const Segments = () => {
                 subject: action.message_subject,
                 body: action.message_body,
                 message: action.message_body,
+                day_of_campaign: action.day_of_campaign,
               }
             }
           }))
@@ -208,6 +210,40 @@ export const Segments = () => {
   const handleBackToSegments = () => {
     setSelectedSegment(null);
     setSelectedMessageKey(null);
+  };
+
+  const handleSendCampaign = async () => {
+    if (!campaignData?.canvas_id) {
+      alert('No canvas ID found for this campaign');
+      return;
+    }
+
+    setSending(true);
+    try {
+      const response = await fetch('http://localhost:3000/api/braze/campaigns/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          campaign_id: campaignData.canvas_id,
+          broadcast: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send campaign');
+      }
+
+      const result = await response.json();
+      alert('Campaign sent successfully!');
+      console.log('Send result:', result);
+    } catch (error) {
+      console.error('Error sending campaign:', error);
+      alert('Failed to send campaign. Please try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   if (!canvasId) {
@@ -266,8 +302,24 @@ export const Segments = () => {
                       <div className="flex-1 flex items-center justify-center text-neutral-400">
                       </div>
                     ) : selectedMessage ? (
-                      <div className="flex-1 overflow-y-auto h-full">
-                        <MessagePreview message={selectedMessage} />
+                      <div className="flex-1 overflow-y-auto h-full flex flex-col">
+                        <div className="p-4 border-b border-neutral-700 bg-neutral-800 flex justify-between items-center">
+                          <div className="text-sm text-neutral-400">
+                            Day of Campaign: <span className="text-neutral-200 font-medium">
+                              {selectedMessage.day_of_campaign ? new Date(selectedMessage.day_of_campaign).toLocaleDateString() : 'Not set'}
+                            </span>
+                          </div>
+                          <button
+                            onClick={handleSendCampaign}
+                            disabled={sending}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-700 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors"
+                          >
+                            {sending ? 'Sending...' : 'Send Campaign'}
+                          </button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto">
+                          <MessagePreview message={selectedMessage} />
+                        </div>
                       </div>
                     ) : (
                       <div className="flex-1 flex items-center justify-center text-neutral-400">

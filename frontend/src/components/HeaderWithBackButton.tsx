@@ -17,7 +17,7 @@ export const HeaderWithBackButton = ({
         <Button
           onClick={onBack}
           variant="ghost"
-          className="text-neutral-400 hover:text-gray-600 p-0 h-auto font-medium text-sm absolute -top-12"
+          className="text-neutral-400 hover:text-zinc-200 hover:bg-gray-600/30 h-auto font-medium text-sm absolute -top-12 p-2"
         >
           ← Back
         </Button>
