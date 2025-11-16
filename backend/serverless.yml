@@ -9,11 +9,11 @@ provider:
   timeout: 30
   environment:
     NODE_ENV: production
-    DB_HOST: ${env:DB_HOST, 'localhost'}
-    DB_PORT: ${env:DB_PORT, '5432'}
-    DB_NAME: ${env:DB_NAME, 'junction2025'}
-    DB_USER: ${env:DB_USER, 'postgres'}
-    DB_PASSWORD: ${env:DB_PASSWORD, 'Junction2025PostgresPass'}
+    DB_HOST: junction2025-postgres.cuhwsnm2qch5.eu-north-1.rds.amazonaws.com
+    DB_PORT: '5432'
+    DB_NAME: junction2025
+    DB_USER: postgres
+    DB_PASSWORD: Junction2025PostgresPass
     ALLOWED_ORIGINS: '*'
   iam:
     role:
