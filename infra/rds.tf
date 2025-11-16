@@ -8,7 +8,7 @@ variable "db_password" {
 resource "aws_db_instance" "junction2025" {
   identifier             = "junction2025-postgres"
   engine                 = "postgres"
-  engine_version         = "16.4"
+  engine_version         = "16"
   instance_class         = "db.t3.micro"
   allocated_storage      = 20
   storage_type           = "gp2"

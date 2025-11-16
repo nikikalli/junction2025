@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = "https://zwtstyvnui.execute-api.eu-north-1.amazonaws.com/dev"
 
 export class ApiClient {
   private baseUrl: string;
