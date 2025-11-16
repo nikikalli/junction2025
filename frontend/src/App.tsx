@@ -3,14 +3,18 @@ import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
 import { CampaignScreen } from './pages/Campaign';
 import { Test } from './pages/Test';
+import { SasViyaCaseStudy } from './pages/sas-viya-case-study';
+import { Nav } from './components/Nav';
 
 function App() {
   return (
     <div className="app">
+      <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/test" element={<Test />} />
         <Route path="/campaign" element={<CampaignScreen />} />
+        <Route path="/sas-viya-case-study" element={<SasViyaCaseStudy />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
