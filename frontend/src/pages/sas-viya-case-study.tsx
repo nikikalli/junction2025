@@ -35,12 +35,12 @@ const benefits = [
 ];
 
 const sectionColors = [
-  'bg-gradient-to-b from-black via-[#ff007a]/15 to-[#4d3dff]/10',
-  'bg-gradient-to-b from-[#4d3dff]/10 via-[#4d3dff]/15 to-cyan-500/10',
-  'bg-gradient-to-b from-cyan-500/10 via-cyan-500/15 to-[#00e5ff]/10',
-  'bg-gradient-to-b from-[#00e5ff]/10 via-[#00e5ff]/15 to-[#ff007a]/10',
-  'bg-gradient-to-b from-[#ff007a]/10 via-[#ff007a]/15 to-[#4d3dff]/10',
-  'bg-gradient-to-b from-[#4d3dff]/10 via-[#4d3dff]/15 to-black',
+  'bg-gradient-to-br from-[#ff007a]/20 to-black',
+  'bg-gradient-to-br from-[#4d3dff]/20 to-black',
+  'bg-gradient-to-br from-cyan-500/20 to-black',
+  'bg-gradient-to-br from-[#00e5ff]/20 to-black',
+  'bg-gradient-to-br from-[#ff007a]/20 to-black',
+  'bg-gradient-to-br from-[#4d3dff]/20 to-black',
 ];
 
 export const SasViyaCaseStudy = () => {
@@ -128,9 +128,17 @@ export const SasViyaCaseStudy = () => {
         <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#ff007a] via-[#4d3dff] to-white mb-6">
           SAS Viya Analytics
         </h1>
-        <p className="text-xl text-gray-400 max-w-3xl text-center mb-12">
-          Scroll to explore how AI eliminates 10,000 manual clicks and prevents targeting errors
+        <p className="text-xl text-gray-400 max-w-3xl text-center mb-8">
+          The brain behind automated campaign personalization across 20+ countries
         </p>
+        <div className="max-w-4xl text-center mb-12">
+          <p className="text-gray-300 leading-relaxed">
+            SAS Viya's cloud analytics platform (CAS) analyzes thousands of past campaign results
+            to understand what works for different parent groups. It learns which parents respond
+            to discounts vs. educational content, preferred channels, and what values resonate
+            with each segment.
+          </p>
+        </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl">
           {benefits.map((benefit, index) => (
             <SpotlightCard
@@ -143,7 +151,7 @@ export const SasViyaCaseStudy = () => {
               spotlightColor="rgba(0, 229, 255, 0.2)"
             >
               <div className="p-4">
-                <div className="text-2xl font-bold text-[#00e5ff] mb-2">{benefit.icon}</div>
+                <div className="text-3xl font-bold text-[#00e5ff] mb-2">{benefit.icon}</div>
                 <div className="text-lg font-semibold text-white mb-1">{benefit.title}</div>
                 <div className="text-sm text-gray-400">{benefit.desc}</div>
               </div>
@@ -169,8 +177,9 @@ export const SasViyaCaseStudy = () => {
           <div className="p-8">
             <h2 className="text-4xl font-bold mb-4 text-[#ff007a]">Behavioral Clustering</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              K-Means clustering identifies 5 distinct behavioral archetypes from 40 segments.
-              Each cluster has optimal campaign configurations that eliminate guesswork.
+              SAS Viya processes historical campaign data and builds behavioral profiles for 40
+              segments, grouping them into 5 archetypes. What used to require manual setup for each
+              market now happens automatically.
             </p>
             <ResponsiveContainer width="100%" height={400}>
               <PieChart>
@@ -218,8 +227,8 @@ export const SasViyaCaseStudy = () => {
           <div className="p-8">
             <h2 className="text-4xl font-bold mb-4 text-[#4d3dff]">Value Alignment Lift</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              SAS Viya identifies which values resonate with each group: family, eco-consciousness,
-              convenience, or quality. When campaign themes match user values, conversions jump 12-19%.
+              The LLM automatically matches campaign themes to user values, preventing embarrassing
+              mistakes (like tampon ads to men). Conversions jump 12-19%.
             </p>
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={valueAlignmentData}>
@@ -256,9 +265,8 @@ export const SasViyaCaseStudy = () => {
           <div className="p-8">
             <h2 className="text-4xl font-bold mb-4 text-cyan-400">Campaign Type Affinity</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              SAS Viya learns patterns like "discount emails work best for budget-conscious parents"
-              or "eco-conscious parents engage more with educational content." ML models predict which
-              campaign configurations perform best.
+              The system learns which campaign types work for each cluster. No more guessing or
+              manual A/B testing. The AI continuously improves.
             </p>
             <ResponsiveContainer width="100%" height={400}>
               <RadarChart cx="50%" cy="50%" outerRadius="80%" data={clusterAffinityData}>
@@ -288,9 +296,8 @@ export const SasViyaCaseStudy = () => {
           <div className="p-8">
             <h2 className="text-4xl font-bold mb-4 text-[#00e5ff]">Channel Preferences</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              SAS Viya determines preferred communication channels: email, push notifications, or in-app
-              messages. The system automatically adjusts channel selection based on segment preferences
-              and optimal timing.
+              One click auto-selects the best channel for each segment. No manual configuration
+              needed. The AI handles email, push, and in-app routing instantly.
             </p>
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={channelPreferenceData} layout="vertical">
@@ -320,9 +327,8 @@ export const SasViyaCaseStudy = () => {
           <div className="p-8">
             <h2 className="text-4xl font-bold mb-4 text-[#ff007a]">Hidden Synergies</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              SAS Viya's ML models discover non-obvious patterns: discount+email yields +4.1% extra
-              lift. This enriched intelligence feeds into Gemini to generate personalized messages
-              that push to Braze for execution.
+              The LLM discovers patterns humans miss. Discount+email yields +4.1% extra lift.
+              This self-improving intelligence scales infinitely with usage.
             </p>
             <ResponsiveContainer width="100%" height={400}>
               <ScatterChart>
@@ -364,9 +370,8 @@ export const SasViyaCaseStudy = () => {
           <div className="p-8">
             <h2 className="text-4xl font-bold mb-4 text-[#4d3dff]">Educational Priming</h2>
             <p className="text-gray-400 mb-8 text-lg">
-              SAS Viya discovers that educational content first improves premium conversions later.
-              The system sequences campaigns automatically, improving performance through data-driven
-              insights across millions of parents.
+              The AI automatically sequences campaigns. Educational content first, then premium
+              offers. One click triggers intelligent multi-step journeys.
             </p>
             <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
               <ResponsiveContainer width="100%" height={300}>
