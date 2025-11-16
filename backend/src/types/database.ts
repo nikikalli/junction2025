@@ -97,3 +97,15 @@ export interface CampaignWithImplementations extends Campaign {
 export interface CampaignImplementationWithActions extends CampaignImplementation {
   actions?: Action[];
 }
+
+// API request types
+export interface UpdateCampaignNameRequest {
+  name: string;
+}
+
+export interface UpdateActionRequest {
+  message_subject?: string;
+  message_body?: string;
+  day_of_campaign?: Date | string;
+  channel?: string;
+}

@@ -9,6 +9,10 @@ export const databaseConfig: PoolConfig = {
   max: 20, // maximum number of clients in the pool
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
+  // SSL configuration for AWS RDS
+  ssl: process.env.DB_HOST?.includes('rds.amazonaws.com')
+    ? { rejectUnauthorized: false }
+    : undefined,
 };
 
 // Singleton pool instance

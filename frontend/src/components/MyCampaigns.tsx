@@ -1,15 +1,16 @@
 import { Campaign } from "@/types";
 import SpotlightCard from "@/components/SpotlightCard";
+import { useNavigate } from "react-router-dom";
 
 interface CampaignCardProps {
   campaign: Campaign;
-  onClick: () => void;
+  onClick: (campaignId: any) => void;
 }
 
 const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
   return (
     <div
-      onClick={onClick}
+      onClick={() => onClick(campaign.id)}
       className="p-4 border-2 border-neutral-700 bg-neutral-850 hover:border-neutral-600 rounded-lg transition-all cursor-pointer"
     >
       <div className="flex items-start gap-3">
@@ -32,8 +33,12 @@ const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
 };
 
 export const MyCampaigns = ({ campaigns }: { campaigns: Campaign[] }) => {
+  const navigate = useNavigate();
+  function handleClick(campaignId: any) {
+    navigate(`/segments/${campaignId}`);
+  }
   return (
-    <SpotlightCard>
+    <SpotlightCard className="w-4xl">
       <div className="flex flex-col mb-6 gap-3">
         <h1 className="text-2xl font-bold mt-3 px-4">My Campaigns</h1>
         <p className="text-base text-gray-400 px-4">
@@ -45,7 +50,7 @@ export const MyCampaigns = ({ campaigns }: { campaigns: Campaign[] }) => {
           <CampaignCard
             key={campaign.id}
             campaign={campaign}
-            onClick={() => {}}
+            onClick={() => handleClick(campaign.id)}
           />
         ))}
       </div>

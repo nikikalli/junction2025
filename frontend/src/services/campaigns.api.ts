@@ -1,6 +1,5 @@
-import { Campaign } from '@/types';
+import { Action, Campaign, CampaignWithImplementations, UpdateActionRequest, UpdateCampaignNameRequest } from '@/types/campaigns';
 import { apiClient } from './api';
-import { Action, CampaignWithImplementations, UpdateActionRequest, UpdateCampaignNameRequest } from '@/types/campaigns';
 
 /**
  * CampaignsApiClient - Single source of truth for campaign API interactions
