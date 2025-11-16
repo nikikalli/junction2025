@@ -1,10 +1,9 @@
-import { campaignGeneratorService } from '../../services/campaign-generator.service';
-import { brazeService } from '../../services/braze.service';
 import mockCanvasDetails from './data/test-data-content-personalization.json';
-
 // Mock the braze service
 jest.mock('../../services/braze.service');
+import { brazeService } from '../../services/braze.service';
 brazeService.getCanvasDetails = jest.fn().mockResolvedValue(mockCanvasDetails);
+import { campaignGeneratorService } from '../../services/campaign-generator.service';
 
 describe('Campaign creation flow', () => {
   beforeEach(() => {
