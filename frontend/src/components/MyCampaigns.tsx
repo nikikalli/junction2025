@@ -1,6 +1,15 @@
+import { useEffect, useState } from "react";
 import SpotlightCard from "@/components/SpotlightCard";
+import { campaignsApi } from "@/services/campaigns.api";
+import type { Campaign } from "@/types/campaigns";
 
 export const MyCampaigns = () => {
+  const [campaigns, setCampaigns] = useState<Campaign[] | null>(null);
+
+  useEffect(() => {
+    campaignsApi.getAllCampaigns().then(setCampaigns);
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center h-full gap-6 w-full px-4 mb-2">
       <SpotlightCard
@@ -11,17 +20,30 @@ export const MyCampaigns = () => {
         <p className="text-1xl md:text-1.5xl text-gray-400">
           Manage and track your campaigns here.
         </p>
-        <div className="flex flex-wrap gap-4 justify-between w-full pl-4 pr-4">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div
-                    key={i}
-                    className="bg-gray-800 hover:bg-gray-700 cursor-pointer rounded-lg p-6 w-50 h-50 flex flex-col items-center justify-center transition-colors"
-                >
-                    <p className="text-lg font-semibold">Campaign {i}</p>
-                    <p className="text-sm text-gray-400 mt-2">View details</p>
-                </div>
+
+        {!campaigns && (
+          <div className="text-gray-400 py-8">Loading campaigns...</div>
+        )}
+
+        {campaigns && campaigns.length === 0 && (
+          <div className="text-gray-400 py-8">No campaigns found</div>
+        )}
+
+        {campaigns && campaigns.length > 0 && (
+          <div className="flex flex-wrap gap-4 justify-between w-full pl-4 pr-4">
+            {campaigns.map((campaign) => (
+              <div
+                key={campaign.id}
+                className="bg-gray-800 hover:bg-gray-700 cursor-pointer rounded-lg p-6 w-50 h-50 flex flex-col items-center justify-center transition-colors"
+              >
+                <p className="text-lg font-semibold">{campaign.name}</p>
+                <p className="text-sm text-gray-400 mt-2">
+                  Start: {new Date(campaign.start_date).toLocaleDateString()}
+                </p>
+              </div>
             ))}
-        </div>
+          </div>
+        )}
       </SpotlightCard>
     </div>
   );

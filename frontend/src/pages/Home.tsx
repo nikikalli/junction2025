@@ -118,7 +118,7 @@ export const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white relative ">
       <div style={{ width: "100%", height: "130vh", position: "relative" }}>
         <PrismaticBurst
           animationType="rotate3d"
@@ -133,7 +133,6 @@ export const Home = () => {
           colors={["#ff007a", "#4d3dff", "#ffffff"]}
         />
         <div className="absolute inset-0 z-10 flex flex-col items-center h-full">
-          <Nav />
           <div className="flex flex-col items-center justify-center h-full gap-6 w-full">
             {!selectedCanvasId && (
               <>
