@@ -26,7 +26,7 @@ export interface MessageConstraints {
 }
 
 export interface DeliverySettings {
-  channel: 'push_notification' | 'in_app_message';
+  channel: 'email' | 'push_notification' | 'in_app_message';
   send_timing_days_from_today: number;
   message_constraints: MessageConstraints;
 }

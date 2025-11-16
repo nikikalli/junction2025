@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { spawnSync } from 'child_process';
 import path from 'path';
 import type { EnrichedSegment, GeminiPrompt } from '../types/gemini-prompt';
 
@@ -15,49 +15,35 @@ export class RecommendationEngineService {
     );
   }
 
-  async generatePrompt(segment: EnrichedSegment): Promise<GeminiPrompt> {
-    return new Promise((resolve, reject) => {
-      const python = spawn('python3', [this.pythonScriptPath]);
+  generatePrompt(segment: EnrichedSegment, isEmailCampaign: boolean = false): GeminiPrompt {
+    const input = {
+      segment,
+      is_email_campaign: isEmailCampaign
+    };
 
-      let stdout = '';
-      let stderr = '';
-
-      python.stdout.on('data', (data) => {
-        stdout += data.toString();
-      });
-
-      python.stderr.on('data', (data) => {
-        stderr += data.toString();
-      });
-
-      python.on('close', (code) => {
-        if (code !== 0) {
-          reject(new Error(`Python script failed: ${stderr}`));
-          return;
-        }
-
-        try {
-          const prompt = JSON.parse(stdout) as GeminiPrompt;
-          resolve(prompt);
-        } catch (error) {
-          reject(new Error(`Failed to parse prompt: ${error}`));
-        }
-      });
-
-      python.on('error', (error) => {
-        reject(new Error(`Failed to spawn Python process: ${error.message}`));
-      });
-
-      python.stdin.write(JSON.stringify(segment));
-      python.stdin.end();
+    const result = spawnSync('python3', [this.pythonScriptPath], {
+      input: JSON.stringify(input),
+      encoding: 'utf-8',
+      timeout: 5000
     });
+
+    if (result.error) {
+      throw new Error(`Failed to spawn Python process: ${result.error.message}`);
+    }
+
+    if (result.status !== 0) {
+      throw new Error(`Python script failed: ${result.stderr}`);
+    }
+
+    try {
+      return JSON.parse(result.stdout) as GeminiPrompt;
+    } catch (error) {
+      throw new Error(`Failed to parse prompt: ${error}`);
+    }
   }
 
-  async generatePrompts(segments: EnrichedSegment[]): Promise<GeminiPrompt[]> {
-    const prompts = await Promise.all(
-      segments.map(segment => this.generatePrompt(segment))
-    );
-    return prompts;
+  generatePrompts(segments: EnrichedSegment[], isEmailCampaign: boolean = false): GeminiPrompt[] {
+    return segments.map(segment => this.generatePrompt(segment, isEmailCampaign));
   }
 }
 
