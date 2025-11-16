@@ -7,6 +7,7 @@ node_modules/
 dist/
 build/
 *.tsbuildinfo
+output/
 
 # Environment variables
 .env
@@ -49,3 +50,4 @@ Thumbs.db
 
 # Vercel
 .vercel
+backend/viya/__pycache__/
