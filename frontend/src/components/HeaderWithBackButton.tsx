@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { ReactNode } from "react";
 
 interface HeaderWithBackButtonProps {
   onBack: () => void;
-  title: string;
+  title: string | ReactNode;
   subtitle?: string;
 }
 

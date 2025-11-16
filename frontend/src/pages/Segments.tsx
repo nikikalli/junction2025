@@ -246,6 +246,20 @@ export const Segments = () => {
     }
   };
 
+  const handleCampaignNameUpdate = async (newName: string) => {
+    if (!canvasId) return;
+
+    try {
+      const campaignId = parseInt(canvasId, 10);
+      await campaignsApi.renameCampaign(campaignId, newName);
+      setCampaignName(newName);
+      alert('Campaign name updated successfully!');
+    } catch (error) {
+      console.error('Error updating campaign name:', error);
+      alert('Failed to update campaign name. Please try again.');
+    }
+  };
+
   if (!canvasId) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black text-white">
@@ -285,6 +299,7 @@ export const Segments = () => {
                   canvasName={campaignName}
                   onBack={handleBackToCampaigns}
                   onSegmentSelect={selectSegment}
+                  onCampaignNameUpdate={handleCampaignNameUpdate}
                 />
               ) : (
                 <div className="w-full h-[70vh] flex flex-col md:flex-row gap-4">
