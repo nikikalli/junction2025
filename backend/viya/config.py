@@ -1,6 +1,9 @@
-DATA_DIR_INPUT = 'data/input'
-DATA_DIR_GENERATED = 'data/generated'
-DATA_DIR_OUTPUT = 'data/output'
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DATA_DIR_INPUT = os.path.join(BASE_DIR, 'data', 'input')
+DATA_DIR_GENERATED = os.path.join(BASE_DIR, 'data', 'generated')
+DATA_DIR_OUTPUT = os.path.join(BASE_DIR, 'data', 'output')
 
 SEGMENTS_INPUT_FILE = 'user_segments.csv'
 SEGMENTS_OUTPUT_FILE = 'user_segments_enriched.csv'

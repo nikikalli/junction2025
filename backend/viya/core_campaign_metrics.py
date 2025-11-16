@@ -48,6 +48,7 @@ class ViyaCampaignAnalytics:
         print(f"Connecting to CAS: {cas_url}")
         self.conn = swat.CAS(cas_url, password=token, ssl_ca_list=False)
         self.conn.loadactionset('fedsql')
+        self.conn.loadactionset('datastep')
         print(f"✓ Connected. Session: {self.conn.sessionid}\n")
 
     def load_data(self):
@@ -65,30 +66,30 @@ class ViyaCampaignAnalytics:
         self.conn.fedsql.execdirect(query='''
             CREATE TABLE campaign_results AS
             SELECT
-                r.campaign_id, r.segment_id, r.impressions, r.clicks, r.conversions,
-                c.campaign_type, c.channel, c.message_sentiment, c.value_theme,
-                s.language, s.price_sensitivity, s.brand_loyalty, s.engagement_propensity,
-                s.channel_perf_email, s.channel_perf_push, s.channel_perf_inapp,
-                s.values_family, s.values_eco_conscious, s.values_convenience, s.values_quality,
-                CAST(r.clicks AS DOUBLE) / r.impressions AS engagement_rate,
-                CAST(r.conversions AS DOUBLE) / r.impressions AS conversion_rate,
-                CASE WHEN c.channel = 'email' THEN s.channel_perf_email
-                     WHEN c.channel = 'push' THEN s.channel_perf_push
-                     ELSE s.channel_perf_inapp END AS channel_match_score
+                r."campaign_id", r."segment_id", r."impressions", r."clicks", r."conversions",
+                c."campaign_type", c."channel", c."message_sentiment", c."value_theme",
+                s."language", s."price_sensitivity", s."brand_loyalty", s."engagement_propensity",
+                s."channel_perf_email", s."channel_perf_push", s."channel_perf_inapp",
+                s."values_family", s."values_eco_conscious", s."values_convenience", s."values_quality",
+                CAST(r."clicks" AS DOUBLE) / r."impressions" AS engagement_rate,
+                CAST(r."conversions" AS DOUBLE) / r."impressions" AS conversion_rate,
+                CASE WHEN c."channel" = 'email' THEN s."channel_perf_email"
+                     WHEN c."channel" = 'push' THEN s."channel_perf_push"
+                     ELSE s."channel_perf_inapp" END AS channel_match_score
             FROM campaign_results_raw r
-            JOIN campaigns c ON r.campaign_id = c.campaign_id
-            JOIN segments s ON r.segment_id = s.segment_id
+            JOIN campaigns c ON r."campaign_id" = c."campaign_id"
+            JOIN segments s ON r."segment_id" = s."segment_id"
         ''')
 
         print("Calculating benchmarks...")
         self.conn.fedsql.execdirect(query='''
             CREATE TABLE benchmarks AS
-            SELECT "language", campaign_type,
-                   AVG(conversion_rate) AS baseline_conversion,
-                   AVG(engagement_rate) AS baseline_engagement,
-                   STDDEV(conversion_rate) AS conversion_std
+            SELECT "language", "campaign_type",
+                   AVG("conversion_rate") AS baseline_conversion,
+                   AVG("engagement_rate") AS baseline_engagement,
+                   STDDEV("conversion_rate") AS conversion_std
             FROM campaign_results
-            GROUP BY "language", campaign_type
+            GROUP BY "language", "campaign_type"
             HAVING COUNT(*) >= 5
         ''')
 
@@ -97,9 +98,9 @@ class ViyaCampaignAnalytics:
             CREATE TABLE campaign_results_vs_benchmark AS
             SELECT r.*,
                    b.baseline_conversion, b.baseline_engagement,
-                   r.conversion_rate / NULLIF(b.baseline_conversion, 0) AS sales_vs_benchmark
+                   r."conversion_rate" / NULLIF(b.baseline_conversion, 0) AS sales_vs_benchmark
             FROM campaign_results r
-            LEFT JOIN benchmarks b ON r."language" = b."language" AND r.campaign_type = b.campaign_type
+            LEFT JOIN benchmarks b ON r."language" = b."language" AND r."campaign_type" = b."campaign_type"
         ''')
         print("Metrics calculated\n")
 
@@ -107,9 +108,9 @@ class ViyaCampaignAnalytics:
         print("Building campaign metrics per segment...")
         self.conn.fedsql.execdirect(query='''
             CREATE TABLE campaign_segment_metrics AS
-            SELECT campaign_id, segment_id,
-                   impressions, clicks, conversions,
-                   engagement_rate, conversion_rate,
+            SELECT "campaign_id", "segment_id",
+                   "impressions", "clicks", "conversions",
+                   "engagement_rate", "conversion_rate",
                    baseline_engagement, baseline_conversion,
                    sales_vs_benchmark
             FROM campaign_results_vs_benchmark
@@ -118,28 +119,42 @@ class ViyaCampaignAnalytics:
 
     def derive_segment_attributes(self):
         print("Deriving segment attributes from campaign performance...")
+        print("Using rolling window of last 100 campaigns per segment...")
+
+        print("Filtering to recent campaigns using CAS data step...")
+        self.conn.datastep.runcode(code='''
+            data campaign_results_ranked;
+                set campaign_results_vs_benchmark;
+                by segment_id campaign_id;
+                retain campaign_rank;
+                if first.segment_id then campaign_rank = 1;
+                else campaign_rank + 1;
+                if campaign_rank <= 100;
+            run;
+        ''')
 
         self.conn.fedsql.execdirect(query=f'''
             CREATE TABLE segment_patterns AS
-            SELECT segment_id,
-                   AVG(engagement_rate) AS avg_engagement,
-                   AVG(CASE WHEN campaign_type = 'discount' THEN conversion_rate END) AS discount_response,
-                   AVG(CASE WHEN campaign_type = 'premium' THEN conversion_rate END) AS premium_response,
-                   MAX(CASE WHEN channel = 'email' THEN engagement_rate ELSE 0 END) AS email_perf,
-                   MAX(CASE WHEN channel = 'push' THEN engagement_rate ELSE 0 END) AS push_perf,
-                   MAX(CASE WHEN channel = 'inapp' THEN engagement_rate ELSE 0 END) AS inapp_perf,
-                   AVG(CASE WHEN value_theme = 'family' THEN conversion_rate END) AS family_resp,
-                   AVG(CASE WHEN value_theme = 'eco_conscious' THEN conversion_rate END) AS eco_resp,
-                   AVG(CASE WHEN value_theme = 'convenience' THEN conversion_rate END) AS conv_resp,
-                   AVG(CASE WHEN value_theme = 'quality' THEN conversion_rate END) AS qual_resp
-            FROM campaign_results_vs_benchmark
-            GROUP BY segment_id
+            SELECT "segment_id",
+                   AVG("engagement_rate") AS avg_engagement,
+                   AVG(CASE WHEN "campaign_type" = 'discount' THEN "conversion_rate" END) AS discount_response,
+                   AVG(CASE WHEN "campaign_type" = 'premium' THEN "conversion_rate" END) AS premium_response,
+                   MAX(CASE WHEN "channel" = 'email' THEN "engagement_rate" ELSE 0 END) AS email_perf,
+                   MAX(CASE WHEN "channel" = 'push' THEN "engagement_rate" ELSE 0 END) AS push_perf,
+                   MAX(CASE WHEN "channel" = 'inapp' THEN "engagement_rate" ELSE 0 END) AS inapp_perf,
+                   AVG(CASE WHEN "value_theme" = 'family' THEN "conversion_rate" END) AS family_resp,
+                   AVG(CASE WHEN "value_theme" = 'eco_conscious' THEN "conversion_rate" END) AS eco_resp,
+                   AVG(CASE WHEN "value_theme" = 'convenience' THEN "conversion_rate" END) AS conv_resp,
+                   AVG(CASE WHEN "value_theme" = 'quality' THEN "conversion_rate" END) AS qual_resp,
+                   COUNT(*) AS campaign_count
+            FROM campaign_results_ranked
+            GROUP BY "segment_id"
         ''')
 
         self.conn.fedsql.execdirect(query=f'''
             CREATE TABLE segments_learned AS
-            SELECT s.segment_id, s."language", s.parent_age, s.parent_gender,
-                   s.baby_count, s.baby_age_week_1, s.event_count,
+            SELECT s."segment_id", s."language", s."parent_age", s."parent_gender",
+                   s."baby_count",
 
                    (COALESCE(p.avg_engagement, {DEFAULT_ENGAGEMENT}) - {ENGAGEMENT_MIN}) / {ENGAGEMENT_SCALE} AS engagement_propensity,
 
@@ -170,7 +185,7 @@ class ViyaCampaignAnalytics:
                    (COALESCE(p.avg_engagement, {DEFAULT_ENGAGEMENT}) - {ENGAGEMENT_MIN}) / {ENGAGEMENT_SCALE} * 0.9 AS content_engagement_rate
 
             FROM segments s
-            LEFT JOIN segment_patterns p ON s.segment_id = p.segment_id
+            LEFT JOIN segment_patterns p ON s."segment_id" = p."segment_id"
         ''')
 
         print("Segment attributes derived\n")

@@ -494,6 +494,30 @@ export class DatabaseService {
    */
   async initializeSchema(): Promise<void> {
     const schemaSQL = `
+      -- Create user_segments_enriched table
+      CREATE TABLE IF NOT EXISTS user_segments_enriched (
+          id SERIAL PRIMARY KEY,
+          segment_id DECIMAL NOT NULL UNIQUE,
+          language VARCHAR(10) NOT NULL,
+          parent_age DECIMAL NOT NULL,
+          parent_gender VARCHAR(10) NOT NULL,
+          baby_count DECIMAL NOT NULL,
+          engagement_propensity DECIMAL NOT NULL,
+          price_sensitivity DECIMAL NOT NULL,
+          brand_loyalty DECIMAL NOT NULL,
+          channel_perf_email DECIMAL NOT NULL,
+          channel_perf_push DECIMAL NOT NULL,
+          channel_perf_inapp DECIMAL NOT NULL,
+          values_family DECIMAL NOT NULL,
+          values_eco_conscious DECIMAL NOT NULL,
+          values_convenience DECIMAL NOT NULL,
+          values_quality DECIMAL NOT NULL,
+          contact_frequency_tolerance DECIMAL NOT NULL,
+          content_engagement_rate DECIMAL NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
       -- Create campaigns table
       CREATE TABLE IF NOT EXISTS campaigns (
           id SERIAL PRIMARY KEY,
@@ -525,10 +549,16 @@ export class DatabaseService {
       );
 
       -- Create indexes
-      CREATE INDEX IF NOT EXISTS idx_campaign_implementations_campaign_id 
+      CREATE INDEX IF NOT EXISTS idx_user_segments_segment_id
+          ON user_segments_enriched(segment_id);
+
+      CREATE INDEX IF NOT EXISTS idx_user_segments_language
+          ON user_segments_enriched(language);
+
+      CREATE INDEX IF NOT EXISTS idx_campaign_implementations_campaign_id
           ON campaign_implementations(campaign_id);
 
-      CREATE INDEX IF NOT EXISTS idx_action_campaign_implementation_id 
+      CREATE INDEX IF NOT EXISTS idx_action_campaign_implementation_id
           ON action(campaign_implementation_id);
 
       -- Create function to update updated_at timestamp
@@ -541,6 +571,10 @@ export class DatabaseService {
       $$ language 'plpgsql';
 
       -- Create triggers
+      DROP TRIGGER IF EXISTS update_user_segments_updated_at ON user_segments_enriched;
+      CREATE TRIGGER update_user_segments_updated_at BEFORE UPDATE ON user_segments_enriched
+          FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
       DROP TRIGGER IF EXISTS update_campaigns_updated_at ON campaigns;
       CREATE TRIGGER update_campaigns_updated_at BEFORE UPDATE ON campaigns
           FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -555,6 +589,20 @@ export class DatabaseService {
     `;
 
     await this.pool.query(schemaSQL);
+  }
+
+  /**
+   * Execute a raw SQL query (for advanced use cases)
+   */
+  async query(queryText: string, values?: any[]): Promise<QueryResult> {
+    return this.pool.query(queryText, values);
+  }
+
+  /**
+   * Close the database connection pool
+   */
+  async close(): Promise<void> {
+    await this.pool.end();
   }
 }
 

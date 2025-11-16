@@ -1,0 +1,285 @@
+{
+  "behavioral_combinations": {
+    "price_driven_family_focused": {
+      "match_criteria": {
+        "price_sensitivity": "high",
+        "primary_value": "family_orientation"
+      },
+      "behavioral_summary": "This parent is budget-conscious and deeply values family moments. They seek products that offer both value and the ability to create meaningful experiences with their baby. Price is a key decision factor, but family benefits can justify purchases.",
+      "messaging_approach": "Lead with emotional family connection, then support with clear value proposition. Emphasize how the product enables special family moments while being affordable. Use warm, relatable language that speaks to everyday parenting experiences.",
+      "motivational_triggers": [
+        "Family bonding opportunities",
+        "Clear savings or discounts",
+        "Value for money",
+        "Practical everyday use"
+      ],
+      "what_resonates": [
+        "Stories of real family moments",
+        "Percentage savings and deals",
+        "Multi-pack or bulk value offers",
+        "Everyday parenting scenarios"
+      ],
+      "what_to_avoid": [
+        "Premium or luxury positioning",
+        "Single high-priced items without value context",
+        "Technical or scientific language",
+        "Environmental focus as primary message"
+      ],
+      "tone": "warm, relatable, and value-focused"
+    },
+    "quality_focused_loyal": {
+      "match_criteria": {
+        "brand_loyalty": "high",
+        "primary_value": "quality_focus"
+      },
+      "behavioral_summary": "This parent prioritizes quality and trusts established brands. They are willing to invest in premium products that deliver reliability and performance. Brand reputation and product quality matter more than price considerations.",
+      "messaging_approach": "Reinforce brand trust and quality credentials. Highlight product features, testing standards, and expert endorsements. Use confident, reassuring language that validates their choice of premium products.",
+      "motivational_triggers": [
+        "Quality assurance and testing",
+        "Brand heritage and trust",
+        "Expert recommendations",
+        "Long-term reliability"
+      ],
+      "what_resonates": [
+        "Quality certifications and standards",
+        "Brand story and values",
+        "Testimonials from experts or other parents",
+        "Premium features and benefits"
+      ],
+      "what_to_avoid": [
+        "Heavy discount messaging",
+        "Price as primary selling point",
+        "Urgency or scarcity tactics",
+        "Comparison with budget alternatives"
+      ],
+      "tone": "confident, reassuring, and quality-focused"
+    },
+    "convenience_seeker_low_engagement": {
+      "match_criteria": {
+        "engagement_propensity": "low",
+        "primary_value": "convenience_preference"
+      },
+      "behavioral_summary": "This parent is time-pressed and prefers minimal, essential communication. They value products and services that save time and simplify their busy lives. Messages need to be direct, clear, and immediately actionable.",
+      "messaging_approach": "Get straight to the point. Lead with the time-saving benefit in the first sentence. Use short, scannable format with clear call-to-action. Avoid lengthy explanations or emotional appeals.",
+      "motivational_triggers": [
+        "Time-saving solutions",
+        "Quick and easy",
+        "One-click actions",
+        "Immediate availability"
+      ],
+      "what_resonates": [
+        "Clear time-saving benefits",
+        "Simple ordering or delivery",
+        "Express checkout options",
+        "Subscription convenience"
+      ],
+      "what_to_avoid": [
+        "Long paragraphs or detailed stories",
+        "Multiple calls-to-action",
+        "Complex decision-making",
+        "Lengthy educational content"
+      ],
+      "tone": "concise, direct, and action-oriented"
+    },
+    "eco_conscious_engaged": {
+      "match_criteria": {
+        "engagement_propensity": "high",
+        "primary_value": "eco_consciousness"
+      },
+      "behavioral_summary": "This parent actively seeks sustainable products and engages deeply with content about environmental impact. They value brands that demonstrate genuine commitment to sustainability and are willing to learn about eco-friendly practices.",
+      "messaging_approach": "Lead with environmental benefits and sustainability credentials. Provide specific details about eco-friendly materials, manufacturing processes, or environmental impact. This audience appreciates transparency and depth.",
+      "motivational_triggers": [
+        "Environmental impact reduction",
+        "Sustainable materials and practices",
+        "Brand environmental commitments",
+        "Educational content about sustainability"
+      ],
+      "what_resonates": [
+        "Specific sustainability data and certifications",
+        "Transparency about sourcing and manufacturing",
+        "Environmental impact stories",
+        "Tips for sustainable parenting"
+      ],
+      "what_to_avoid": [
+        "Greenwashing or vague environmental claims",
+        "Price as primary focus",
+        "Purely transactional messaging",
+        "Lack of specific environmental details"
+      ],
+      "tone": "informative, passionate, and environmentally conscious"
+    },
+    "price_driven_convenience_seeker": {
+      "match_criteria": {
+        "price_sensitivity": "high",
+        "primary_value": "convenience_preference"
+      },
+      "behavioral_summary": "This parent seeks the best value while minimizing time and effort. They appreciate products and services that deliver both affordability and ease of use. Quick, simple purchasing decisions are preferred.",
+      "messaging_approach": "Combine value messaging with convenience benefits. Highlight both savings and time-saving aspects. Use clear, direct language with straightforward calls-to-action. Emphasize simplicity and efficiency.",
+      "motivational_triggers": [
+        "Value bundles and bulk savings",
+        "Fast checkout and delivery",
+        "Subscription discounts",
+        "One-stop shopping"
+      ],
+      "what_resonates": [
+        "Combo deals and multi-packs",
+        "Free shipping thresholds",
+        "Auto-delivery programs with discounts",
+        "Simple reordering options"
+      ],
+      "what_to_avoid": [
+        "Complex decision trees",
+        "Premium-only offerings",
+        "Lengthy product comparisons",
+        "Multi-step purchasing processes"
+      ],
+      "tone": "practical, straightforward, and efficiency-focused"
+    },
+    "quality_focused_eco_conscious": {
+      "match_criteria": {
+        "brand_loyalty": "high",
+        "primary_value": "eco_consciousness"
+      },
+      "behavioral_summary": "This parent values both premium quality and environmental responsibility. They trust brands that demonstrate genuine commitment to sustainability without compromising on product excellence. They are willing to invest in eco-friendly premium products.",
+      "messaging_approach": "Emphasize the intersection of quality and sustainability. Highlight how premium materials and manufacturing processes benefit both baby and environment. Use detailed, credible language that demonstrates expertise and commitment.",
+      "motivational_triggers": [
+        "Certified sustainable materials",
+        "Premium eco-friendly features",
+        "Long-lasting quality reduces waste",
+        "Brand environmental leadership"
+      ],
+      "what_resonates": [
+        "Third-party sustainability certifications",
+        "Quality testing and eco-credentials",
+        "Durability and environmental benefits",
+        "Transparent supply chain information"
+      ],
+      "what_to_avoid": [
+        "Discount-focused messaging",
+        "Vague green claims",
+        "Compromise between quality and sustainability",
+        "Short-term promotional tactics"
+      ],
+      "tone": "authoritative, values-driven, and trustworthy"
+    },
+    "engaged_family_focused": {
+      "match_criteria": {
+        "engagement_propensity": "high",
+        "primary_value": "family_orientation"
+      },
+      "behavioral_summary": "This parent actively engages with content and deeply values family experiences. They enjoy learning about products that enhance family life and create special moments. They appreciate storytelling and emotional connections.",
+      "messaging_approach": "Use rich storytelling that celebrates family moments. Provide engaging content that goes beyond product features to show how products fit into family life. Create emotional resonance while offering valuable information.",
+      "motivational_triggers": [
+        "Family milestone celebrations",
+        "Shared parenting experiences",
+        "Community and connection",
+        "Expert parenting tips"
+      ],
+      "what_resonates": [
+        "Real parent stories and testimonials",
+        "Family-focused content series",
+        "Milestone tracking and celebrations",
+        "Interactive community features"
+      ],
+      "what_to_avoid": [
+        "Purely transactional messaging",
+        "Generic product descriptions",
+        "Overly brief or minimal content",
+        "Impersonal corporate tone"
+      ],
+      "tone": "warm, engaging, and emotionally resonant"
+    },
+    "balanced_moderate": {
+      "match_criteria": {
+        "price_sensitivity": "medium",
+        "engagement_propensity": "medium"
+      },
+      "behavioral_summary": "This parent balances multiple considerations when making purchase decisions. They evaluate both price and quality, engage with content selectively, and appreciate clear, honest information. They make thoughtful decisions without extreme preferences.",
+      "messaging_approach": "Provide balanced messaging that addresses multiple benefits. Include clear product information, reasonable pricing context, and genuine value propositions. Use a friendly, informative tone that respects their thoughtful approach.",
+      "motivational_triggers": [
+        "Good value for quality",
+        "Trustworthy information",
+        "Balanced benefits",
+        "Social proof and reviews"
+      ],
+      "what_resonates": [
+        "Product reviews and ratings",
+        "Clear feature-benefit explanations",
+        "Fair pricing with quality justification",
+        "Real parent testimonials"
+      ],
+      "what_to_avoid": [
+        "Extreme discount or premium positioning",
+        "Overly aggressive urgency tactics",
+        "One-dimensional messaging",
+        "Excessive hype or exaggeration"
+      ],
+      "tone": "friendly, balanced, and informative"
+    },
+    "low_engagement_quality_seeker": {
+      "match_criteria": {
+        "engagement_propensity": "low",
+        "primary_value": "quality_focus"
+      },
+      "behavioral_summary": "This parent prefers minimal communication but wants quality products when they do purchase. They appreciate concise, credible information about product excellence. They make careful purchase decisions but don't want lengthy interactions.",
+      "messaging_approach": "Be brief but authoritative. Lead with quality credentials and key differentiators. Use bullet points and scannable format. Provide depth through optional links rather than lengthy main content.",
+      "motivational_triggers": [
+        "Clear quality indicators",
+        "Expert endorsements",
+        "Proven track record",
+        "Straightforward premium benefits"
+      ],
+      "what_resonates": [
+        "Certification badges and awards",
+        "Brief expert quotes",
+        "Key quality metrics",
+        "Easy access to detailed specs"
+      ],
+      "what_to_avoid": [
+        "Lengthy narratives",
+        "Frequent communication",
+        "Emotional storytelling",
+        "Multiple messages or follow-ups"
+      ],
+      "tone": "concise, credible, and quality-focused"
+    },
+    "default_balanced": {
+      "match_criteria": {},
+      "behavioral_summary": "This parent approaches purchasing decisions with a balanced perspective, considering various factors including price, quality, convenience, and values alignment. They appreciate clear, honest communication.",
+      "messaging_approach": "Use straightforward messaging that highlights key product benefits across multiple dimensions. Provide clear information that helps them make informed decisions. Maintain a helpful, professional tone.",
+      "motivational_triggers": [
+        "Clear product benefits",
+        "Reliable information",
+        "Good overall value",
+        "Trustworthy brand"
+      ],
+      "what_resonates": [
+        "Honest product descriptions",
+        "Multiple benefit highlights",
+        "Customer reviews",
+        "Clear pricing and policies"
+      ],
+      "what_to_avoid": [
+        "Misleading claims",
+        "Excessive pressure tactics",
+        "Overly complex information",
+        "Inconsistent messaging"
+      ],
+      "tone": "professional, helpful, and balanced"
+    }
+  },
+  "channel_constraints": {
+    "email": {
+      "title_max_characters": 80,
+      "body_max_characters": 500
+    },
+    "push_notification": {
+      "title_max_characters": 50,
+      "body_max_characters": 120
+    },
+    "in_app_message": {
+      "title_max_characters": 60,
+      "body_max_characters": 300
+    }
+  }
+}

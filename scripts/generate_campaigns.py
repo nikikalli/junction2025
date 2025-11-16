@@ -15,7 +15,7 @@ offer_types = ['percentage_discount', 'bundle', 'premium', 'none']
 campaigns = []
 campaign_id = 1
 
-for i in range(12):
+for i in range(50):
     campaign_type = np.random.choice(campaign_types)
 
     if campaign_type == 'discount':
@@ -43,7 +43,7 @@ for i in range(12):
     campaign_id += 1
 
 campaigns_df = pd.DataFrame(campaigns)
-campaigns_df.to_csv('data/generated/braze.csv', index=False)
+campaigns_df.to_csv('data/generated/campaigns.csv', index=False)
 print(f"\nCreated {len(campaigns_df)} campaigns")
 
 results = []
@@ -59,11 +59,11 @@ for _, campaign in campaigns_df.iterrows():
         click_multiplier = 1.0
         conversion_multiplier = 1.0
 
-        if campaign['channel'] == 'email' and segment['prefers_email'] == 1:
+        if campaign['channel'] == 'email' and segment['channel_perf_email'] > 0.6:
             click_multiplier *= 1.3
-        elif campaign['channel'] == 'push' and segment['prefers_push'] == 1:
+        elif campaign['channel'] == 'push' and segment['channel_perf_push'] > 0.6:
             click_multiplier *= 1.3
-        elif campaign['channel'] == 'inapp' and segment['prefers_inapp'] == 1:
+        elif campaign['channel'] == 'inapp' and segment['channel_perf_inapp'] > 0.6:
             click_multiplier *= 1.3
 
         if campaign['campaign_type'] == 'discount' and segment['price_sensitivity'] > 0.6:
