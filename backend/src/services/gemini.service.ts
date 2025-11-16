@@ -324,54 +324,55 @@ Do NOT include explanations, markdown code blocks, or any other text. Just the m
     }
   }
 
-  private async personalizeMessageForSegment(message: string, segment: string): Promise<string> {
-    const wordCount = message.split(/\s+/).length;
-    const maxChanges = Math.min(5, Math.ceil(wordCount * 0.1));
+//   private async personalizeMessageForSegment(message: string, segment: string): Promise<string> {
+//     const wordCount = message.split(/\s+/).length;
+//     const maxChanges = Math.min(5, Math.ceil(wordCount * 0.1));
 
-    const prompt = `You are a marketing personalization expert for Pampers Club. Your task is to personalize the following marketing message for the "${segment}" segment.
+//     const prompt = `You are a marketing personalization expert for Pampers Club. Your task is to personalize the following marketing message for the "${segment}" segment.
 
-CRITICAL REQUIREMENTS:
-1. You MUST make at least 1-2 meaningful changes to personalize for this specific segment
-2. Change at most ${maxChanges} words (max 15 words OR 25% of the text length)
-3. Preserve ALL HTML tags, Liquid template variables (e.g., {{${'{'}first_name}}), formatting, and structure EXACTLY
-4. Focus on adjusting value propositions, emotional tone, and call-to-action language
-5. Keep URLs, links, and technical elements unchanged
-6. Convert JSON html to an actual HTML format
+// CRITICAL REQUIREMENTS:
+// 1. You MUST make at least 1-2 meaningful changes to personalize for this specific segment
+// 2. Change at most ${maxChanges} words (max 15 words OR 25% of the text length)
+// 3. Preserve ALL HTML tags, Liquid template variables (e.g., {{${'{'}first_name}}), formatting, and structure EXACTLY
+// 4. Focus on adjusting value propositions, emotional tone, and call-to-action language
+// 5. Keep URLs, links, and technical elements unchanged
+// 6. Convert JSON html to an actual HTML format
 
-SEGMENT-SPECIFIC GUIDANCE:
-- For "new parent" or "new parents": Use supportive, reassuring language. Emphasize guidance, help, and being there for them. Replace generic phrases with parent-focused ones (e.g., "You left items" → "We're here to help", "Check out" → "Get the support you need")
-- For "women" segments: Emphasize care, quality, convenience, and family values
-- For "price-sensitive" or "value" segments: Highlight savings, value, and smart choices
+// SEGMENT-SPECIFIC GUIDANCE:
+// - For "new parent" or "new parents": Use supportive, reassuring language. Emphasize guidance, help, and being there for them. Replace generic phrases with parent-focused ones (e.g., "You left items" → "We're here to help", "Check out" → "Get the support you need")
+// - For "women" segments: Emphasize care, quality, convenience, and family values
+// - For "price-sensitive" or "value" segments: Highlight savings, value, and smart choices
 
-EXAMPLES OF GOOD PERSONALIZATION:
-Original: "You left a few things in your cart :("
-For new parents: "We're here to help with your cart :)"
+// EXAMPLES OF GOOD PERSONALIZATION:
+// Original: "You left a few things in your cart :("
+// For new parents: "We're here to help with your cart :)"
 
-Original: "Did you forget something?"
-For new parents: "Let us help you complete your order"
+// Original: "Did you forget something?"
+// For new parents: "Let us help you complete your order"
 
-Message to personalize:
-${message}
+// Message to personalize:
+// ${message}
 
-Target segment: ${segment}
+// Target segment: ${segment}
 
-Return ONLY the personalized message text. Do NOT include explanations or markdown formatting.`;
+// Return ONLY the personalized message text. Do NOT include explanations or markdown formatting.`;
 
-    try {
-      const result = await this.model.generateContent(prompt);
-      const response = await result.response;
-      let text = response.text().trim();
+//     try {
+//       const result = await this.model.generateContent(prompt);
+//       const response = await result.response;
+//       let text = response.text().trim();
 
-      if (text.startsWith('```')) {
-        text = text.replace(/^```html?\n?/, '').replace(/```$/, '').trim();
-      }
+//       if (text.startsWith('```')) {
+//         text = text.replace(/^```html?\n?/, '').replace(/```$/, '').trim();
+//       }
 
-      return text;
-    } catch (error: any) {
-      console.error('Gemini API error:', error);
-      throw createError('Failed to personalize message with Gemini', 500);
-    }
-  }
+//       return text;
+//     } catch (error: any) {
+//       console.error('Gemini API error:', error);
+//       throw createError('Failed to personalize message with Gemini', 500);
+//     }
+//   }
+// }
 }
 
 export const geminiService = new GeminiService();

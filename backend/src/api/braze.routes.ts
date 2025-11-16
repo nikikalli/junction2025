@@ -83,11 +83,11 @@ router.get(
 
       if (extract === 'messages') {
         const messages = await brazeService.extractCanvasMessages(canvasId);
-        res.json(messages);
+        return res.json(messages);
       } else if (extract === 'activities') {
         const messages = await brazeService.extractCanvasMessages(canvasId);
         const activities = brazeService.transformMessagesToActivities(messages);
-        res.json(activities);
+        return res.json(activities);
       } else if (extract === 'gemini') {
         if (!segment) {
           return res.status(400).json({ error: 'segment query parameter is required for gemini extraction' });
@@ -95,13 +95,16 @@ router.get(
         const messages = await brazeService.extractCanvasMessages(canvasId);
         const activities = brazeService.transformMessagesToActivities(messages);
         const personalizedActivities = await geminiService.personalizeActivitiesForSegment(activities, segment);
-        res.json(personalizedActivities);
+        return res.json(personalizedActivities);
       } else {
         const data = await brazeService.getCanvasDetails(canvasId, post_launch_draft_version);
-        res.json(data);
+        return res.json(data);
+      
       }
     } catch (error) {
       next(error);
+      return;
+     // return res.status(400).json({ error: 'An error occurred' });
     }
   }
 );
