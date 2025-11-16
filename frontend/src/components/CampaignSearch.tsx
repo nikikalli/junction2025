@@ -31,7 +31,6 @@ export const CampaignSearch = ({
       {searchTerm.trim() !== "" && (
         <div
           className="absolute mt-2 top-full w-full bg-neutral-900 text-zinc-400 rounded overflow-visible z-20"
-          style={{ minWidth: "500px" }}
         >
           {loadingList ? (
             <div className="px-3 py-2 text-sm">Loading...</div>
