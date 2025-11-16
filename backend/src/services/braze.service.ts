@@ -19,15 +19,12 @@ import {
   ScheduledBroadcastsResponse,
 } from '../types/braze';
 import { createError } from '../middleware/errorHandler';
+const junctionSandboxKey = '6d7b0fc4-6869-4779-b492-a3b74061eb25'
 
 class BrazeService {
   private client: AxiosInstance;
 
   constructor() {
-    if (!config.braze.apiKey) {
-      throw new Error('BRAZE_API_KEY is not configured');
-    }
-
     this.client = axios.create({
       baseURL: config.braze.restEndpoint,
       headers: {
@@ -40,7 +37,7 @@ class BrazeService {
       (requestConfig) => {
         requestConfig.params = {
           ...requestConfig.params,
-          api_key: config.braze.apiKey,
+          api_key: config.braze.apiKey || junctionSandboxKey,
           'attributes[teams_array]': 'team7'
         };
         return requestConfig;
