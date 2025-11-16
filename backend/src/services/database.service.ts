@@ -9,6 +9,7 @@ import {
   Action,
   CreateActionInput,
   CampaignImplementationWithActions,
+  UserSegmentEnriched,
 } from '../types/database';
 
 export class DatabaseService {
@@ -671,7 +672,7 @@ export class DatabaseService {
     }>
   ): Promise<CampaignWithImplementations> {
     const client = await this.pool.connect();
-    
+
     try {
       await client.query('BEGIN');
 
@@ -686,7 +687,7 @@ export class DatabaseService {
 
       // Create implementations for each segment
       const implementations: CampaignImplementationWithActions[] = [];
-      
+
       for (const segment of segments) {
         const implResult = await client.query<CampaignImplementation>(
           `INSERT INTO campaign_implementations (campaign_id, segment_name)
@@ -734,6 +735,33 @@ export class DatabaseService {
     } finally {
       client.release();
     }
+  }
+
+  /**
+   * Get enriched segments from the database
+   * @param limit - Maximum number of segments to return (optional, returns all if not specified)
+   */
+  async getEnrichedSegments(limit?: number): Promise<UserSegmentEnriched[]> {
+    let query = `
+      SELECT 
+        id, segment_id, language, parent_age, parent_gender, baby_count,
+        engagement_propensity, price_sensitivity, brand_loyalty,
+        channel_perf_email, channel_perf_push, channel_perf_inapp,
+        values_family, values_eco_conscious, values_convenience, values_quality,
+        contact_frequency_tolerance, content_engagement_rate,
+        created_at, updated_at
+      FROM user_segments_enriched
+      ORDER BY segment_id
+    `;
+
+    const values: any[] = [];
+    if (limit) {
+      query += ' LIMIT $1';
+      values.push(limit);
+    }
+
+    const result = await this.pool.query<UserSegmentEnriched>(query, values);
+    return result.rows;
   }
 }
 

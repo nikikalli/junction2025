@@ -7,7 +7,7 @@ interface MessageListPanelProps {
   selectedMessageKey: string | null;
   loading: boolean;
   segmentName: string;
-  campaignType: "Standard" | "Promotional";
+  campaignType: "Awareness" | "Promotional";
   onBack: () => void;
   onMessageSelect: (key: string) => void;
 }

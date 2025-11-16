@@ -18,13 +18,13 @@ export const SegmentCard = ({ segment, onClick }: SegmentCardProps) => {
           </h4>
           <div className="space-y-1 text-xs text-neutral-400">
             <div className="flex justify-between">
-              <span>Age:</span>
-              <span className="text-neutral-200">{segment.parent_age}y</span>
+              <span>Brand Loyalty:</span>
+              <span className="text-neutral-200">{Math.round((segment.brand_loyalty || 0) * 100)}%</span>
             </div>
             <div className="flex justify-between">
-              <span>Engagement:</span>
+              <span>Price Sensitivity:</span>
               <span className="text-neutral-200">
-                {segment.engagement_propensity}%
+                {Math.round((segment.price_sensitivity || 0) * 100)}%
               </span>
             </div>
           </div>
