@@ -1,3 +1,6 @@
+-- Ensure postgres role has login permission
+ALTER ROLE postgres WITH LOGIN;
+
 -- Create campaigns table
 CREATE TABLE IF NOT EXISTS campaigns (
     id SERIAL PRIMARY KEY,

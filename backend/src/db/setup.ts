@@ -38,7 +38,7 @@ async function startPostgresContainer(): Promise<void> {
   
   try {
     const backendDir = path.resolve(__dirname, '../..');
-    await execAsync(`cd ${backendDir} && docker-compose up -d postgres`);
+    await execAsync(`cd ${backendDir} && docker compose up -d postgres`);
     console.log('✓ PostgreSQL container started');
     
     // Wait for PostgreSQL to be ready
