@@ -1,0 +1,4 @@
+edu_exposure_level,segment_count,avg_later_premium_conv,avg_overall_premium_conv,avg_edu_engagement
+high_edu_exposure,12,0.02186512622613,0.02186512622613,0.10617560235573
+low_edu_exposure,3,0.02142862797119,0.02142862797119,0.07914815214346
+medium_edu_exposure,25,0.02094384953566,0.02094384953566,0.08959387511047

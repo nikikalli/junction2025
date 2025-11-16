@@ -1,0 +1,16 @@
+section,metric,value,rank
+performance,r_squared,0.5732,
+performance,rmse,0.002708,
+performance,mae,0.002193,
+performance,train_size,1600,
+performance,test_size,400,
+feature_importance,campaign_type,0.3237,1
+feature_importance,value_match,0.3195,2
+feature_importance,price_sensitivity,0.0838,3
+feature_importance,channel_match_score,0.0433,4
+feature_importance,message_sentiment,0.0415,5
+top_opportunities,seg4_discount_email,0.0390,994
+top_opportunities,seg4_discount_email,0.0390,705
+top_opportunities,seg4_discount_email,0.0373,1035
+top_opportunities,seg4_discount_push,0.0341,622
+top_opportunities,seg4_discount_push,0.0341,1915
