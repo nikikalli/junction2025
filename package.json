@@ -10,8 +10,7 @@
   "scripts": {
     "init": "npm run init --workspaces",
     "dev": "npm run dev --workspace=backend & npm run dev --workspace=frontend",
-    "build": "npm run build --workspace=frontend",
-    "build:all": "npm run build --workspaces",
+    "build": "npm run build --workspaces",
     "lint": "npm run lint --workspaces",
     "clean": "git clean -fdx ."
   },

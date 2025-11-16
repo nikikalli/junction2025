@@ -9,6 +9,8 @@ interface UseCampaignSearchReturn {
   loadingList: boolean;
 }
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
 export const useCampaignSearch = (): UseCampaignSearchReturn => {
   const [searchTerm, setSearchTerm] = useState("");
   const [canvasList, setCanvasList] = useState<CanvasList[]>([]);
@@ -18,7 +20,7 @@ export const useCampaignSearch = (): UseCampaignSearchReturn => {
     const fetchCanvasList = async () => {
       setLoadingList(true);
       try {
-        const res = await fetch("http://localhost:3000/api/braze/canvas/list");
+        const res = await fetch(`${API_URL}/braze/canvas/list`);
         const data = await res.json();
         const list =
           data.canvases?.map((c: any) => ({ id: c.id, name: c.name })) || [];

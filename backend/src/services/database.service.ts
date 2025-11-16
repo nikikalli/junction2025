@@ -61,7 +61,7 @@ export class DatabaseService {
     `;
 
     const result = await this.pool.query(query);
-    
+
     // Transform flat result into nested structure
     const campaignsMap = new Map<number, CampaignWithImplementations>();
     const implementationsMap = new Map<number, CampaignImplementationWithActions>();
@@ -158,7 +158,7 @@ export class DatabaseService {
     `;
 
     const result = await this.pool.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -299,7 +299,7 @@ export class DatabaseService {
     `;
 
     const result = await this.pool.query(query, [campaignId]);
-    
+
     // Transform flat result into nested structure
     const implementationsMap = new Map<number, CampaignImplementationWithActions>();
 
@@ -387,6 +387,56 @@ export class DatabaseService {
     ]);
 
     return result.rows[0];
+  }
+
+  /**
+   * Update an existing action
+   */
+  async updateAction(id: number, updates: Partial<Omit<CreateActionInput, 'campaign_implementation_id'>>): Promise<Action | null> {
+    const updateFields: string[] = [];
+    const values: any[] = [];
+    let paramCount = 1;
+
+    if (updates.day_of_campaign !== undefined) {
+      updateFields.push(`day_of_campaign = $${paramCount++}`);
+      values.push(updates.day_of_campaign);
+    }
+    if (updates.channel !== undefined) {
+      updateFields.push(`channel = $${paramCount++}`);
+      values.push(updates.channel);
+    }
+    if (updates.message_subject !== undefined) {
+      updateFields.push(`message_subject = $${paramCount++}`);
+      values.push(updates.message_subject);
+    }
+    if (updates.message_body !== undefined) {
+      updateFields.push(`message_body = $${paramCount++}`);
+      values.push(updates.message_body);
+    }
+
+    if (updateFields.length === 0) {
+      // No updates provided, just fetch and return existing action
+      const query = `
+        SELECT id, campaign_implementation_id, day_of_campaign, channel, 
+               message_subject, message_body, created_at, updated_at
+        FROM action
+        WHERE id = $1
+      `;
+      const result: QueryResult<Action> = await this.pool.query(query, [id]);
+      return result.rows[0] || null;
+    }
+
+    values.push(id);
+    const query = `
+      UPDATE action
+      SET ${updateFields.join(', ')}
+      WHERE id = $${paramCount}
+      RETURNING id, campaign_implementation_id, day_of_campaign, channel, 
+                message_subject, message_body, created_at, updated_at
+    `;
+
+    const result: QueryResult<Action> = await this.pool.query(query, values);
+    return result.rows[0] || null;
   }
 
   /**
@@ -603,6 +653,87 @@ export class DatabaseService {
    */
   async close(): Promise<void> {
     await this.pool.end();
+  }
+
+  /**
+   * Create a campaign from canvas with activities
+   */
+  async createCampaignFromCanvas(
+    canvasId: string,
+    canvasName: string,
+    segments: Array<{
+      segment_name: string;
+      activities: Array<{
+        type: string;
+        message: string;
+        subject: string | null;
+      }>;
+    }>
+  ): Promise<CampaignWithImplementations> {
+    const client = await this.pool.connect();
+    
+    try {
+      await client.query('BEGIN');
+
+      // Create campaign
+      const campaignResult = await client.query<Campaign>(
+        `INSERT INTO campaigns (name, canvas_id, start_date)
+         VALUES ($1, $2, NOW())
+         RETURNING *`,
+        [canvasName, canvasId]
+      );
+      const campaign = campaignResult.rows[0];
+
+      // Create implementations for each segment
+      const implementations: CampaignImplementationWithActions[] = [];
+      
+      for (const segment of segments) {
+        const implResult = await client.query<CampaignImplementation>(
+          `INSERT INTO campaign_implementations (campaign_id, segment_name)
+           VALUES ($1, $2)
+           RETURNING *`,
+          [campaign.id, segment.segment_name]
+        );
+        const implementation = implResult.rows[0];
+
+        // Create actions for this implementation
+        const actions: Action[] = [];
+        let dayOffset = 0;
+
+        for (const activity of segment.activities) {
+          const actionResult = await client.query<Action>(
+            `INSERT INTO action (campaign_implementation_id, day_of_campaign, channel, message_subject, message_body)
+             VALUES ($1, NOW() + INTERVAL '${dayOffset} days', $2, $3, $4)
+             RETURNING *`,
+            [
+              implementation.id,
+              activity.type,
+              activity.subject || '',
+              activity.message
+            ]
+          );
+          actions.push(actionResult.rows[0]);
+          dayOffset++;
+        }
+
+        implementations.push({
+          ...implementation,
+          actions
+        });
+      }
+
+      await client.query('COMMIT');
+
+      return {
+        ...campaign,
+        implementations
+      };
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
   }
 }
 

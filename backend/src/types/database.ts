@@ -35,6 +35,7 @@ export interface Campaign {
 export interface CampaignImplementation {
   id: number;
   campaign_id: number;
+  segment_name?: string;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -79,6 +80,7 @@ export interface CreateCampaignInput {
 
 export interface CreateCampaignImplementationInput {
   campaign_id: number;
+  segment_name?: string;
 }
 
 export interface CreateActionInput {
@@ -96,4 +98,16 @@ export interface CampaignWithImplementations extends Campaign {
 
 export interface CampaignImplementationWithActions extends CampaignImplementation {
   actions?: Action[];
+}
+
+// API request types
+export interface UpdateCampaignNameRequest {
+  name: string;
+}
+
+export interface UpdateActionRequest {
+  message_subject?: string;
+  message_body?: string;
+  day_of_campaign?: Date | string;
+  channel?: string;
 }

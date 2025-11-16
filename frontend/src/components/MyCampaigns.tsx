@@ -1,15 +1,16 @@
 import { Campaign } from "@/types";
 import SpotlightCard from "@/components/SpotlightCard";
+import { useNavigate } from "react-router-dom";
 
 interface CampaignCardProps {
   campaign: Campaign;
-  onClick: () => void;
+  onClick: (campaignId: any) => void;
 }
 
 const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
   return (
     <div
-      onClick={onClick}
+      onClick={() => onClick(campaign.id)}
       className="p-4 border-2 border-neutral-700 bg-neutral-850 hover:border-neutral-600 rounded-lg transition-all cursor-pointer"
     >
       <div className="flex items-start gap-3">
@@ -32,22 +33,32 @@ const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
 };
 
 export const MyCampaigns = ({ campaigns }: { campaigns: Campaign[] }) => {
+  const navigate = useNavigate();
+  function handleClick(campaignId: any) {
+    navigate(`/segments/${campaignId}`);
+  }
   return (
-    <SpotlightCard>
+    <SpotlightCard className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col mb-6 gap-3">
         <h1 className="text-2xl font-bold mt-3 px-4">My Campaigns</h1>
         <p className="text-base text-gray-400 px-4">
           Manage and track your campaigns here.
         </p>
       </div>
-      <div className="flex flex-col gap-3 px-4 pb-4">
-        {campaigns.map((campaign) => (
-          <CampaignCard
-            key={campaign.id}
-            campaign={campaign}
-            onClick={() => {}}
-          />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 pb-4">
+        {campaigns.length === 0 ? (
+          <div className="col-span-full text-center py-8 text-gray-400">
+            No campaigns yet. Create your first campaign above!
+          </div>
+        ) : (
+          campaigns.map((campaign) => (
+            <CampaignCard
+              key={campaign.id}
+              campaign={campaign}
+              onClick={() => handleClick(campaign.id)}
+            />
+          ))
+        )}
       </div>
     </SpotlightCard>
   );

@@ -1,0 +1,75 @@
+service: junction2025-backend
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  stage: ${opt:stage, 'dev'}
+  memorySize: 512
+  timeout: 30
+  environment:
+    NODE_ENV: production
+    DB_HOST: junction2025-postgres.cuhwsnm2qch5.eu-north-1.rds.amazonaws.com
+    DB_PORT: '5432'
+    DB_NAME: junction2025
+    DB_USER: postgres
+    DB_PASSWORD: Junction2025PostgresPass
+    ALLOWED_ORIGINS: '*'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - rds:*
+            - ec2:CreateNetworkInterface
+            - ec2:DescribeNetworkInterfaces
+            - ec2:DeleteNetworkInterface
+            - ec2:AssignPrivateIpAddresses
+            - ec2:UnassignPrivateIpAddresses
+          Resource: '*'
+
+functions:
+  api:
+    handler: bundle/lambda.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+      - http:
+          path: /
+          method: ANY
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: false
+
+plugins:
+  - serverless-offline
+
+package:
+  patterns:
+    - 'bundle/**'
+    - '!dist/**'
+    - '!src/**'
+    - '!node_modules/**'
+    - '!tests/**'
+
+custom:
+  serverless-offline:
+    httpPort: 3001
