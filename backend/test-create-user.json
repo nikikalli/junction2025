@@ -1,0 +1,11 @@
+{
+  "attributes": [
+    {
+      "external_id": "junction_test_user_001",
+      "email": "junction.test@example.com",
+      "first_name": "Junction",
+      "last_name": "Tester",
+      "country": "FI"
+    }
+  ]
+}

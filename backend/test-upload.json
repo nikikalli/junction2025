@@ -1,0 +1,5 @@
+{
+  "template_name": "Automated Campaign Template - Junction 2025",
+  "html_body": "<html><body><h1>Hello {{first_name}}!</h1><p>This is an automated test email template with personalization.</p><p>Special offer: Get 20% off your next purchase!</p><footer>Best regards,<br>The Pampers Team</footer></body></html>",
+  "subject": "Special Offer for {{first_name}}"
+}
