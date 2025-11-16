@@ -1,3 +1,6 @@
+-- Ensure postgres role has login permission
+ALTER ROLE postgres WITH LOGIN;
+
 -- Create user_segments_enriched table
 CREATE TABLE IF NOT EXISTS user_segments_enriched (
     id SERIAL PRIMARY KEY,
