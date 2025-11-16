@@ -1,5 +1,4 @@
 {
   "version": 2,
-  "rootDirectory": "frontend",
   "framework": "vite"
 }
