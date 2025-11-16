@@ -12,6 +12,7 @@ import { SegmentList } from "@/components/SegmentList";
 import { MessageListPanel } from "@/components/MessageListPanel";
 import { CampaignTypeDialog } from "@/components/CampaignTypeDialog";
 import type { CanvasMessage } from "@/types";
+import { MyCampaigns } from "@/components/MyCampaigns";
 
 const MessagePreview = ({ message }: { message: CanvasMessage }) => {
   if (message.channel === "email" && message.body) {
@@ -118,7 +119,7 @@ export const Home = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      <div style={{ width: "100%", height: "100vh", position: "relative" }}>
+      <div style={{ width: "100%", height: "130vh", position: "relative" }}>
         <PrismaticBurst
           animationType="rotate3d"
           intensity={2}
@@ -133,7 +134,7 @@ export const Home = () => {
         />
         <div className="absolute inset-0 z-10 flex flex-col items-center h-full">
           <Nav />
-          <div className="flex flex-col items-center justify-center h-full gap-6 w-full px-4">
+          <div className="flex flex-col items-center justify-center h-full gap-6 w-full">
             {!selectedCanvasId && (
               <>
                 <TextType
@@ -199,6 +200,7 @@ export const Home = () => {
               )}
             </SpotlightCard>
           </div>
+          <MyCampaigns></MyCampaigns>
         </div>
       </div>
 
