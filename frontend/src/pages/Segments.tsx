@@ -118,9 +118,9 @@ export const Segments = () => {
         if (fullCampaign.implementations && fullCampaign.implementations.length > 0) {
           console.log('Mapping implementations to segments...');
           const mappedSegments: Segment[] = fullCampaign.implementations.map((impl) => ({
-            type: campaignType,
+            type: impl.segment_name || campaignType,
             id: impl.id,
-            name: `Segment ${impl.id}`,
+            name: impl.segment_name || `Segment ${impl.id}`,
             subject: impl.actions?.[0]?.message_subject || "",
             message: impl.actions?.[0]?.message_body || "",
             segment_id: `segment_${impl.id}`,
