@@ -33,7 +33,7 @@ const CampaignCard = ({ campaign, onClick }: CampaignCardProps) => {
 
 export const MyCampaigns = ({ campaigns }: { campaigns: Campaign[] }) => {
   return (
-    <SpotlightCard>
+    <SpotlightCard className="w-4xl">
       <div className="flex flex-col mb-6 gap-3">
         <h1 className="text-2xl font-bold mt-3 px-4">My Campaigns</h1>
         <p className="text-base text-gray-400 px-4">

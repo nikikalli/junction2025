@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-central-1"
+  region = "eu-north-1"
 }
 
 variable "bucket_name" {
@@ -107,5 +107,5 @@ output "s3_bucket_name" {
 }
 
 output "s3_bucket_region" {
-  value = "eu-central-1"
+  value = "eu-north-1"
 }

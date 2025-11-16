@@ -132,89 +132,85 @@ export const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white relative ">
-      <div style={{ width: "100%", height: "100vh", position: "relative" }}>
-        <PrismaticBurst
-          animationType="rotate3d"
-          intensity={2}
-          speed={0.5}
-          distort={1.0}
-          paused={false}
-          offset={{ x: 0, y: 0 }}
-          hoverDampness={0.25}
-          rayCount={24}
-          mixBlendMode="lighten"
-          colors={["#ff007a", "#4d3dff", "#ffffff"]}
-        />
-        <div className="absolute inset-0 z-10 flex flex-col items-center h-full">
-          <div className="flex flex-col items-center justify-center h-full gap-6 w-full">
-            {!selectedCanvasId && (
-              <>
-                <TextType
-                  className="text-2xl md:text-4xl font-bold text-center whitespace-nowrap"
-                  text={["One vision, a thousand campaigns"]}
-                  typingSpeed={75}
-                  pauseDuration={1500}
-                  showCursor={true}
-                  cursorCharacter="_"
-                />
-                <p className="text-1xl md:text-2xl text-gray-400">
-                  Turn assets into campaigns with one click
-                </p>
-              </>
-            )}
-            <SpotlightCard
-              className="flex flex-col items-center justify-center custom-spotlight-card w-[1000px] max-w-full"
-              spotlightColor="rgba(0, 229, 255, 0.2)"
-            >
-              {!selectedCanvasId ? (
-                <CampaignSearch
-                  searchTerm={searchTerm}
-                  onSearchChange={setSearchTerm}
-                  filteredCanvasList={filteredCanvasList}
-                  loadingList={loadingList}
-                  onCampaignSelect={openCampaignDialog}
-                />
-              ) : !selectedSegment ? (
-                <SegmentList
-                  segments={segments}
-                  loading={segmentLoading}
-                  campaignType={selectedCampaignType}
-                  canvasName={pendingCanvasName || ""}
-                  onBack={handleBackToCampaigns}
-                  onSegmentSelect={selectSegment}
-                />
-              ) : (
-                <div className="w-full h-[70vh] flex flex-col md:flex-row gap-4">
-                  <MessageListPanel
-                    allMessages={allMessages}
-                    selectedMessageKey={selectedMessageKey}
-                    loading={segmentLoading}
-                    segmentName={selectedSegment.name}
-                    campaignType={selectedCampaignType}
-                    onBack={handleBackToSegments}
-                    onMessageSelect={setSelectedMessageKey}
-                  />
-                  <div className="w-full md:w-[65%] bg-neutral-900 flex flex-col overflow-hidden">
-                    {segmentLoading ? (
-                      <div className="flex-1 flex items-center justify-center text-neutral-400">
-                      </div>
-                    ) : selectedMessage ? (
-                      <div className="flex-1 overflow-y-auto h-full">
-                        <MessagePreview message={selectedMessage} />
-                      </div>
-                    ) : (
-                      <div className="flex-1 flex items-center justify-center text-neutral-400">
-                        Select a message to view details
-                      </div>
-                    )}
+    <div className="flex flex-col h-screen w-screen items-center justify-center bg-black text-white relative ">
+      <PrismaticBurst
+        animationType="rotate3d"
+        intensity={2}
+        speed={0.5}
+        distort={1.0}
+        paused={false}
+        offset={{ x: 0, y: 0 }}
+        hoverDampness={0.25}
+        rayCount={24}
+        mixBlendMode="lighten"
+        colors={["#ff007a", "#4d3dff", "#ffffff"]}
+      />
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full gap-12 w-full opacity-90">
+        {!selectedCanvasId && (
+          <>
+            <TextType
+              className="text-2xl md:text-4xl font-bold text-center whitespace-nowrap"
+              text={["One vision, a thousand campaigns"]}
+              typingSpeed={75}
+              pauseDuration={1500}
+              showCursor={true}
+              cursorCharacter="_"
+            />
+            <p className="text-1xl md:text-2xl text-gray-400">
+              Turn assets into campaigns with one click
+            </p>
+          </>
+        )}
+        <SpotlightCard
+          className="flex flex-col items-center justify-center custom-spotlight-card w-5xl"
+          spotlightColor="rgba(0, 229, 255, 0.2)"
+        >
+          {!selectedCanvasId ? (
+            <CampaignSearch
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              filteredCanvasList={filteredCanvasList}
+              loadingList={loadingList}
+              onCampaignSelect={openCampaignDialog}
+            />
+          ) : !selectedSegment ? (
+            <SegmentList
+              segments={segments}
+              loading={segmentLoading}
+              campaignType={selectedCampaignType}
+              canvasName={pendingCanvasName || ""}
+              onBack={handleBackToCampaigns}
+              onSegmentSelect={selectSegment}
+            />
+          ) : (
+            <div className="w-full h-[70vh] flex flex-col md:flex-row gap-4">
+              <MessageListPanel
+                allMessages={allMessages}
+                selectedMessageKey={selectedMessageKey}
+                loading={segmentLoading}
+                segmentName={selectedSegment.name}
+                campaignType={selectedCampaignType}
+                onBack={handleBackToSegments}
+                onMessageSelect={setSelectedMessageKey}
+              />
+              <div className="w-full md:w-[65%] bg-neutral-900 flex flex-col overflow-hidden">
+                {segmentLoading ? (
+                  <div className="flex-1 flex items-center justify-center text-neutral-400">
                   </div>
-                </div>
-              )}
-            </SpotlightCard>
-          </div>
-          <MyCampaigns campaigns={campaigns} />
-        </div>
+                ) : selectedMessage ? (
+                  <div className="flex-1 overflow-y-auto h-full">
+                    <MessagePreview message={selectedMessage} />
+                  </div>
+                ) : (
+                  <div className="flex-1 flex items-center justify-center text-neutral-400">
+                    Select a message to view details
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </SpotlightCard>
+        <MyCampaigns campaigns={campaigns} />
       </div>
 
       <CampaignTypeDialog
