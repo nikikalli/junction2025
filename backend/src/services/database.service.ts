@@ -654,6 +654,87 @@ export class DatabaseService {
   async close(): Promise<void> {
     await this.pool.end();
   }
+
+  /**
+   * Create a campaign from canvas with activities
+   */
+  async createCampaignFromCanvas(
+    canvasId: string,
+    canvasName: string,
+    segments: Array<{
+      segment_name: string;
+      activities: Array<{
+        type: string;
+        message: string;
+        subject: string | null;
+      }>;
+    }>
+  ): Promise<CampaignWithImplementations> {
+    const client = await this.pool.connect();
+    
+    try {
+      await client.query('BEGIN');
+
+      // Create campaign
+      const campaignResult = await client.query<Campaign>(
+        `INSERT INTO campaigns (name, canvas_id, start_date)
+         VALUES ($1, $2, NOW())
+         RETURNING *`,
+        [canvasName, canvasId]
+      );
+      const campaign = campaignResult.rows[0];
+
+      // Create implementations for each segment
+      const implementations: CampaignImplementationWithActions[] = [];
+      
+      for (const segment of segments) {
+        const implResult = await client.query<CampaignImplementation>(
+          `INSERT INTO campaign_implementations (campaign_id, segment_name)
+           VALUES ($1, $2)
+           RETURNING *`,
+          [campaign.id, segment.segment_name]
+        );
+        const implementation = implResult.rows[0];
+
+        // Create actions for this implementation
+        const actions: Action[] = [];
+        let dayOffset = 0;
+
+        for (const activity of segment.activities) {
+          const actionResult = await client.query<Action>(
+            `INSERT INTO action (campaign_implementation_id, day_of_campaign, channel, message_subject, message_body)
+             VALUES ($1, NOW() + INTERVAL '${dayOffset} days', $2, $3, $4)
+             RETURNING *`,
+            [
+              implementation.id,
+              activity.type,
+              activity.subject || '',
+              activity.message
+            ]
+          );
+          actions.push(actionResult.rows[0]);
+          dayOffset++;
+        }
+
+        implementations.push({
+          ...implementation,
+          actions
+        });
+      }
+
+      await client.query('COMMIT');
+
+      return {
+        ...campaign,
+        implementations
+      };
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
 }
 
 // Export singleton instance

@@ -35,6 +35,7 @@ export interface Campaign {
 export interface CampaignImplementation {
   id: number;
   campaign_id: number;
+  segment_name?: string;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -79,6 +80,7 @@ export interface CreateCampaignInput {
 
 export interface CreateCampaignImplementationInput {
   campaign_id: number;
+  segment_name?: string;
 }
 
 export interface CreateActionInput {

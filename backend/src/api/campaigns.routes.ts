@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { databaseService } from '../services/database.service';
+import { brazeService } from '../services/braze.service';
 import { UpdateCampaignNameRequest, UpdateActionRequest } from '../types/database';
 
 const router = Router();
@@ -11,6 +12,84 @@ router.get(
     try {
       const campaigns = await databaseService.getAllCampaigns();
       res.json(campaigns);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST /campaigns/from-canvas - Create campaign from canvas with activities
+router.post(
+  '/from-canvas',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { canvas_id, canvas_name, segments } = req.body;
+
+      // Validate input
+      if (!canvas_id || typeof canvas_id !== 'string') {
+        res.status(400).json({ error: 'canvas_id is required and must be a string' });
+        return;
+      }
+
+      if (!canvas_name || typeof canvas_name !== 'string') {
+        res.status(400).json({ error: 'canvas_name is required and must be a string' });
+        return;
+      }
+
+      if (!Array.isArray(segments) || segments.length === 0) {
+        res.status(400).json({ error: 'segments must be a non-empty array' });
+        return;
+      }
+
+      // Extract activities from canvas for each segment
+      const segmentsWithActivities = await Promise.all(
+        segments.map(async (segment: { segment_name: string }) => {
+          if (!segment.segment_name || typeof segment.segment_name !== 'string') {
+            throw new Error('Each segment must have a segment_name');
+          }
+
+          // Extract messages from the canvas
+          const messages = await brazeService.extractCanvasMessages(canvas_id);
+          
+          // Transform messages to activities
+          let activities = brazeService.transformMessagesToActivities(messages);
+
+          // If no activities were extracted, create sample activities
+          if (activities.length === 0) {
+            activities = [
+              {
+                type: 'email',
+                message: 'Welcome to our campaign! We are excited to have you join us.',
+                subject: 'Welcome to our campaign'
+              },
+              {
+                type: 'web_push',
+                message: 'Check out our latest offers and discover amazing deals!',
+                subject: 'New offers available'
+              },
+              {
+                type: 'in_app_message',
+                message: 'Exclusive offer just for you! Limited time only.',
+                subject: 'Special offer inside'
+              }
+            ];
+          }
+
+          return {
+            segment_name: segment.segment_name,
+            activities
+          };
+        })
+      );
+
+      // Create campaign with activities in database
+      const campaign = await databaseService.createCampaignFromCanvas(
+        canvas_id,
+        canvas_name,
+        segmentsWithActivities
+      );
+
+      res.status(201).json(campaign);
     } catch (error) {
       next(error);
     }

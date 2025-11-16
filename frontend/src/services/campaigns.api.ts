@@ -113,6 +113,28 @@ export class CampaignsApiClient {
     const dateString = typeof date === 'string' ? date : date.toISOString();
     return this.updateAction(actionId, { day_of_campaign: dateString });
   }
+
+  /**
+   * POST /campaigns/from-canvas
+   * Creates a new campaign from a canvas with activities for specified segments
+   * @param canvasId - The Braze canvas ID
+   * @param canvasName - The name for the new campaign
+   * @param segments - Array of segments to create implementations for
+   */
+  async createCampaignFromCanvas(
+    canvasId: string,
+    canvasName: string,
+    segments: Array<{ segment_name: string }>
+  ): Promise<CampaignWithImplementations> {
+    const result = await apiClient.post<CampaignWithImplementations>(`${this.basePath}/from-canvas`, {
+      canvas_id: canvasId,
+      canvas_name: canvasName,
+      segments
+    });
+    // Invalidate cache
+    this.campaignsCache = null;
+    return result;
+  }
 }
 
 // Export singleton instance

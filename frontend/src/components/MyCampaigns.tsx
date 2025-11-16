@@ -38,21 +38,27 @@ export const MyCampaigns = ({ campaigns }: { campaigns: Campaign[] }) => {
     navigate(`/segments/${campaignId}`);
   }
   return (
-    <SpotlightCard className="w-4xl">
+    <SpotlightCard className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col mb-6 gap-3">
         <h1 className="text-2xl font-bold mt-3 px-4">My Campaigns</h1>
         <p className="text-base text-gray-400 px-4">
           Manage and track your campaigns here.
         </p>
       </div>
-      <div className="flex flex-col gap-3 px-4 pb-4">
-        {campaigns.map((campaign) => (
-          <CampaignCard
-            key={campaign.id}
-            campaign={campaign}
-            onClick={() => handleClick(campaign.id)}
-          />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 pb-4">
+        {campaigns.length === 0 ? (
+          <div className="col-span-full text-center py-8 text-gray-400">
+            No campaigns yet. Create your first campaign above!
+          </div>
+        ) : (
+          campaigns.map((campaign) => (
+            <CampaignCard
+              key={campaign.id}
+              campaign={campaign}
+              onClick={() => handleClick(campaign.id)}
+            />
+          ))
+        )}
       </div>
     </SpotlightCard>
   );

@@ -40,19 +40,32 @@ export const Home = () => {
     pendingCanvasName,
     openCampaignDialog,
     confirmCampaignType,
-  } = useCampaignTypeDialog((canvasId, type) => {
-    // Find the campaign by canvas_id and navigate using campaign ID
-    const campaign = campaigns.find(c => c.canvas_id === canvasId);
-    if (campaign) {
-      navigate(`/segments/${campaign.id}?type=${type}`);
-    } else {
-      console.error('Campaign not found for canvas_id:', canvasId);
+  } = useCampaignTypeDialog(async (canvasId, type) => {
+    try {
+      // Create campaign from canvas with the selected audience type
+      const newCampaign = await campaignsApi.createCampaignFromCanvas(
+        canvasId,
+        pendingCanvasName || 'New Campaign',
+        [{ segment_name: type }] // type is "Standard" or "Promotional"
+      );
+
+      // Refresh campaigns list
+      const updatedCampaigns = await campaignsApi.getAllCampaigns();
+      setCampaigns(updatedCampaigns);
+
+      // Navigate to the new campaign's segments page
+      navigate(`/segments/${newCampaign.id}?type=${type}`);
+    } catch (error) {
+      console.error('Error creating campaign from canvas:', error);
+      alert('Failed to create campaign. Please try again.');
+    } finally {
+      setDialogOpen(false);
     }
-    setDialogOpen(false);
   });
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white relative ">
+    <div className="flex flex-col min-h-screen bg-black text-white">
+      {/* Hero Section with Fixed Height */}
       <div style={{ width: "100%", height: "100vh", position: "relative" }}>
         <PrismaticBurst
           animationType="rotate3d"
@@ -66,32 +79,36 @@ export const Home = () => {
           mixBlendMode="lighten"
           colors={["#ff007a", "#4d3dff", "#ffffff"]}
         />
-        <div className="absolute inset-0 z-10 flex flex-col items-center h-full">
-          <div className="flex flex-col items-center justify-center h-full gap-6 w-full">
-            <TextType
-              className="text-2xl md:text-4xl font-bold text-center whitespace-nowrap"
-              text={["One vision, a thousand campaigns"]}
-              typingSpeed={75}
-              pauseDuration={1500}
-              showCursor={true}
-              cursorCharacter="_"
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 w-full px-4">
+          <TextType
+            className="text-2xl md:text-4xl font-bold text-center whitespace-nowrap"
+            text={["One vision, a thousand campaigns"]}
+            typingSpeed={75}
+            pauseDuration={1500}
+            showCursor={true}
+            cursorCharacter="_"
+          />
+          <p className="text-1xl md:text-2xl text-gray-400">
+            Turn assets into campaigns with one click
+          </p>
+          <SpotlightCard
+            className="flex flex-col items-center justify-center custom-spotlight-card w-[1000px] max-w-full"
+            spotlightColor="rgba(0, 229, 255, 0.2)"
+          >
+            <CampaignSearch
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              filteredCanvasList={filteredCanvasList}
+              loadingList={loadingList}
+              onCampaignSelect={openCampaignDialog}
             />
-            <p className="text-1xl md:text-2xl text-gray-400">
-              Turn assets into campaigns with one click
-            </p>
-            <SpotlightCard
-              className="flex flex-col items-center justify-center custom-spotlight-card w-[1000px] max-w-full"
-              spotlightColor="rgba(0, 229, 255, 0.2)"
-            >
-              <CampaignSearch
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                filteredCanvasList={filteredCanvasList}
-                loadingList={loadingList}
-                onCampaignSelect={openCampaignDialog}
-              />
-            </SpotlightCard>
-          </div>
+          </SpotlightCard>
+        </div>
+      </div>
+
+      {/* Scrollable Campaigns Section */}
+      <div className="w-full bg-black py-12 px-4">
+        <div className="max-w-7xl mx-auto">
           <MyCampaigns campaigns={campaigns} />
         </div>
       </div>

@@ -31224,158 +31224,57 @@ var require_database_service = __commonJS({
       async close() {
         await this.pool.end();
       }
+      /**
+       * Create a campaign from canvas with activities
+       */
+      async createCampaignFromCanvas(canvasId, canvasName, segments) {
+        const client = await this.pool.connect();
+        try {
+          await client.query("BEGIN");
+          const campaignResult = await client.query(`INSERT INTO campaigns (name, canvas_id, start_date)
+         VALUES ($1, $2, NOW())
+         RETURNING *`, [canvasName, canvasId]);
+          const campaign = campaignResult.rows[0];
+          const implementations = [];
+          for (const segment of segments) {
+            const implResult = await client.query(`INSERT INTO campaign_implementations (campaign_id, segment_name)
+           VALUES ($1, $2)
+           RETURNING *`, [campaign.id, segment.segment_name]);
+            const implementation = implResult.rows[0];
+            const actions = [];
+            let dayOffset = 0;
+            for (const activity of segment.activities) {
+              const actionResult = await client.query(`INSERT INTO action (campaign_implementation_id, day_of_campaign, channel, message_subject, message_body)
+             VALUES ($1, NOW() + INTERVAL '${dayOffset} days', $2, $3, $4)
+             RETURNING *`, [
+                implementation.id,
+                activity.type,
+                activity.subject || "",
+                activity.message
+              ]);
+              actions.push(actionResult.rows[0]);
+              dayOffset++;
+            }
+            implementations.push({
+              ...implementation,
+              actions
+            });
+          }
+          await client.query("COMMIT");
+          return {
+            ...campaign,
+            implementations
+          };
+        } catch (error) {
+          await client.query("ROLLBACK");
+          throw error;
+        } finally {
+          client.release();
+        }
+      }
     };
     exports2.DatabaseService = DatabaseService;
     exports2.databaseService = new DatabaseService();
-  }
-});
-
-// dist/api/campaigns.routes.js
-var require_campaigns_routes = __commonJS({
-  "dist/api/campaigns.routes.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.router = void 0;
-    var express_1 = require_express2();
-    var database_service_1 = require_database_service();
-    var router = (0, express_1.Router)();
-    exports2.router = router;
-    router.get("/", async (_req, res, next) => {
-      try {
-        const campaigns = await database_service_1.databaseService.getAllCampaigns();
-        res.json(campaigns);
-      } catch (error) {
-        next(error);
-      }
-    });
-    router.get("/:id", async (req, res, next) => {
-      try {
-        const campaignId = parseInt(req.params.id, 10);
-        if (isNaN(campaignId)) {
-          res.status(400).json({ error: "Invalid campaign ID" });
-          return;
-        }
-        const campaign = await database_service_1.databaseService.getCampaignByIdWithImplementations(campaignId);
-        if (!campaign) {
-          res.status(404).json({ error: "Campaign not found" });
-          return;
-        }
-        res.json(campaign);
-      } catch (error) {
-        next(error);
-      }
-    });
-    router.get("/:id/implementations/:implementationId/actions", async (req, res, next) => {
-      try {
-        const campaignId = parseInt(req.params.id, 10);
-        const implementationId = parseInt(req.params.implementationId, 10);
-        if (isNaN(campaignId) || isNaN(implementationId)) {
-          res.status(400).json({ error: "Invalid campaign ID or implementation ID" });
-          return;
-        }
-        const campaign = await database_service_1.databaseService.getCampaignById(campaignId);
-        if (!campaign) {
-          res.status(404).json({ error: "Campaign not found" });
-          return;
-        }
-        const actions = await database_service_1.databaseService.getImplementationActions(implementationId);
-        if (actions.length > 0) {
-          const implementations = await database_service_1.databaseService.getCampaignImplementations(campaignId);
-          const implementationExists = implementations.some((impl) => impl.id === implementationId);
-          if (!implementationExists) {
-            res.status(404).json({ error: "Implementation not found for this campaign" });
-            return;
-          }
-        }
-        res.json(actions);
-      } catch (error) {
-        next(error);
-      }
-    });
-    router.patch("/:id", async (req, res, next) => {
-      try {
-        const campaignId = parseInt(req.params.id, 10);
-        if (isNaN(campaignId)) {
-          res.status(400).json({ error: "Invalid campaign ID" });
-          return;
-        }
-        const body = req.body;
-        if (!body.name || typeof body.name !== "string" || body.name.trim().length === 0) {
-          res.status(400).json({ error: "Valid name is required" });
-          return;
-        }
-        const updatedCampaign = await database_service_1.databaseService.updateCampaign(campaignId, { name: body.name.trim() });
-        if (!updatedCampaign) {
-          res.status(404).json({ error: "Campaign not found" });
-          return;
-        }
-        res.json(updatedCampaign);
-      } catch (error) {
-        next(error);
-      }
-    });
-    router.patch("/actions/:id", async (req, res, next) => {
-      try {
-        const actionId = parseInt(req.params.id, 10);
-        if (isNaN(actionId)) {
-          res.status(400).json({ error: "Invalid action ID" });
-          return;
-        }
-        const body = req.body;
-        if (body.message_subject === void 0 && body.message_body === void 0 && body.day_of_campaign === void 0 && body.channel === void 0) {
-          res.status(400).json({
-            error: "At least one field must be provided: message_subject, message_body, day_of_campaign, or channel"
-          });
-          return;
-        }
-        const updates = {};
-        if (body.message_subject !== void 0) {
-          if (typeof body.message_subject !== "string") {
-            res.status(400).json({ error: "message_subject must be a string" });
-            return;
-          }
-          updates.message_subject = body.message_subject;
-        }
-        if (body.message_body !== void 0) {
-          if (typeof body.message_body !== "string") {
-            res.status(400).json({ error: "message_body must be a string" });
-            return;
-          }
-          updates.message_body = body.message_body;
-        }
-        if (body.day_of_campaign !== void 0) {
-          const date = new Date(body.day_of_campaign);
-          if (isNaN(date.getTime())) {
-            res.status(400).json({ error: "day_of_campaign must be a valid date" });
-            return;
-          }
-          updates.day_of_campaign = date;
-        }
-        if (body.channel !== void 0) {
-          if (typeof body.channel !== "string" || body.channel.trim().length === 0) {
-            res.status(400).json({ error: "channel must be a non-empty string" });
-            return;
-          }
-          updates.channel = body.channel.trim();
-        }
-        const updatedAction = await database_service_1.databaseService.updateAction(actionId, updates);
-        if (!updatedAction) {
-          res.status(404).json({ error: "Action not found" });
-          return;
-        }
-        res.json(updatedAction);
-      } catch (error) {
-        next(error);
-      }
-    });
-    router.get("/templates/email/update", async (_req, res, next) => {
-      try {
-        const data = await database_service_1.databaseService.getAllCampaigns();
-        res.json(data);
-      } catch (error) {
-        next(error);
-      }
-    });
   }
 });
 
@@ -37242,6 +37141,222 @@ var require_braze_service = __commonJS({
       }
     };
     exports2.brazeService = new BrazeService();
+  }
+});
+
+// dist/api/campaigns.routes.js
+var require_campaigns_routes = __commonJS({
+  "dist/api/campaigns.routes.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.router = void 0;
+    var express_1 = require_express2();
+    var database_service_1 = require_database_service();
+    var braze_service_1 = require_braze_service();
+    var router = (0, express_1.Router)();
+    exports2.router = router;
+    router.get("/", async (_req, res, next) => {
+      try {
+        const campaigns = await database_service_1.databaseService.getAllCampaigns();
+        res.json(campaigns);
+      } catch (error) {
+        next(error);
+      }
+    });
+    router.post("/from-canvas", async (req, res, next) => {
+      try {
+        const { canvas_id, canvas_name, segments } = req.body;
+        if (!canvas_id || typeof canvas_id !== "string") {
+          res.status(400).json({ error: "canvas_id is required and must be a string" });
+          return;
+        }
+        if (!canvas_name || typeof canvas_name !== "string") {
+          res.status(400).json({ error: "canvas_name is required and must be a string" });
+          return;
+        }
+        if (!Array.isArray(segments) || segments.length === 0) {
+          res.status(400).json({ error: "segments must be a non-empty array" });
+          return;
+        }
+        const segmentsWithActivities = await Promise.all(segments.map(async (segment) => {
+          if (!segment.segment_name || typeof segment.segment_name !== "string") {
+            throw new Error("Each segment must have a segment_name");
+          }
+          const messages = await braze_service_1.brazeService.extractCanvasMessages(canvas_id);
+          let activities = braze_service_1.brazeService.transformMessagesToActivities(messages);
+          if (activities.length === 0) {
+            activities = [
+              {
+                type: "email",
+                message: "Welcome to our campaign! We are excited to have you join us.",
+                subject: "Welcome to our campaign"
+              },
+              {
+                type: "web_push",
+                message: "Check out our latest offers and discover amazing deals!",
+                subject: "New offers available"
+              },
+              {
+                type: "in_app_message",
+                message: "Exclusive offer just for you! Limited time only.",
+                subject: "Special offer inside"
+              }
+            ];
+          }
+          return {
+            segment_name: segment.segment_name,
+            activities
+          };
+        }));
+        const campaign = await database_service_1.databaseService.createCampaignFromCanvas(canvas_id, canvas_name, segmentsWithActivities);
+        res.status(201).json(campaign);
+      } catch (error) {
+        next(error);
+      }
+    });
+    router.get("/:id", async (req, res, next) => {
+      try {
+        const campaignId = parseInt(req.params.id, 10);
+        if (isNaN(campaignId)) {
+          res.status(400).json({ error: "Invalid campaign ID" });
+          return;
+        }
+        const campaign = await database_service_1.databaseService.getCampaignByIdWithImplementations(campaignId);
+        if (!campaign) {
+          res.status(404).json({ error: "Campaign not found" });
+          return;
+        }
+        const responseData = {
+          ...campaign,
+          canvas: {
+            id: campaign.canvas_id,
+            name: campaign.name,
+            created_at: campaign.created_at,
+            updated_at: campaign.updated_at,
+            description: `Campaign: ${campaign.name}`,
+            draft: false,
+            enabled: true,
+            variants: [{ name: "Variant 1" }],
+            steps: []
+            // Will be populated per implementation
+          }
+        };
+        res.json(responseData);
+      } catch (error) {
+        next(error);
+      }
+    });
+    router.get("/:id/implementations/:implementationId/actions", async (req, res, next) => {
+      try {
+        const campaignId = parseInt(req.params.id, 10);
+        const implementationId = parseInt(req.params.implementationId, 10);
+        if (isNaN(campaignId) || isNaN(implementationId)) {
+          res.status(400).json({ error: "Invalid campaign ID or implementation ID" });
+          return;
+        }
+        const campaign = await database_service_1.databaseService.getCampaignById(campaignId);
+        if (!campaign) {
+          res.status(404).json({ error: "Campaign not found" });
+          return;
+        }
+        const actions = await database_service_1.databaseService.getImplementationActions(implementationId);
+        if (actions.length > 0) {
+          const implementations = await database_service_1.databaseService.getCampaignImplementations(campaignId);
+          const implementationExists = implementations.some((impl) => impl.id === implementationId);
+          if (!implementationExists) {
+            res.status(404).json({ error: "Implementation not found for this campaign" });
+            return;
+          }
+        }
+        res.json(actions);
+      } catch (error) {
+        next(error);
+      }
+    });
+    router.patch("/:id", async (req, res, next) => {
+      try {
+        const campaignId = parseInt(req.params.id, 10);
+        if (isNaN(campaignId)) {
+          res.status(400).json({ error: "Invalid campaign ID" });
+          return;
+        }
+        const body = req.body;
+        if (!body.name || typeof body.name !== "string" || body.name.trim().length === 0) {
+          res.status(400).json({ error: "Valid name is required" });
+          return;
+        }
+        const updatedCampaign = await database_service_1.databaseService.updateCampaign(campaignId, { name: body.name.trim() });
+        if (!updatedCampaign) {
+          res.status(404).json({ error: "Campaign not found" });
+          return;
+        }
+        res.json(updatedCampaign);
+      } catch (error) {
+        next(error);
+      }
+    });
+    router.patch("/actions/:id", async (req, res, next) => {
+      try {
+        const actionId = parseInt(req.params.id, 10);
+        if (isNaN(actionId)) {
+          res.status(400).json({ error: "Invalid action ID" });
+          return;
+        }
+        const body = req.body;
+        if (body.message_subject === void 0 && body.message_body === void 0 && body.day_of_campaign === void 0 && body.channel === void 0) {
+          res.status(400).json({
+            error: "At least one field must be provided: message_subject, message_body, day_of_campaign, or channel"
+          });
+          return;
+        }
+        const updates = {};
+        if (body.message_subject !== void 0) {
+          if (typeof body.message_subject !== "string") {
+            res.status(400).json({ error: "message_subject must be a string" });
+            return;
+          }
+          updates.message_subject = body.message_subject;
+        }
+        if (body.message_body !== void 0) {
+          if (typeof body.message_body !== "string") {
+            res.status(400).json({ error: "message_body must be a string" });
+            return;
+          }
+          updates.message_body = body.message_body;
+        }
+        if (body.day_of_campaign !== void 0) {
+          const date = new Date(body.day_of_campaign);
+          if (isNaN(date.getTime())) {
+            res.status(400).json({ error: "day_of_campaign must be a valid date" });
+            return;
+          }
+          updates.day_of_campaign = date;
+        }
+        if (body.channel !== void 0) {
+          if (typeof body.channel !== "string" || body.channel.trim().length === 0) {
+            res.status(400).json({ error: "channel must be a non-empty string" });
+            return;
+          }
+          updates.channel = body.channel.trim();
+        }
+        const updatedAction = await database_service_1.databaseService.updateAction(actionId, updates);
+        if (!updatedAction) {
+          res.status(404).json({ error: "Action not found" });
+          return;
+        }
+        res.json(updatedAction);
+      } catch (error) {
+        next(error);
+      }
+    });
+    router.get("/templates/email/update", async (_req, res, next) => {
+      try {
+        const data = await database_service_1.databaseService.getAllCampaigns();
+        res.json(data);
+      } catch (error) {
+        next(error);
+      }
+    });
   }
 });
 
