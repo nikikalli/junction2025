@@ -1,0 +1,17 @@
+{
+  "canvas_id": "218ac6eb-5003-4860-8382-4b99a56c99e5",
+  "schedule": {
+    "time": "2025-11-16T10:00:00Z",
+    "in_local_time": false
+  },
+  "recipients": [
+    {
+      "external_id": "74faa716-4198-429f-958d-b42938aa1c7a",
+      "canvas_entry_properties": {
+        "first_name": "Junction",
+        "promo_code": "SAVE20",
+        "product_name": "Premium Diapers"
+      }
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { brazeService } from './braze.service';
 import { ContentBlockDeployment } from '../types/automation';
 
@@ -19,7 +18,6 @@ class EmailTemplateDeploymentService {
       template_name: templateName,
       subject: subject || `Personalized Message for ${contentBlock.segment}`,
       body: emailBody,
-      description: `Auto-generated template for ${contentBlock.segment}`,
     });
 
     return {

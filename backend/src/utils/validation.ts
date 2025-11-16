@@ -59,6 +59,8 @@ export const canvasIdParamSchema = z.object({
 
 export const canvasDetailsQuerySchema = z.object({
   post_launch_draft_version: z.string().transform((val) => val === 'true').optional(),
+  extract: z.string().optional(),
+  segment: z.string().optional(),
 });
 
 export const canvasScheduleSchema = z.object({
@@ -141,4 +143,74 @@ export const updateEmailTemplateSchema = z.object({
   plaintext_body: z.string().optional(),
   preheader: z.string().optional(),
   tags: z.array(z.string()).optional(),
+});
+
+export const uploadHtmlTemplateSchema = z.object({
+  template_name: z.string().min(1),
+  html_body: z.string().min(1),
+  subject: z.string().min(1),
+  tags: z.array(z.string()).optional(),
+});
+
+export const sendCampaignSchema = z.object({
+  campaign_id: z.string().min(1).optional(),
+  send_id: z.string().min(1).optional(),
+  override_messaging_limits: z.boolean().optional(),
+  recipient_subscription_state: z.string().optional(),
+  external_user_ids: z.array(z.string()).optional(),
+  user_aliases: z.array(z.object({
+    alias_name: z.string(),
+    alias_label: z.string(),
+  })).optional(),
+  segment_id: z.string().optional(),
+  audience: z.object({
+    AND: z.array(z.unknown()).optional(),
+    OR: z.array(z.unknown()).optional(),
+  }).passthrough().optional(),
+  broadcast: z.boolean().optional(),
+  trigger_properties: z.record(z.unknown()).optional(),
+});
+
+export const scheduleCampaignSchema = z.object({
+  campaign_id: z.string().min(1).optional(),
+  send_id: z.string().min(1).optional(),
+  schedule: z.object({
+    time: z.string().datetime(),
+    in_local_time: z.boolean().optional(),
+    at_optimal_time: z.boolean().optional(),
+  }),
+  external_user_ids: z.array(z.string()).optional(),
+  user_aliases: z.array(z.object({
+    alias_name: z.string(),
+    alias_label: z.string(),
+  })).optional(),
+  segment_id: z.string().optional(),
+  audience: z.object({
+    AND: z.array(z.unknown()).optional(),
+    OR: z.array(z.unknown()).optional(),
+  }).passthrough().optional(),
+  broadcast: z.boolean().optional(),
+  trigger_properties: z.record(z.unknown()).optional(),
+  override_messaging_limits: z.boolean().optional(),
+  recipient_subscription_state: z.string().optional(),
+});
+
+export const sendDirectMessageSchema = z.object({
+  external_user_ids: z.array(z.string()).min(1),
+  email: z.object({
+    subject: z.string().min(1),
+    body: z.string().min(1),
+  }).optional(),
+  web_push: z.object({
+    title: z.string().min(1),
+    alert: z.string().min(1),
+  }).optional(),
+  in_app_message: z.object({
+    message: z.string().min(1),
+  }).optional(),
+});
+
+export const personalizeActivitiesSchema = z.object({
+  canvas_id: z.string().min(1),
+  segment: z.string().min(1),
 });

@@ -199,6 +199,150 @@ class BrazeService {
     const response = await this.client.post('/messages/schedule/create', request);
     return response.data;
   }
+
+  async uploadHtmlAsTemplate(
+    templateName: string,
+    htmlBody: string,
+    subject: string,
+    tags?: string[]
+  ): Promise<EmailTemplateResponse> {
+    const requestData: CreateEmailTemplateRequest = {
+      template_name: templateName,
+      subject: subject,
+      body: htmlBody,
+    };
+
+    if (tags && tags.length > 0) {
+      requestData.tags = tags;
+    }
+
+    const template = await this.createEmailTemplate(requestData);
+
+    return template;
+  }
+
+  async sendDirectMessage(params: {
+    external_user_ids: string[];
+    email?: { subject: string; body: string };
+    web_push?: { title: string; alert: string };
+    in_app_message?: { message: string };
+  }): Promise<any> {
+    const messages: any = {};
+
+    if (params.email) {
+      messages.apple_push = {
+        alert: params.email.subject,
+        extra: {
+          email_subject: params.email.subject,
+          email_body: params.email.body,
+        },
+      };
+    }
+
+    if (params.web_push) {
+      messages.web_push = {
+        alert: params.web_push.alert,
+        title: params.web_push.title,
+      };
+    }
+
+    if (params.in_app_message) {
+      messages.in_app_message = {
+        message: params.in_app_message.message,
+      };
+    }
+
+    const payload = {
+      external_user_ids: params.external_user_ids,
+      messages,
+    };
+
+    const response = await this.client.post('/messages/send', payload);
+    return response.data;
+  }
+
+  async extractCanvasMessages(canvasId: string): Promise<Array<{
+    channel: string;
+    content: any;
+  }>> {
+    const canvasDetails = await this.getCanvasDetails(canvasId);
+    const extractedMessages: Array<{
+      channel: string;
+      content: any;
+    }> = [];
+
+    if (!canvasDetails.steps) {
+      return extractedMessages;
+    }
+
+    for (const step of canvasDetails.steps) {
+      if (!step.messages) {
+        continue;
+      }
+
+      for (const [_messageId, message] of Object.entries(step.messages as Record<string, any>)) {
+        const channel = message.channel;
+
+        if (channel === 'web_push') {
+          extractedMessages.push({
+            channel: 'web_push',
+            content: {
+              title: message.title,
+              alert: message.alert,
+            },
+          });
+        } else if (channel === 'trigger_in_app_message' || channel === 'in_app_message') {
+          extractedMessages.push({
+            channel: 'in_app_message',
+            content: {
+              message: message.message,
+            },
+          });
+        } else if (channel === 'email') {
+          extractedMessages.push({
+            channel: 'email',
+            content: {
+              subject: message.subject,
+              body: message.body,
+            },
+          });
+        }
+      }
+    }
+
+    return extractedMessages;
+  }
+
+  transformMessagesToActivities(messages: Array<{
+    channel: string;
+    content: any;
+  }>): Array<{
+    type: string;
+    message: string;
+    subject: string | null;
+  }> {
+    return messages.map(msg => {
+      let message = '';
+      let subject: string | null = null;
+
+      if (msg.channel === 'web_push') {
+        subject = msg.content.title || null;
+        message = msg.content.alert || '';
+      } else if (msg.channel === 'in_app_message') {
+        message = msg.content.message || '';
+        subject = null;
+      } else if (msg.channel === 'email') {
+        subject = msg.content.subject || null;
+        message = msg.content.body || '';
+      }
+
+      return {
+        type: msg.channel,
+        message,
+        subject,
+      };
+    });
+  }
 }
 
 export const brazeService = new BrazeService();

@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { brazeRouter } from './braze.routes';
 import { campaignGeneratorRouter } from './campaign-generator.routes';
-import segmentActionRouter from './segment-action.routes';
-import automationRouter from './automation.routes';
+//import segmentActionRouter from './segment-action.routes';
+//import automationRouter from './automation.routes';
 
 const router = Router();
 
@@ -12,7 +12,7 @@ router.get('/health', (_req, res) => {
 
 router.use('/braze', brazeRouter);
 router.use('/campaigns', campaignGeneratorRouter);
-router.use('/segments', segmentActionRouter);
-router.use('/automation', automationRouter);
+//router.use('/segments', segmentActionRouter);
+//router.use('/automation', automationRouter);
 
 export { router as apiRouter };
